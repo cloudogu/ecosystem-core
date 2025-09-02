@@ -1,0 +1,9 @@
+dependencies:
+- name: k8s-component-operator-crd
+  repository: oci://registry.cloudogu.com/k8s
+  version: 1.10.0
+- name: k8s-component-operator
+  repository: oci://registry.cloudogu.com/k8s
+  version: 1.10.0
+digest: sha256:27fb19acb31231cd58028dccef17c0c3975aa4baa8aed8a86cd5c769c458170f
+generated: "2025-09-02T20:29:57.221437897+02:00"
