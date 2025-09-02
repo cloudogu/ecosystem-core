@@ -60,3 +60,47 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+
+{{/*
+Require a Secret and (optionally) a list of keys inside it.
+- If .keys is omitted or empty, only the Secret's existence is validated.
+
+Usage:
+  {{ include "ecosystem-core.requireSecret" (dict
+  		"namespace" .Release.Namespace
+        "name" "my-secret"
+        "keys" (list "username" "password")
+     ) }}
+
+  # Only check that the Secret exists:
+  {{ include "ecosystem-core.requireSecret" (dict "namespace" .Release.Namespace "name" "my-secret") }}
+*/}}
+{{- define "ecosystem-core.requireSecret" -}}
+  {{- $ns   := required "missing namespace" .namespace -}}
+  {{- $name := required "requireSecret: missing 'name' parameter" .name -}}
+  {{- $keys := .keys | default (list) -}}
+  {{- $skip := default false .skip -}}
+
+  {{- if not $skip }}
+    {{- $secret := lookup "v1" "Secret" $ns $name -}}
+    {{- if not $secret -}}
+      {{- fail (printf "Secret '%s' does not exist in namespace '%s'." $name $ns) -}}
+    {{- end -}}
+
+    {{- if gt (len $keys) 0 -}}
+      {{- $missing := list -}}
+      {{- range $i, $k := $keys -}}
+        {{- if not (hasKey $secret.data $k) -}}
+          {{- $missing = append $missing $k -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if gt (len $missing) 0 -}}
+        {{- fail (printf "Secret '%s' in namespace '%s' is missing required key(s): %s."
+                        $name $ns (join ", " $missing)) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+
