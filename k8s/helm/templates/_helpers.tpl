@@ -63,42 +63,44 @@ Create the name of the service account to use
 
 
 {{/*
-Require a Secret and (optionally) a list of keys inside it.
-- If .keys is omitted or empty, only the Secret's existence is validated.
+Require a Secret or ConfigMap and (optionally) a list of keys inside it.
+- If .keys is omitted or empty, only the resource's existence is validated.
+
+resourceType is limited to "Secret" or "ConfigMap" when keys need to be validated, because of the "data" key used for
+validation.
 
 Usage:
-  {{ include "ecosystem-core.requireSecret" (dict
+  {{ include "ecosystem-core.requireSecretOrConfigMap" (dict
   		"namespace" .Release.Namespace
+  		"resourceType" "Secret"
         "name" "my-secret"
         "keys" (list "username" "password")
      ) }}
 
   # Only check that the Secret exists:
-  {{ include "ecosystem-core.requireSecret" (dict "namespace" .Release.Namespace "name" "my-secret") }}
+  {{ include "ecosystem-core.requireSecretOrConfigMap" (dict "namespace" .Release.Namespace "resourceType" "Secret" "name" "my-secret") }}
 */}}
-{{- define "ecosystem-core.requireSecret" -}}
+{{- define "ecosystem-core.requireSecretOrConfigMap" -}}
   {{- $ns   := required "missing namespace" .namespace -}}
+  {{- $type := required "missing resource type" .resourceType -}}
   {{- $name := required "requireSecret: missing 'name' parameter" .name -}}
   {{- $keys := .keys | default (list) -}}
-  {{- $skip := default false .skip -}}
 
-  {{- if not $skip }}
-    {{- $secret := lookup "v1" "Secret" $ns $name -}}
-    {{- if not $secret -}}
-      {{- fail (printf "Secret '%s' does not exist in namespace '%s'." $name $ns) -}}
+  {{- $secret := lookup "v1" $type $ns $name -}}
+  {{- if not $secret -}}
+    {{- fail (printf "%s '%s' does not exist in namespace '%s'." $type $name $ns) -}}
+  {{- end -}}
+
+  {{- if gt (len $keys) 0 -}}
+    {{- $missing := list -}}
+    {{- range $i, $k := $keys -}}
+      {{- if not (hasKey $secret.data $k) -}}
+        {{- $missing = append $missing $k -}}
+      {{- end -}}
     {{- end -}}
-
-    {{- if gt (len $keys) 0 -}}
-      {{- $missing := list -}}
-      {{- range $i, $k := $keys -}}
-        {{- if not (hasKey $secret.data $k) -}}
-          {{- $missing = append $missing $k -}}
-        {{- end -}}
-      {{- end -}}
-      {{- if gt (len $missing) 0 -}}
-        {{- fail (printf "Secret '%s' in namespace '%s' is missing required key(s): %s."
-                        $name $ns (join ", " $missing)) -}}
-      {{- end -}}
+    {{- if gt (len $missing) 0 -}}
+      {{- fail (printf "%s '%s' in namespace '%s' is missing required key(s): %s."
+                      $type $name $ns (join ", " $missing)) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

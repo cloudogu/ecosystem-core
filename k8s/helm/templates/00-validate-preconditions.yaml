@@ -1,0 +1,7 @@
+{{ if not .Values.skipSecretValidation | default false }}
+  {{ include "ecosystem-core.requireSecretOrConfigMap" (dict "namespace" .Release.Namespace "resourceType" "Secret" "name" "component-operator-helm-registry" "keys" (list "config.json")) }}
+  {{ include "ecosystem-core.requireSecretOrConfigMap" (dict "namespace" .Release.Namespace "resourceType" "Secret" "name" "ces-container-registries" "keys" (list ".dockerconfigjson")) }}
+  {{ include "ecosystem-core.requireSecretOrConfigMap" (dict "namespace" .Release.Namespace "resourceType" "Secret" "name" "k8s-dogu-operator-dogu-registry" "keys" (list "endpoint" "urlschema" "username" "password")) }}
+
+  {{ include "ecosystem-core.requireSecretOrConfigMap" (dict "namespace" .Release.Namespace "resourceType" "ConfigMap" "name" "component-operator-helm-repository" "keys" (list "endpoint" "insecureTls" "plainHttp" "schema")) }}
+{{ end }}

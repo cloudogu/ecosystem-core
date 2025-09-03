@@ -121,3 +121,5 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+skipSecretValidation: false
