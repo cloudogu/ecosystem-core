@@ -4,6 +4,8 @@ VERSION=0.1.0
 
 MAKEFILES_VERSION=10.2.1
 
+K8S_COMPONENT_TARGET_VALUES = ${HELM_TARGET_DIR}/values.yaml
+
 include build/make/variables.mk
 include build/make/self-update.mk
 include build/make/clean.mk
@@ -49,3 +51,8 @@ helm-registry-config: ## Creates a configMap and a secret for the helm registry
 	@kubectl create secret generic component-operator-helm-registry \
 		--from-literal=config.json='{"auths": {"${HELM_REGISTRY_HOST}": {"auth": "$(shell echo -n "${HELM_REGISTRY_USERNAME}:$(shell echo ${HELM_REGISTRY_PASSWORD} | base64 -d)" | base64)"}}}' \
 		--namespace="${NAMESPACE}" --context="${KUBE_CONTEXT_NAME}"
+
+.PHONY: template-log-level
+template-log-level: $(BINARY_YQ)
+	@echo "Setting LOG_LEVEL env in deployment to ${LOG_LEVEL}!"
+	@$(BINARY_YQ) -i e ".k8s-component-operator.manager.env.logLevel=\"${LOG_LEVEL}\"" ${K8S_COMPONENT_TARGET_VALUES}
