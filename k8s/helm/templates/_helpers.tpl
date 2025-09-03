@@ -86,15 +86,16 @@ Usage:
   {{- $name := required "requireSecret: missing 'name' parameter" .name -}}
   {{- $keys := .keys | default (list) -}}
 
-  {{- $secret := lookup "v1" $type $ns $name -}}
-  {{- if not $secret -}}
+  {{- $obj := lookup "v1" $type $ns $name -}}
+  {{- if not $obj -}}
     {{- fail (printf "%s '%s' does not exist in namespace '%s'." $type $name $ns) -}}
   {{- end -}}
 
   {{- if gt (len $keys) 0 -}}
+    {{- $data   := (index $obj "data") | default (dict) -}}
     {{- $missing := list -}}
     {{- range $i, $k := $keys -}}
-      {{- if not (hasKey $secret.data $k) -}}
+      {{- if not (hasKey $data $k) -}}
         {{- $missing = append $missing $k -}}
       {{- end -}}
     {{- end -}}
