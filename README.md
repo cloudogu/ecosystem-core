@@ -1,5 +1,31 @@
 # ecosystem-core
-Helm chart providing the core components required to run the ecosystem.
+
+Ecosystem-Core is a Helm chart that installs the core components (operators) required to run the [Cloudogu Ecosystem](https://platform.cloudogu.com/en/info/cloudogu-ecosystem/)
+on Kubernetes.
+It works standalone or via GitOps tools like [Argo CD](https://argoproj.github.io/cd/).
+
+## Prerequisites
+- A Kubernetes cluster with cluster-admin privileges (tested with recent LTS releases).
+- `kubectl` and `helm` v3.8+ installed.
+- A namespace: The chart is namespace-scoped. You can install to any namespace (e.g., ecosystem).
+
+## Validations / preconditions
+This chart can fail fast when required Secrets/ConfigMaps are missing. We use Helm’s `lookup` during install to 
+verify they exist and (optionally) contain specific keys. More information about the required Secrets and ConfigMaps can be
+found [here](docs/operations/preparation_en.md)
+
+To simplify the creation of secrets and ConfigMaps, there is a make target that can be used in conjunction with a .env file:
+
+- `cp .env.template .env`
+- Provide all information needed for Cloudogu's dogu registry, docker registry and helm registry
+- `make registry-configs`
+
+
+## Troubleshooting
+- **helm template fails**: When no cluster is available set skipPreconditionValidation=true in `values.yaml` for dry runs.
+- **Missing keys in Secret/ConfigMap**: ensure keys are in .data key.
+- **OCI pull errors**: verify helm registry login to Cloudogu's helm registry.
+
 
 ---
 ## What is the Cloudogu EcoSystem?
