@@ -32,7 +32,9 @@ node('docker') {
                         .image("golang:${goVersion}")
                         .mountJenkinsUser()
                         .inside("--volume ${WORKSPACE}:/${repositoryName} -w /${repositoryName}")
-                                {
+                               {
+                               		helmRegistryLogin()
+
                                     stage('Generate k8s Resources') {
                                         make 'helm-update-dependencies'
                                         make 'helm-generate'
@@ -115,4 +117,12 @@ void stageAutomaticRelease() {
 
 void make(String makeArgs) {
     sh "make ${makeArgs}"
+}
+
+void helmRegistryLogin() {
+    make 'install-helm'
+
+	withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'harborhelmchartpush', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD']]) {
+    	sh ".bin/helm registry login ${registryUrl} --username '${HARBOR_USERNAME}' --password '${HARBOR_PASSWORD}'"
+    }
 }
