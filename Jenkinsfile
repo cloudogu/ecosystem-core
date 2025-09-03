@@ -58,9 +58,6 @@ node('docker') {
                     }
 
                     stage('Test ecosystem-core') {
-                        // Sleep because it takes time for the controller to create the resource. Without it would end up
-                        // in error "no matching resource found when run the wait command"
-                        //sleep(20)
                         k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/instance=k8s-component-operator --timeout=300s")
                     }
                 } catch(Exception e) {
