@@ -1,6 +1,6 @@
 # Set these to the desired values
 ARTIFACT_ID=ecosystem-core
-VERSION=0.1.0
+VERSION=0.0.1
 
 MAKEFILES_VERSION=10.2.1
 
