@@ -10,6 +10,7 @@ include build/make/variables.mk
 include build/make/self-update.mk
 include build/make/clean.mk
 include build/make/k8s-component.mk
+include build/make/release.mk
 
 ##@ registry-configs
 .PHONY: registry-configs
