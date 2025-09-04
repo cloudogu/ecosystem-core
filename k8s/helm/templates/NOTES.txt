@@ -1,22 +1,40 @@
-1. Get the application URL by running these commands:
-{{- if .Values.ingress.enabled }}
-{{- range $host := .Values.ingress.hosts }}
-  {{- range .paths }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
-  {{- end }}
-{{- end }}
-{{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "ecosystem-core.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch its status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "ecosystem-core.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "ecosystem-core.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
-{{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "ecosystem-core.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
-{{- end }}
+{{ include "printCloudoguLogo" . }}
+
+Thank you for installing the Cloudogu EcoSystem.
+
+To install Dogus manually, create a File dogu.yaml for the Dogu-CR:
+    apiVersion: k8s.cloudogu.com/v1
+    kind: Dogu
+    metadata:
+      name: jenkins
+      labels:
+        app: ces
+    spec:
+      name: official/jenkins
+      version: 2.387.1-2
+
+and apply it to the cluster: kubectl apply -f dogu.yaml --namespace={{ .Release.Namespace }}
+{{- printf "\n" }}
+{{- $doguSecretName := "k8s-dogu-operator-dogu-registry" }}
+{{- if .Values.skipPreconditionValidation }}
+Warning: No mandatory credentials for secret {{ $doguSecretName }} specified . You must create it before the setup can start.
+    Use the corresponding fields in the values.yaml and upgrade the chart.
+    Ignore this warning if you created it manually with:
+        kubectl create secret generic {{ $doguSecretName }} --namespace={{ .Release.Namespace }} --from-literal=username=yourusername --from-literal=password=yourpassword --from-literal=endpoint={{ .Values.dogu_registry_secret.url }}
+{{ end }}
+
+{{- $dockerSecretName := "ces-container-registries" }}
+{{- if .Values.skipPreconditionValidation }}
+Warning: No mandatory credentials for secret {{ $dockerSecretName }} specified. You must create it before the setup can start.
+    Use the corresponding fields in the values.yaml and upgrade the chart.
+    Ignore this warning if you create it manually with:
+        kubectl create secret docker-registry {{ $dockerSecretName }} --namespace={{ .Release.Namespace }} --docker-username=yourusername --docker-password=yourpassword --docker-server=registry.cloudogu.com --docker-email=youremail
+{{ end }}
+
+{{- $helmSecretName := "component-operator-helm-registry" }}
+{{- if .Values.skipPreconditionValidation }}
+Warning: No mandatory credentials for secret {{ $helmSecretName }} specified. You must create it before the setup can start.
+    Use the corresponding fields in the values.yaml and upgrade the chart.
+    Ignore this warning if you create it manually with:
+        kubectl create secret generic {{ $helmSecretName }} --namespace={{ .Release.Namespace }} --from-literal=config.json="{\"auths\": {\"{{ .Values.helm_registry_secret.host }}": {\"auth\": \"$(printf "%s:%s" "yourusername" "yourpassword" | base64)\"}}}"
+{{ end }}
