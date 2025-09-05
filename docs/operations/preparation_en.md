@@ -5,9 +5,28 @@ These contain the access data for Dogu, container, and Helm registries.
 
 ## Prerequisites
 
+- The "Component" CustomResourceDefinition (CRD) must be installed in the cluster.
+  This is required by the `k8s-component-operator` to manage component objects.
 - Access to the Kubernetes cluster (`kubectl` must be configured)
 - A set Kubernetes namespace (`$NAMESPACE`)
 - Access data for the registries (username, password, email if necessary)
+
+### Component CRD
+In order to create component CRs, the corresponding CustomResourceDefinition (CRD) must already be registered in the cluster.
+Install the CRD using the published Helm chart from the OCI repository.
+
+```bash
+helm upgrade --install k8s-component-operator-crd \
+  oci://registry.cloudogu.com/k8s/k8s-component-operator-crd \
+  --version 1.10.0 \
+  --namespace <namespace>
+```
+
+Verify the installation:
+```bash
+kubectl get crd components.k8s.cloudogu.com
+```
+The output should show the CRD `components.k8s.cloudogu.com`.
 
 ### Dogu Registry Secret
 
@@ -91,14 +110,3 @@ kubectl create secret generic component-operator-helm-registry \
 | **registry.cloudogu.com** | Hostname of the Helm registry to which the credentials apply.                                                                  |
 | **auth**                  | Base64-encoded string of `username:password`. Example: `ZGVtbzpwYXNzd29ydA==` corresponds to `demo:password`.                  |
 | **namespace**             | The Kubernetes namespace in which the secret is created. The component operator can only use the secret within this namespace. |
-
-
----
-
-## Summary
-
-- **Dogu Registry Secret** → `k8s-dogu-operator-dogu-registry`
-- **Container Registry Secret** → `ces-container-registries`
-- **Helm Registry ConfigMap & Secret** → `component-operator-helm-repository`, `component-operator-helm-registry`
-
-These resources must be created in the desired namespace **before installing `ecosystem-core`**.
