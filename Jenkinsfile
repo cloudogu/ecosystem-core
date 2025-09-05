@@ -54,6 +54,7 @@ node('docker') {
                     }
 
                     stage('Deploy ecosystem-core') {
+                        k3d.helm("install k8s-component-operator-crd oci://registry.cloudogu.com/k8s/k8s-component-operator-crd  --version 1.10.0")
                         k3d.helm("install ${repositoryName} ${helmChartDir}")
                     }
 
