@@ -124,3 +124,36 @@ Usage:
 {{- printf "\n" }}
 {{- end }}
 
+{{/* Renders a single Component CR from a map entry (name + component spec) */}}
+{{- define "ecosystem-core.renderComponent" -}}
+{{- $name := .name -}}
+{{- $c := .component -}}
+apiVersion: k8s.cloudogu.com/v1
+kind: Component
+metadata:
+  name: {{ $c.name | default $name }}
+spec:
+  name: {{ $c.name | default $name }}
+  namespace: {{ $c.helmNamespace | default "k8s" }}
+  version: {{ (ternary "" $c.version (eq $c.version "latest")) | quote }}
+  {{- if $c.deployNamespace }}
+  deployNamespace: {{ $c.deployNamespace }}
+  {{- end }}
+  {{- if $c.mainLogLevel }}
+  mappedValues:
+    mainLogLevel: {{ $c.mainLogLevel }}
+  {{- end }}
+  {{- with $c.valuesYamlOverwrite }}
+  valuesYamlOverwrite: |-
+{{ . | nindent 4 }}
+  {{- end }}
+{{- end }}
+
+{{/* Renders all Component CRs from a map[string]component */}}
+{{- define "ecosystem-core.renderComponentsMap" -}}
+{{- $m := .map -}}
+{{- range $n, $comp := $m }}
+{{ include "ecosystem-core.renderComponent" (dict "name" $n "component" $comp) }}
+---
+{{- end }}
+{{- end }}

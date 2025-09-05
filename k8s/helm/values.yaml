@@ -2,8 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# skipPreconditionValidation
-skipPreconditionValidation: true
+skipPreconditionValidation: false
 k8s-component-operator:
   manager:
     image:
@@ -19,7 +18,6 @@ k8s-component-operator:
       memory: 105M
     networkPolicies:
       enabled: true
-
 components:
   k8s-dogu-operator-crd:
     version: 2.9.0
@@ -45,3 +43,31 @@ components:
     version: 0.2.0
   k8s-support-mode-operator:
     version: 0.3.0
+backup:
+  enabled: false
+  components:
+    k8s-backup-operator-crd:
+      version: 1.6.0
+    k8s-backup-operator:
+      version: 1.6.0
+    k8s-velero:
+      version: 10.0.1-5
+monitoring:
+  enabled: false
+  components:
+    k8s-prometheus:
+      version: 75.3.5-2
+    k8s-minio:
+      version: 2025.6.13-2
+    k8s-loki:
+      version: 3.3.2-4
+    k8s-promtail:
+      version: 2.9.1-9
+    k8s-alloy:
+      version: 1.1.2-1
+cleanup:
+  timeoutSeconds: 900
+  image:
+    registry: docker.io
+    repository: alpine/kubectl
+    tag: 1.34.0

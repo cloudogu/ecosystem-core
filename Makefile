@@ -5,11 +5,26 @@ VERSION=0.1.0
 MAKEFILES_VERSION=10.2.1
 
 K8S_COMPONENT_TARGET_VALUES = ${HELM_TARGET_DIR}/values.yaml
+COMPONENT_CRD_CHART_REF ?= oci://registry.cloudogu.com/k8s/k8s-component-operator-crd
+COMPONENT_CRD_VERSION ?= 1.10.0
 
 include build/make/variables.mk
 include build/make/self-update.mk
 include build/make/clean.mk
 include build/make/k8s-component.mk
+
+.PHONY: install-component-crd
+install-component-crd: ## Installs the k8s-component-operator-crd Helm chart from OCI in version ${COMPONENT_CRD_VERSION}
+	@echo "Installing Component-CRD with Helm: ${COMPONENT_CRD_CHART_REF} (${COMPONENT_CRD_VERSION}) into namespace ${NAMESPACE}"
+	@${BINARY_HELM} upgrade --install "k8s-component-operator-crd" "${COMPONENT_CRD_CHART_REF}" \
+		--version "${COMPONENT_CRD_VERSION}" \
+		--namespace="${NAMESPACE}" --kube-context="${KUBE_CONTEXT_NAME}"
+
+.PHONY: uninstall-component-crd
+uninstall-component-crd: ## Installs the k8s-component-operator-crd Helm chart from OCI in version ${COMPONENT_CRD_VERSION}
+	@echo "Unnstalling Component-CRD with Helm"
+	@${BINARY_HELM} uninstall "k8s-component-operator-crd" \
+		--namespace="${NAMESPACE}" --kube-context="${KUBE_CONTEXT_NAME}"
 
 ##@ registry-configs
 .PHONY: registry-configs

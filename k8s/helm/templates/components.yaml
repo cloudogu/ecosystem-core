@@ -1,21 +1,12 @@
-{{- range $name, $c := .Values.components }}
-apiVersion: k8s.cloudogu.com/v1
-kind: Component
-metadata:
-  name: {{ default $name }}
-spec:
-  name: {{ default $name }}
-  namespace: {{ $c.helmNamespace | default "k8s" }}
-  version: {{ $c.version }}
-  {{- if $c.deployNamespace }}
-  deployNamespace: {{ $c.deployNamespace }}
-  {{- end }}
-  {{- if $c.mainLogLevel }}
-  mappedValues:
-    mainLogLevel: {{ $c.mainLogLevel }}
-  {{- end }}
-  {{- with $c.valuesYamlOverwrite }}
-  valuesYamlOverwrite: |-{{ . | nindent 4 }}
-  {{- end }}
----
+{{- /* Root components */ -}}
+{{- include "ecosystem-core.renderComponentsMap" (dict "map" .Values.components) }}
+
+{{- /* Backup stack components */ -}}
+{{- if .Values.backup.enabled }}
+{{- include "ecosystem-core.renderComponentsMap" (dict "map" .Values.backup.components) }}
+{{- end }}
+
+{{- /* Monitoring stack components */ -}}
+{{- if .Values.monitoring.enabled }}
+{{- include "ecosystem-core.renderComponentsMap" (dict "map" .Values.monitoring.components) }}
 {{- end }}
