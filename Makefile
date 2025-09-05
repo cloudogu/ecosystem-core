@@ -1,15 +1,29 @@
 # Set these to the desired values
 ARTIFACT_ID=ecosystem-core
 VERSION=0.1.0
+GOTAG?=1.25.1
 
 MAKEFILES_VERSION=10.2.1
 
+IMAGE=cloudogu/${ARTIFACT_ID}-default-config:${VERSION}
+IMAGE_DEV?=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID)-default-config/$(GIT_BRANCH)
+
+IMAGE_IMPORT_TARGET=image-import
+K8S_COMPONENT_SOURCE_VALUES = ${HELM_SOURCE_DIR}/values.yaml
 K8S_COMPONENT_TARGET_VALUES = ${HELM_TARGET_DIR}/values.yaml
+HELM_PRE_GENERATE_TARGETS = helm-values-update-image-version
+HELM_POST_GENERATE_TARGETS = helm-values-replace-image-repo template-log-level template-image-pull-policy
 COMPONENT_CRD_CHART_REF ?= oci://registry.cloudogu.com/k8s/k8s-component-operator-crd
 COMPONENT_CRD_VERSION ?= 1.10.0
 
 include build/make/variables.mk
 include build/make/self-update.mk
+include build/make/dependencies-gomod.mk
+include build/make/build.mk
+include build/make/mocks.mk
+include build/make/test-common.mk
+include build/make/test-unit.mk
+include build/make/static-analysis.mk
 include build/make/clean.mk
 include build/make/k8s-component.mk
 
@@ -71,3 +85,33 @@ helm-registry-config: ## Creates a configMap and a secret for the helm registry
 template-log-level: $(BINARY_YQ)
 	@echo "Setting LOG_LEVEL env in deployment to ${LOG_LEVEL}!"
 	@$(BINARY_YQ) -i e ".k8s-component-operator.manager.env.logLevel=\"${LOG_LEVEL}\"" ${K8S_COMPONENT_TARGET_VALUES}
+
+.PHONY: docker-build
+docker-build: check-docker-credentials check-k8s-image-env-var ${BINARY_YQ} ## Overwrite docker-build from k8s.mk to build from subdir
+	@echo "Building docker image $(IMAGE)..."
+	@DOCKER_BUILDKIT=1 docker build  ./default-config -t $(IMAGE)
+
+.PHONY: helm-values-update-image-version
+helm-values-update-image-version: $(BINARY_YQ)
+	@echo "Updating the image version in source values.yaml to ${VERSION}..."
+	@$(BINARY_YQ) -i e ".defaultConfig.image.tag = \"${VERSION}\"" ${K8S_COMPONENT_SOURCE_VALUES}
+
+.PHONY: helm-values-replace-image-repo
+helm-values-replace-image-repo: $(BINARY_YQ)
+	@if [[ "${STAGE}" == "development" ]]; then \
+		echo "Setting dev image repo in target values.yaml!" ;\
+		echo "Component target values: ${IMAGE_DEV}" ;\
+		REGISTRY=$$(echo "${IMAGE_DEV}" | sed 's|\([^/]*\)/.*|\1|') ;\
+		MAIN_REPOSITORY=$$(echo "${IMAGE_DEV}" | sed 's|^[^/]*/||; s|:.*$$||') ;\
+		echo "Registry: $$REGISTRY" ;\
+		echo "Main Repository: $$MAIN_REPOSITORY" ;\
+		$(BINARY_YQ) -i e ".defaultConfig.image.registry=\"$$REGISTRY\"" ${K8S_COMPONENT_TARGET_VALUES} ;\
+		$(BINARY_YQ) -i e ".defaultConfig.image.repository=\"$$MAIN_REPOSITORY\"" ${K8S_COMPONENT_TARGET_VALUES} ;\
+	fi
+
+.PHONY: template-image-pull-policy
+template-image-pull-policy: $(BINARY_YQ)
+	@if [[ "${STAGE}" == "development" ]]; then \
+		echo "Setting pull policy to always!" ; \
+		$(BINARY_YQ) -i e ".defaultConfig.imagePullPolicy=\"Always\"" "${K8S_COMPONENT_TARGET_VALUES}" ; \
+	fi
