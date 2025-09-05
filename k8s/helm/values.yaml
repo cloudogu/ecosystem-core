@@ -1,0 +1,21 @@
+# Default values for ecosystem-core.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# skipPreconditionValidation
+skipPreconditionValidation: false
+k8s-component-operator:
+  manager:
+    image:
+      registry: docker.io
+      repository: cloudogu/k8s-component-operator
+      tag: 1.10.0
+    env:
+      logLevel: info
+    resourceLimits:
+      memory: 105M
+    resourceRequests:
+      cpu: 15m
+      memory: 105M
+    networkPolicies:
+      enabled: true

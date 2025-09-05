@@ -1,0 +1,40 @@
+{{ include "printCloudoguLogo" . }}
+
+Thank you for installing the Cloudogu EcoSystem.
+
+To install Dogus manually, create a File dogu.yaml for the Dogu-CR:
+    apiVersion: k8s.cloudogu.com/v1
+    kind: Dogu
+    metadata:
+      name: jenkins
+      labels:
+        app: ces
+    spec:
+      name: official/jenkins
+      version: 2.387.1-2
+
+and apply it to the cluster: kubectl apply -f dogu.yaml --namespace={{ .Release.Namespace }}
+{{- printf "\n" }}
+{{- $doguSecretName := "k8s-dogu-operator-dogu-registry" }}
+{{- if .Values.skipPreconditionValidation }}
+Warning: No mandatory credentials for secret {{ $doguSecretName }} specified . You must create it before the setup can start.
+    Use the corresponding fields in the values.yaml and upgrade the chart.
+    Ignore this warning if you created it manually with:
+        kubectl create secret generic {{ $doguSecretName }} --namespace={{ .Release.Namespace }} --from-literal=username=yourusername --from-literal=password=yourpassword --from-literal=endpoint={{ .Values.dogu_registry_secret.url }}
+{{ end }}
+
+{{- $dockerSecretName := "ces-container-registries" }}
+{{- if .Values.skipPreconditionValidation }}
+Warning: No mandatory credentials for secret {{ $dockerSecretName }} specified. You must create it before the setup can start.
+    Use the corresponding fields in the values.yaml and upgrade the chart.
+    Ignore this warning if you create it manually with:
+        kubectl create secret docker-registry {{ $dockerSecretName }} --namespace={{ .Release.Namespace }} --docker-username=yourusername --docker-password=yourpassword --docker-server=registry.cloudogu.com --docker-email=youremail
+{{ end }}
+
+{{- $helmSecretName := "component-operator-helm-registry" }}
+{{- if .Values.skipPreconditionValidation }}
+Warning: No mandatory credentials for secret {{ $helmSecretName }} specified. You must create it before the setup can start.
+    Use the corresponding fields in the values.yaml and upgrade the chart.
+    Ignore this warning if you create it manually with:
+        kubectl create secret generic {{ $helmSecretName }} --namespace={{ .Release.Namespace }} --from-literal=config.json="{\"auths\": {\"{{ .Values.helm_registry_secret.host }}": {\"auth\": \"$(printf "%s:%s" "yourusername" "yourpassword" | base64)\"}}}"
+{{ end }}

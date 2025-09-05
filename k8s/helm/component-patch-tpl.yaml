@@ -1,0 +1,13 @@
+apiVersion: v1
+values:
+  images:
+    componentOperator: cloudogu/k8s-component-operator:1.10.0
+patches:
+  values.yaml:
+    additionalImages:
+    k8s-component-operator:
+      manager:
+        image:
+          registry: "{{ registryFrom .images.componentOperator }}"
+          repository: "{{ repositoryFrom .images.componentOperator }}"
+          tag: "{{ tagFrom .images.componentOperator }}"
