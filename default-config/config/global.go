@@ -15,11 +15,11 @@ type globalConfigRepo interface {
 	SaveOrMerge(ctx context.Context, globalConfig regLibConfig.GlobalConfig) (regLibConfig.GlobalConfig, error)
 }
 
-type globalConfigWriter struct {
+type cesGlobalConfigWriter struct {
 	globalConfigRepo globalConfigRepo
 }
 
-func (gcw *globalConfigWriter) applyDefaultGlobalConfig(ctx context.Context, defaultGlobalConfig map[string]string) error {
+func (gcw *cesGlobalConfigWriter) applyDefaultGlobalConfig(ctx context.Context, defaultGlobalConfig map[string]string) error {
 	slog.Info("Applying default global config...")
 
 	globalConfig, err := gcw.globalConfigRepo.Get(ctx)

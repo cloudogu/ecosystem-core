@@ -16,12 +16,12 @@ type doguConfigRepo interface {
 	SaveOrMerge(ctx context.Context, doguConfig regLibConfig.DoguConfig) (regLibConfig.DoguConfig, error)
 }
 
-type doguConfigWriter struct {
+type cesDoguConfigWriter struct {
 	doguConfigRepo          doguConfigRepo
 	sensitiveDoguConfigRepo doguConfigRepo
 }
 
-func (dcw *doguConfigWriter) applyDefaultDoguConfig(ctx context.Context, defaultDoguConfig map[string]map[string]string, sensitiveDefaultDoguConfig map[string]map[string]string) error {
+func (dcw *cesDoguConfigWriter) applyDefaultDoguConfig(ctx context.Context, defaultDoguConfig map[string]map[string]string, sensitiveDefaultDoguConfig map[string]map[string]string) error {
 	slog.Info("Applying default dogu config...")
 	if err := applyDefaultsForRepo(ctx, defaultDoguConfig, dcw.doguConfigRepo); err != nil {
 		return fmt.Errorf("failed to apply default dogu config: %w", err)

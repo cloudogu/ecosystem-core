@@ -27,6 +27,11 @@ include build/make/static-analysis.mk
 include build/make/clean.mk
 include build/make/k8s-component.mk
 
+.PHONY: mocks
+mocks: ${MOCKERY_BIN} ## target is used to generate mocks for all interfaces in a project.
+	cd ${WORKDIR}/default-config && ${MOCKERY_BIN}
+	@echo "Mocks successfully created."
+
 .PHONY: install-component-crd
 install-component-crd: ## Installs the k8s-component-operator-crd Helm chart from OCI in version ${COMPONENT_CRD_VERSION}
 	@echo "Installing Component-CRD with Helm: ${COMPONENT_CRD_CHART_REF} (${COMPONENT_CRD_VERSION}) into namespace ${NAMESPACE}"

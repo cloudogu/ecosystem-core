@@ -36,7 +36,9 @@ func main() {
 	doguConfigRepo := repository.NewDoguConfigRepository(k8sConfigMapClient)
 	sensitiveDoguConfigRepo := repository.NewSensitiveDoguConfigRepository(k8sSecretClient)
 
-	if err := config.ApplyDefaultConfig(ctx, globalConfigRepo, doguConfigRepo, sensitiveDoguConfigRepo); err != nil {
+	applier := config.NewDefaultConfigApplier(globalConfigRepo, doguConfigRepo, sensitiveDoguConfigRepo)
+
+	if err := applier.ApplyDefaultConfig(ctx); err != nil {
 		slog.Error("failed to apply default config", "err", err)
 		panic(err)
 	}
