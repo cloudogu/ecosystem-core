@@ -27,6 +27,13 @@ include build/make/static-analysis.mk
 include build/make/clean.mk
 include build/make/k8s-component.mk
 
+test-default-config: $(GO_JUNIT_REPORT)
+	@echo "Compiling default-config..."
+	cd ${WORKDIR}/default-config && $(GO_ENV_VARS) go mod vendor
+	cd ${WORKDIR}/default-config && $(GO_ENV_VARS) go build $(GO_BUILD_FLAGS)
+	@echo "Compiling default-config..."
+	cd ${WORKDIR}/default-config && $(GO_ENV_VARS) go test -v -coverprofile=target/coverage.out -json ./... | $(GO_JUNIT_REPORT) > target/unit-tests.xml
+
 .PHONY: mocks
 mocks: ${MOCKERY_BIN} ## target is used to generate mocks for all interfaces in a project.
 	cd ${WORKDIR}/default-config && ${MOCKERY_BIN}
@@ -88,8 +95,13 @@ helm-registry-config: ## Creates a configMap and a secret for the helm registry
 
 .PHONY: template-log-level
 template-log-level: $(BINARY_YQ)
-	@echo "Setting LOG_LEVEL env in deployment to ${LOG_LEVEL}!"
-	@$(BINARY_YQ) -i e ".k8s-component-operator.manager.env.logLevel=\"${LOG_LEVEL}\"" ${K8S_COMPONENT_TARGET_VALUES}
+	@if [ -n "${LOG_LEVEL}" ]; then \
+		echo "Setting LOG_LEVEL env in deployment to ${LOG_LEVEL}!"; \
+		$(BINARY_YQ) -i e ".k8s-component-operator.manager.env.logLevel=\"${LOG_LEVEL}\"" ${K8S_COMPONENT_TARGET_VALUES}; \
+		$(BINARY_YQ) -i e ".defaultConfig.env.logLevel=\"${LOG_LEVEL}\"" ${K8S_COMPONENT_TARGET_VALUES}; \
+	else \
+		echo "LOG_LEVEL not set; skipping log level templating."; \
+	fi
 
 .PHONY: docker-build
 docker-build: check-docker-credentials check-k8s-image-env-var ${BINARY_YQ} ## Overwrite docker-build from k8s.mk to build from subdir
