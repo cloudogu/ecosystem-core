@@ -7,3 +7,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - [#01] Provide helm chart to install core components of the ecosystem
+- [#03] post-install job to initialize default configuration

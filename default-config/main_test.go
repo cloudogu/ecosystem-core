@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -11,14 +12,16 @@ import (
 func Test_applyDefaults(t *testing.T) {
 	testCtx := context.Background()
 
+	cfg := jobConfig{waitTimeout: defaultWaitTimeoutMinutes * time.Minute}
+
 	t.Run("should apply defaults", func(t *testing.T) {
 		ca := newMockConfigApplier(t)
 		ca.EXPECT().ApplyDefaultConfig(testCtx).Return(nil)
 
 		fa := newMockFqdnApplier(t)
-		fa.EXPECT().ApplyInitialFQDN(testCtx, defaultWaitTimeout).Return(nil)
+		fa.EXPECT().ApplyInitialFQDN(testCtx, cfg.waitTimeout).Return(nil)
 
-		err := applyDefaults(testCtx, ca, fa)
+		err := applyDefaults(testCtx, cfg, ca, fa)
 
 		require.NoError(t, err)
 	})
@@ -29,7 +32,7 @@ func Test_applyDefaults(t *testing.T) {
 
 		fa := newMockFqdnApplier(t)
 
-		err := applyDefaults(testCtx, ca, fa)
+		err := applyDefaults(testCtx, cfg, ca, fa)
 
 		require.Error(t, err)
 		assert.ErrorIs(t, err, assert.AnError)
@@ -41,9 +44,9 @@ func Test_applyDefaults(t *testing.T) {
 		ca.EXPECT().ApplyDefaultConfig(testCtx).Return(nil)
 
 		fa := newMockFqdnApplier(t)
-		fa.EXPECT().ApplyInitialFQDN(testCtx, defaultWaitTimeout).Return(assert.AnError)
+		fa.EXPECT().ApplyInitialFQDN(testCtx, cfg.waitTimeout).Return(assert.AnError)
 
-		err := applyDefaults(testCtx, ca, fa)
+		err := applyDefaults(testCtx, cfg, ca, fa)
 
 		require.Error(t, err)
 		assert.ErrorIs(t, err, assert.AnError)

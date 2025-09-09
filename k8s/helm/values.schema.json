@@ -186,6 +186,22 @@
           "type": "string",
           "description": "Image pull policy for the default-config container.",
           "enum": ["Always", "IfNotPresent"]
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "logLevel": {
+              "type": "string",
+              "description": "Log level for the operator.",
+              "enum": ["debug", "info", "warn", "error"]
+            },
+            "waitTimeoutMinutes": {
+              "type": "integer",
+              "description": "The timeout in minutes to wait for the load-balancer service to be get an external IP. Defaults to 5 minutes.",
+              "minimum": 1
+            }
+          }
         }
       },
       "required": ["image"]

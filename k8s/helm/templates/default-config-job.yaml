@@ -29,6 +29,9 @@ rules:
   - apiGroups: [""]
     resources: ["configmaps","secrets"]
     verbs: ["get","list","watch", "create", "update", "patch"]
+  - apiGroups: [ "" ]
+    resources: [ "services"]
+    verbs: [ "get" ]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -88,5 +91,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: LOG_LEVEL
+              value: {{ .Values.defaultConfig.env.logLevel | quote }}
+            - name: WAIT_TIMEOUT_MINUTES
+              value: {{ .Values.defaultConfig.env.waitTimeoutMinutes | quote }}
       imagePullSecrets:
         - name: ces-container-registries

@@ -80,3 +80,6 @@ defaultConfig:
     repository: cloudogu/ecosystem-core-default-config
     tag: 0.1.0
   imagePullPolicy: IfNotPresent
+  env:
+    logLevel: info
+    waitTimeoutMinutes: 5

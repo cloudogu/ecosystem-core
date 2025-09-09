@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/cloudogu/ecosystem-core/default-config/config"
@@ -14,9 +15,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-const defaultWaitTimeout = time.Minute * 5
-
-var waitTimeout = defaultWaitTimeout
+const defaultWaitTimeoutMinutes = 5
 
 type configApplier interface {
 	ApplyDefaultConfig(ctx context.Context) error
@@ -28,8 +27,9 @@ type fqdnApplier interface {
 
 func main() {
 	ctx := context.Background()
+	cfg := readConfig()
 
-	err := run(ctx)
+	err := run(ctx, cfg)
 	if err != nil {
 		panic(fmt.Errorf("failed to run default-comfig: %w", err))
 	}
@@ -37,7 +37,9 @@ func main() {
 	slog.Info("exiting")
 }
 
-func run(ctx context.Context) error {
+func run(ctx context.Context, cfg jobConfig) error {
+	configureLogger(cfg.logLevel)
+
 	namespace := os.Getenv("NAMESPACE")
 	slog.Info("starting applying default-configs...", "namespace", namespace)
 
@@ -62,21 +64,58 @@ func run(ctx context.Context) error {
 	ca := config.NewDefaultConfigApplier(globalConfigRepo, doguConfigRepo, sensitiveDoguConfigRepo)
 	fa := fqdn.NewApplier(globalConfigRepo, k8sServicesClient)
 
-	if err = applyDefaults(ctx, ca, fa); err != nil {
+	if err = applyDefaults(ctx, cfg, ca, fa); err != nil {
 		return fmt.Errorf("failed to apply default config: %w", err)
 	}
 
 	return nil
 }
 
-func applyDefaults(ctx context.Context, configApplier configApplier, fqdnApplier fqdnApplier) error {
+func applyDefaults(ctx context.Context, cfg jobConfig, configApplier configApplier, fqdnApplier fqdnApplier) error {
 	if err := configApplier.ApplyDefaultConfig(ctx); err != nil {
 		return fmt.Errorf("failed to apply default config: %w", err)
 	}
 
-	if err := fqdnApplier.ApplyInitialFQDN(ctx, waitTimeout); err != nil {
+	if err := fqdnApplier.ApplyInitialFQDN(ctx, cfg.waitTimeout); err != nil {
 		return fmt.Errorf("failed to apply intial fqdn: %w", err)
 	}
 
 	return nil
+}
+
+func configureLogger(logLevel string) {
+	var level slog.Level
+	var err = level.UnmarshalText([]byte(logLevel))
+	if err != nil {
+		slog.Error("error parsing log level. Setting log level to INFO.", "err", err)
+		level = slog.LevelInfo
+	}
+
+	logger := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{
+		AddSource: false,
+		Level:     level,
+	}))
+	slog.SetDefault(logger)
+
+	slog.Info("configured logger", "level", level.String())
+}
+
+type jobConfig struct {
+	namespace   string
+	logLevel    string
+	waitTimeout time.Duration
+}
+
+func readConfig() jobConfig {
+	waitTimeoutMinutes, err := strconv.Atoi(os.Getenv("WAIT_TIMEOUT_MINUTES"))
+	if err != nil {
+		slog.Warn("failed to parse WAIT_TIMEOUT_MINUTES. Using default value.", "err", err, "defaultWaitTimeoutMinutes", defaultWaitTimeoutMinutes)
+		waitTimeoutMinutes = defaultWaitTimeoutMinutes
+	}
+
+	return jobConfig{
+		namespace:   os.Getenv("NAMESPACE"),
+		logLevel:    os.Getenv("LOG_LEVEL"),
+		waitTimeout: time.Duration(waitTimeoutMinutes) * time.Minute,
+	}
 }
