@@ -128,6 +128,7 @@ Usage:
 {{- define "ecosystem-core.renderComponent" -}}
 {{- $name := .name -}}
 {{- $c := .component -}}
+{{- if not $c.disabled }}
 apiVersion: k8s.cloudogu.com/v1
 kind: Component
 metadata:
@@ -147,6 +148,7 @@ spec:
   valuesYamlOverwrite: |-
 {{ . | nindent 4 }}
   {{- end }}
+{{- end }}
 {{- end }}
 
 {{/* Renders all Component CRs from a map[string]component */}}

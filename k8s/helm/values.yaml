@@ -22,7 +22,7 @@ components:
   k8s-dogu-operator-crd:
     version: 2.9.0
   k8s-dogu-operator:
-    version: 3.11.2
+    version: 3.12.0
   k8s-service-discovery:
     version: 2.2.0
   k8s-blueprint-operator-crd:
@@ -32,16 +32,19 @@ components:
   k8s-ces-gateway:
     version: 0.0.1
   k8s-ces-assets:
-    version: 0.0.1
+    version: 0.1.0
   k8s-ces-control:
+    disabled: true
     version: 1.7.1
   k8s-debug-mode-operator-crd:
     version: 0.2.3
   k8s-debug-mode-operator:
     version: 0.3.0
   k8s-support-mode-operator-crd:
+    disabled: true
     version: 0.2.0
   k8s-support-mode-operator:
+    disabled: true
     version: 0.3.0
 backup:
   enabled: false
@@ -56,7 +59,7 @@ monitoring:
   enabled: false
   components:
     k8s-prometheus:
-      version: 75.3.5-2
+      version: 75.3.5-3
     k8s-minio:
       version: 2025.6.13-2
     k8s-loki:

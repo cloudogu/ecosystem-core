@@ -54,6 +54,7 @@ Jeder Eintrag entspricht einer Komponente und nutzt ein standardisiertes Schema.
 ```yaml
 components:
   my-component:
+    disabled: false
     version: "1.2.3"
     helmNamespace: "k8s"
     deployNamespace: "my-namespace"
@@ -64,13 +65,14 @@ components:
         name: "myService"
 ```
 
-| Feld                  | Typ      | Beschreibung                                                                                                                  |
-|-----------------------|----------|-------------------------------------------------------------------------------------------------------------------------------|
-| `version`             | `string` | Version der Komponente (z. B. Docker- oder Helm-Tag). Durch Angabe von "latest" wird die neuste verfügbare Version verwendet. |
-| `helmNamespace`       | `string` | Namespace, den die Komponente für Helm-Operationen nutzt (Standard: `k8s`)                                                    |
-| `deployNamespace`     | `string` | Ziel-Namespace, in den die Komponente installiert wird (Standard: Namespace der Komponente)                                   |
-| `mainLogLevel`        | `string` | Log-Level für die Komponente (`debug`, `info`, `warn`, `error`)                                                               |
-| `valuesYamlOverwrite` | `string` | Freitext-YAML-Block zum Überschreiben von Standardwerten                                                                      |
+| Feld                  | Typ       | Beschreibung                                                                                                                  |
+|-----------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------|
+| `disabled`            | `boolean` | Deaktiviert die Komponente (Standard: `false`)                                                                                |
+| `version`             | `string`  | Version der Komponente (z. B. Docker- oder Helm-Tag). Durch Angabe von "latest" wird die neuste verfügbare Version verwendet. |
+| `helmNamespace`       | `string`  | Namespace, den die Komponente für Helm-Operationen nutzt (Standard: `k8s`)                                                    |
+| `deployNamespace`     | `string`  | Ziel-Namespace, in den die Komponente installiert wird (Standard: Namespace der Komponente)                                   |
+| `mainLogLevel`        | `string`  | Log-Level für die Komponente (`debug`, `info`, `warn`, `error`)                                                               |
+| `valuesYamlOverwrite` | `string`  | Freitext-YAML-Block zum Überschreiben von Standardwerten                                                                      |
 
 ## Backup-Komponenten (`backup`)
 

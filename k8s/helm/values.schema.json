@@ -8,6 +8,10 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "disabled" : {
+          "type": "boolean",
+          "description": "Disable a component."
+        },
         "version": {
           "type": "string",
           "description": "Component version to deploy."
