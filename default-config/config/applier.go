@@ -11,7 +11,7 @@ var globalDefaults = map[string]string{
 	"domain":              "ces.local",
 	"admin_group":         "cesAdmin",
 	"mail_address":        "",
-	"certificateType":     "selfsigned",
+	"certificate/type":    "selfsigned",
 	"default_dogu":        "cas",
 	"k8s/use_internal_ip": "false",
 	"k8s/internal_ip":     "",
