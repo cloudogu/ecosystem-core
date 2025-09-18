@@ -74,6 +74,21 @@ node('docker') {
                         k3d.startK3d()
                     }
 
+                    String version = makefile.getVersion()
+                    def imageNameDefaultConfig = ""
+                    stage('Build & Push Image') {
+						imageNameDefaultConfig = buildAndPushToLocalRegistry(k3d, "cloudogu/${repositoryName}-default-config", version, "./default-config")
+                    }
+
+                    stage('Update development resources') {
+                    	def repository = imageNameDefaultConfig.substring(0, imageName.lastIndexOf(":"))
+                        docker.image("golang:${goVersion}")
+                        	.mountJenkinsUser()
+                            .inside("--volume ${WORKSPACE}:/workdir -w /workdir") {
+                            	sh "STAGE=development IMAGE_DEV=${repository} make helm-values-replace-image-repo"
+                        	}
+                    }
+
                     stage('Deploy ecosystem-core') {
                         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'harborhelmchartpush', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD']]) {
                             k3d.helm("registry login ${registryUrl} --username '${HARBOR_USERNAME}' --password '${HARBOR_PASSWORD}'")
@@ -184,4 +199,17 @@ void helmRegistryLogin() {
     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'harborhelmchartpush', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD']]) {
         sh ".bin/helm registry login ${registryUrl} --username '${HARBOR_USERNAME}' --password '${HARBOR_PASSWORD}'"
     }
+}
+
+def buildAndPushToLocalRegistry(def k3d, def imageName, def tag, def dockerFile) {
+    def internalHandle="${imageName}:${tag}"
+    def externalRegistry="${k3d.@registry.@imageRegistryExternalHandle}"
+
+    def dockerImage = this.docker.build("${internalHandle}", "${dockerFile}")
+
+    this.docker.withRegistry("http://${externalRegistry}/") {
+        dockerImage.push("${tag}")
+    }
+
+    return "${k3d.@registry.@imageRegistryInternalHandle}/${internalHandle}"
 }
