@@ -165,6 +165,46 @@
         }
       },
       "required": ["timeoutSeconds", "image"]
+    },
+    "defaultConfig": {
+      "type": "object",
+      "description": "Configuration for the default-config init step.",
+      "additionalProperties": false,
+      "properties": {
+        "image": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Container image used to apply the default configuration.",
+          "properties": {
+            "registry": { "type": "string", "minLength": 1 },
+            "repository": { "type": "string", "minLength": 1 },
+            "tag": { "type": "string", "minLength": 1 }
+          },
+          "required": ["registry", "repository", "tag"]
+        },
+        "imagePullPolicy": {
+          "type": "string",
+          "description": "Image pull policy for the default-config container.",
+          "enum": ["Always", "IfNotPresent"]
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "logLevel": {
+              "type": "string",
+              "description": "Log level for the operator.",
+              "enum": ["debug", "info", "warn", "error"]
+            },
+            "waitTimeoutMinutes": {
+              "type": "integer",
+              "description": "The timeout in minutes to wait for the load-balancer service to be get an external IP. Defaults to 5 minutes.",
+              "minimum": 1
+            }
+          }
+        }
+      },
+      "required": ["image"]
     }
   }
 }
