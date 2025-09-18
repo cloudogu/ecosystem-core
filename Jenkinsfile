@@ -8,6 +8,7 @@ git.committerEmail = 'cesmarvin@cloudogu.com'
 gitflow = new GitFlow(this, git)
 github = new GitHub(this, git)
 changelog = new Changelog(this)
+makefile = new Makefile(this)
 
 repositoryName = "ecosystem-core"
 productionReleaseBranch = "main"
@@ -159,7 +160,6 @@ void stageStaticAnalysisSonarQube() {
 
 void stageAutomaticRelease() {
     if (gitflow.isReleaseBranch()) {
-        Makefile makefile = new Makefile(this)
         String releaseVersion = makefile.getVersion()
         String changelogVersion = git.getSimpleBranchName()
 
