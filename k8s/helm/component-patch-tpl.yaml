@@ -2,6 +2,7 @@ apiVersion: v1
 values:
   images:
     componentOperator: cloudogu/k8s-component-operator:1.10.0
+    defaultConfig: cloudogu/ecosystem-core-default-config:0.1.0
     kubectl: docker.io/alpine/kubectl:1.34.0
 patches:
   values.yaml:
@@ -16,3 +17,8 @@ patches:
         registry: "{{ registryFrom .images.kubectl }}"
         repository: "{{ repositoryFrom .images.kubectl }}"
         tag: "{{ tagFrom .images.kubectl }}"
+    defaultConfig:
+      image:
+        registry: "{{ registryFrom .images.defaultConfig }}"
+        repository: "{{ repositoryFrom .images.defaultConfig }}"
+        tag: "{{ tagFrom .images.defaultConfig }}"
