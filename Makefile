@@ -1,5 +1,7 @@
 # Set these to the desired values
 ARTIFACT_ID=ecosystem-core
+ARTIFACT_ID_DEFAULT_CONFIG=${ARTIFACT_ID}-default-config
+
 VERSION=0.1.0
 GOTAG?=1.25.1
 
@@ -107,6 +109,13 @@ template-log-level: $(BINARY_YQ)
 docker-build: check-docker-credentials check-k8s-image-env-var ${BINARY_YQ} ## Overwrite docker-build from k8s.mk to build from subdir
 	@echo "Building docker image $(IMAGE)..."
 	@DOCKER_BUILDKIT=1 docker build  ./default-config -t $(IMAGE)
+
+.PHONY: images-import
+images-import: ## import images from ces-importer and
+	@echo "Import default config"
+	@make image-import \
+		IMAGE=${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION} \
+		IMAGE_DEV_VERSION=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH):${VERSION}
 
 .PHONY: helm-values-update-image-version
 helm-values-update-image-version: $(BINARY_YQ)
