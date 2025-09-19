@@ -110,7 +110,7 @@ docker-build: check-docker-credentials check-k8s-image-env-var ${BINARY_YQ} ## O
 	@echo "Building docker image $(IMAGE)..."
 	@DOCKER_BUILDKIT=1 docker build  ./default-config -t $(IMAGE)
 
-.PHONY: images-import
+.PHONY: image-import
 images-import: ## import images from ces-importer and
 	@echo "Import default config"
 	@make image-import \

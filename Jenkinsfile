@@ -9,7 +9,7 @@ gitflow = new GitFlow(this, git)
 github = new GitHub(this, git)
 changelog = new Changelog(this)
 makefile = new Makefile(this)
-docker = new Docker(this)
+Docker docker = new Docker(this)
 
 repositoryName = "ecosystem-core"
 productionReleaseBranch = "main"
