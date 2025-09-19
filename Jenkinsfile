@@ -97,6 +97,9 @@ node('docker') {
                             k3d.helm("install k8s-component-operator-crd oci://registry.cloudogu.com/k8s/k8s-component-operator-crd  --version 1.10.0")
                             k3d.helm("registry logout ${registryUrl}")
 
+							k3d.assignExternalIP()
+                            k3d.kubectl("--namespace default create configmap global-config --from-literal=config.yaml='fqdn: ${k3d.@externalIP}'")
+
                             k3d.helm("install ${repositoryName} ${helmChartDir}")
                         }
                     }

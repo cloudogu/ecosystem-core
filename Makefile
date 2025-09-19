@@ -7,9 +7,6 @@ GOTAG?=1.25.1
 
 MAKEFILES_VERSION=10.2.1
 
-IMAGE=cloudogu/${ARTIFACT_ID}-default-config:${VERSION}
-IMAGE_DEV?=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID)-default-config/$(GIT_BRANCH)
-
 IMAGE_IMPORT_TARGET=images-import
 K8S_COMPONENT_SOURCE_VALUES = ${HELM_SOURCE_DIR}/values.yaml
 K8S_COMPONENT_TARGET_VALUES = ${HELM_TARGET_DIR}/values.yaml
@@ -28,6 +25,9 @@ include build/make/test-unit.mk
 include build/make/static-analysis.mk
 include build/make/clean.mk
 include build/make/k8s-component.mk
+
+IMAGE=cloudogu/${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION}
+IMAGE_DEV=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH)
 
 test-default-config: $(GO_JUNIT_REPORT)
 	@echo "Compiling default-config..."
