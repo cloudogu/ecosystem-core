@@ -10,7 +10,7 @@ MAKEFILES_VERSION=10.2.1
 IMAGE=cloudogu/${ARTIFACT_ID}-default-config:${VERSION}
 IMAGE_DEV?=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID)-default-config/$(GIT_BRANCH)
 
-IMAGE_IMPORT_TARGET=image-import
+IMAGE_IMPORT_TARGET=images-import
 K8S_COMPONENT_SOURCE_VALUES = ${HELM_SOURCE_DIR}/values.yaml
 K8S_COMPONENT_TARGET_VALUES = ${HELM_TARGET_DIR}/values.yaml
 HELM_PRE_GENERATE_TARGETS = helm-values-update-image-version
@@ -110,7 +110,7 @@ docker-build: check-docker-credentials check-k8s-image-env-var ${BINARY_YQ} ## O
 	@echo "Building docker image $(IMAGE)..."
 	@DOCKER_BUILDKIT=1 docker build  ./default-config -t $(IMAGE)
 
-.PHONY: image-import
+.PHONY: images-import
 images-import: ## import images from ces-importer and
 	@echo "Import default config"
 	@make image-import \
