@@ -106,6 +106,11 @@ node('docker') {
 
                     stage('Test ecosystem-core') {
                         k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-component-operator --timeout=300s")
+                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-dogu-operator --timeout=300s")
+                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-service-discovery --timeout=300s")
+                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-blueprint-operator --timeout=300s")
+                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-ces-gateway --timeout=300s")
+                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-ces-assets --timeout=300s")
                     }
                 } catch (Exception e) {
                     k3d.collectAndArchiveLogs()
