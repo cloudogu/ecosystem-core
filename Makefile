@@ -7,6 +7,9 @@ GOTAG?=1.25.1
 
 MAKEFILES_VERSION=10.2.1
 
+IMAGE=cloudogu/${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION}
+#IMAGE_DEV=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH)
+
 IMAGE_IMPORT_TARGET=images-import
 K8S_COMPONENT_SOURCE_VALUES = ${HELM_SOURCE_DIR}/values.yaml
 K8S_COMPONENT_TARGET_VALUES = ${HELM_TARGET_DIR}/values.yaml
@@ -14,9 +17,6 @@ HELM_PRE_GENERATE_TARGETS = helm-values-update-image-version
 HELM_POST_GENERATE_TARGETS = helm-values-replace-image-repo template-log-level template-image-pull-policy
 COMPONENT_CRD_CHART_REF ?= oci://registry.cloudogu.com/k8s/k8s-component-operator-crd
 COMPONENT_CRD_VERSION ?= 1.10.0
-
-IMAGE=cloudogu/${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION}
-IMAGE_DEV=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH)
 
 include build/make/variables.mk
 include build/make/self-update.mk
@@ -107,13 +107,14 @@ template-log-level: $(BINARY_YQ)
 
 .PHONY: docker-build
 docker-build: check-docker-credentials check-k8s-image-env-var ${BINARY_YQ} ## Overwrite docker-build from k8s.mk to build from subdir
-	@echo "Building docker image $(IMAGE)..."
-	@DOCKER_BUILDKIT=1 docker build  ./default-config -t $(IMAGE)
+	@echo "Building docker image $(IMAGE) in directory $(IMAGE_DIR)..."
+    @DOCKER_BUILDKIT=1 docker build $(IMAGE_DIR) -t $(IMAGE)
 
 .PHONY: images-import
 images-import: ## import images from ces-importer and
 	@echo "Import default config"
 	@make image-import \
+		IMAGE_DIR=./default-config \
 		IMAGE=${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION} \
 		IMAGE_DEV_VERSION=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH):${VERSION}
 
