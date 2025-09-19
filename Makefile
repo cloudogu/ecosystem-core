@@ -15,6 +15,9 @@ HELM_POST_GENERATE_TARGETS = helm-values-replace-image-repo template-log-level t
 COMPONENT_CRD_CHART_REF ?= oci://registry.cloudogu.com/k8s/k8s-component-operator-crd
 COMPONENT_CRD_VERSION ?= 1.10.0
 
+IMAGE=cloudogu/${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION}
+IMAGE_DEV=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH)
+
 include build/make/variables.mk
 include build/make/self-update.mk
 include build/make/dependencies-gomod.mk
@@ -25,9 +28,6 @@ include build/make/test-unit.mk
 include build/make/static-analysis.mk
 include build/make/clean.mk
 include build/make/k8s-component.mk
-
-IMAGE=cloudogu/${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION}
-IMAGE_DEV=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH)
 
 test-default-config: $(GO_JUNIT_REPORT)
 	@echo "Compiling default-config..."

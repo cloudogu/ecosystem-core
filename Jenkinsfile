@@ -98,7 +98,7 @@ node('docker') {
                             k3d.helm("registry logout ${registryUrl}")
 
 							k3d.assignExternalIP()
-                            k3d.kubectl("--namespace default create configmap global-config --from-literal=config.yaml='fqdn: ${k3d.@externalIP}'")
+                            k3d.kubectl("--namespace default create configmap global-config --from-literal=config.yaml='fqdn:${k3d.@externalIP}'")
 
                             k3d.helm("install ${repositoryName} ${helmChartDir}")
                         }
