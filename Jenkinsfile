@@ -105,12 +105,36 @@ node('docker') {
                     }
 
                     stage('Test ecosystem-core') {
-                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-component-operator --timeout=300s")
-                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-dogu-operator --timeout=300s")
-                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-service-discovery --timeout=300s")
-                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-blueprint-operator --timeout=300s")
-                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-ces-gateway --timeout=300s")
-                        k3d.kubectl("wait --for=condition=ready pod -l app.kubernetes.io/name=k8s-ces-assets --timeout=300s")
+                        // Labels we wait for
+                        def labels = [
+                        	"app.kubernetes.io/name=k8s-component-operator",
+                            "app.kubernetes.io/name=k8s-dogu-operator",
+                            "app.kubernetes.io/name=k8s-service-discovery",
+                            "app.kubernetes.io/name=k8s-blueprint-operator",
+                            "app.kubernetes.io/name=k8s-ces-gateway",
+                            "app.kubernetes.io/name=k8s-ces-assets"
+                        ]
+
+                        // Timeout (same for all, adjust as needed)
+                        def timeoutSeconds = 300
+                        def sleepSeconds   = 5
+                        def maxRetries     = (int)(timeoutSeconds / sleepSeconds)
+
+                        // Loop through each label
+                        labels.each { label ->
+                        	println "Waiting for pod(s) with ${label}..."
+
+                            int retries = 0
+                            while (k3d.kubectl("get pods -n default -l ${label} --no-headers").trim().isEmpty()) {
+                                if (retries++ >= maxRetries) {
+                                	throw new RuntimeException("Timeout waiting for pod(s) with ${label} to be created")
+                                }
+                                sleep(sleepSeconds * 1000)
+                            }
+
+                            // Wait for readiness with kubectl’s own timeout
+                            k3d.kubectl("wait --for=condition=ready pod -l ${label} -n default --timeout=${timeoutSeconds}s")
+                        }
                     }
                 } catch (Exception e) {
                     k3d.collectAndArchiveLogs()
