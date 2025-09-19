@@ -9,6 +9,7 @@ gitflow = new GitFlow(this, git)
 github = new GitHub(this, git)
 changelog = new Changelog(this)
 makefile = new Makefile(this)
+docker = new Docker(this)
 
 repositoryName = "ecosystem-core"
 productionReleaseBranch = "main"
@@ -41,7 +42,7 @@ node('docker') {
                     markdown.check()
                 }
 
-                new Docker(this)
+                docker
                         .image("golang:${goVersion}")
                         .mountJenkinsUser()
                         .inside("--volume ${WORKSPACE}:/${repositoryName} -w /${repositoryName}")
@@ -82,7 +83,7 @@ node('docker') {
                     }
 
                     stage('Update development resources') {
-                    	def repository = imageNameDefaultConfig.substring(0, imageName.lastIndexOf(":"))
+                    	def repository = imageNameDefaultConfig.substring(0, imageNameDefaultConfig.lastIndexOf(":"))
                         docker.image("golang:${goVersion}")
                         	.mountJenkinsUser()
                             .inside("--volume ${WORKSPACE}:/workdir -w /workdir") {
@@ -164,7 +165,7 @@ void stageAutomaticRelease() {
         String changelogVersion = git.getSimpleBranchName()
 
         stage('Push Helm chart to Harbor') {
-            new Docker(this)
+            docker
                     .image("golang:${goVersion}")
                     .mountJenkinsUser()
                     .inside("--volume ${WORKSPACE}:/${repositoryName} -w /${repositoryName}")
