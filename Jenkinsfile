@@ -129,7 +129,7 @@ node('docker') {
                                 if (retries++ >= maxRetries) {
                                 	throw new RuntimeException("Timeout waiting for pod(s) with ${label} to be created")
                                 }
-                                sleep(sleepSeconds * 1000)
+                                sleep(time: sleepSeconds, unit: "SECONDS")
                             }
 
                             // Wait for readiness with kubectl’s own timeout
