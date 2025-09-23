@@ -125,7 +125,7 @@ node('docker') {
                         	println "Waiting for pod(s) with ${label}..."
 
                             int retries = 0
-                            while (k3d.kubectl("get pods -n default -l ${label} --no-headers").trim().isEmpty()) {
+                            while (k3d.kubectl("get pods -n default -l ${label} --no-headers", true).trim().isEmpty()) {
                                 if (retries++ >= maxRetries) {
                                 	throw new RuntimeException("Timeout waiting for pod(s) with ${label} to be created")
                                 }
