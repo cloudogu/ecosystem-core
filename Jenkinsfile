@@ -108,11 +108,11 @@ node('docker') {
                         // Labels we wait for
                         def labels = [
                         	"app.kubernetes.io/name=k8s-component-operator",
-                            "app.kubernetes.io/name=k8s-dogu-operator",
-                            "app.kubernetes.io/name=k8s-service-discovery",
-                            "app.kubernetes.io/name=k8s-blueprint-operator",
-                            "app.kubernetes.io/name=k8s-ces-gateway",
-                            "app.kubernetes.io/name=k8s-ces-assets"
+                            "k8s.cloudogu.com/component.name=k8s-dogu-operator",
+                            "k8s.cloudogu.com/component.name=k8s-service-discovery",
+                            "k8s.cloudogu.com/component.name=k8s-blueprint-operator",
+                            "k8s.cloudogu.com/component.name=k8s-ces-gateway",
+                            "k8s.cloudogu.com/component.name=k8s-ces-assets"
                         ]
 
                         // Timeout (same for all, adjust as needed)
