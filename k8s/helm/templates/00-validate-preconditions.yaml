@@ -1,3 +1,8 @@
+{{- if not (.Capabilities.APIVersions.Has "k8s.cloudogu.com/v1/Component") -}}
+  {{- fail "CRD k8s.cloudogu.com/v1/Component is not installed." -}}
+{{- end -}}
+
+
 {{ if not (.Values.skipPreconditionValidation | default false) }}
   {{ include "ecosystem-core.requireSecretOrConfigMap" (dict "namespace" .Release.Namespace "resourceType" "Secret" "name" "component-operator-helm-registry" "keys" (list "config.json")) }}
   {{ include "ecosystem-core.requireSecretOrConfigMap" (dict "namespace" .Release.Namespace "resourceType" "Secret" "name" "ces-container-registries" "keys" (list ".dockerconfigjson")) }}

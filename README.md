@@ -10,14 +10,20 @@ It works standalone or via GitOps tools like [Argo CD](https://argoproj.github.i
 - A namespace: The chart is namespace-scoped. You can install to any namespace (e.g., ecosystem).
 
 ## Validations / preconditions
+
+The "Component" CustomResourceDefinition (CRD) must be installed in the cluster.
+This is required by the `k8s-component-operator` to manage component objects.
+
 This chart can fail fast when required Secrets/ConfigMaps are missing. We use Helm’s `lookup` during install to 
-verify they exist and (optionally) contain specific keys. More information about the required Secrets and ConfigMaps can be
-found [here](docs/operations/preparation_en.md)
+verify they exist and (optionally) contain specific keys. 
+
+More information about the required CRDs, Secrets and ConfigMaps can be found [here](docs/operations/preparation_en.md).
 
 To simplify the creation of secrets and ConfigMaps, there is a make target that can be used in conjunction with a .env file:
 
 - `cp .env.template .env`
 - Provide all information needed for Cloudogu's dogu registry, docker registry and helm registry
+- `make install-component-crd`
 - `make registry-configs`
 
 
