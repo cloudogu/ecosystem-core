@@ -8,7 +8,7 @@ GOTAG?=1.25.1
 MAKEFILES_VERSION=10.2.1
 
 IMAGE=cloudogu/${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION}
-#IMAGE_DEV=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH)
+#IMAGE_DEV?=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH)
 
 IMAGE_IMPORT_TARGET=images-import
 K8S_COMPONENT_SOURCE_VALUES = ${HELM_SOURCE_DIR}/values.yaml
@@ -108,7 +108,7 @@ template-log-level: $(BINARY_YQ)
 .PHONY: docker-build
 docker-build: check-docker-credentials check-k8s-image-env-var ${BINARY_YQ} ## Overwrite docker-build from k8s.mk to build from subdir
 	@echo "Building docker image $(IMAGE) in directory $(IMAGE_DIR)..."
-    @DOCKER_BUILDKIT=1 docker build $(IMAGE_DIR) -t $(IMAGE)
+	@DOCKER_BUILDKIT=1 docker build $(IMAGE_DIR) -t $(IMAGE)
 
 .PHONY: images-import
 images-import: ## import images from ces-importer and
