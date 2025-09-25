@@ -144,9 +144,9 @@ spec:
   mappedValues:
     mainLogLevel: {{ $c.mainLogLevel }}
   {{- end }}
-  {{- with $c.valuesYamlOverwrite }}
+  {{- with $c.valuesObject }}
   valuesYamlOverwrite: |-
-{{ . | nindent 4 }}
+  {{- toYaml $c.valuesObject | nindent 4 -}}
   {{- end }}
 {{- end }}
 {{- end }}
@@ -154,8 +154,35 @@ spec:
 {{/* Renders all Component CRs from a map[string]component */}}
 {{- define "ecosystem-core.renderComponentsMap" -}}
 {{- $m := .map -}}
+{{- $root := .root -}}
 {{- range $n, $comp := $m }}
-{{ include "ecosystem-core.renderComponent" (dict "name" $n "component" $comp) }}
+  {{- if eq $n "k8s-service-discovery" }}
+    {{ include "ecosystem-core.renderServiceDiscovery" (dict "name" $n "component" $comp "root" $root) }}
+  {{- else }}
+    {{ include "ecosystem-core.renderComponent" (dict "name" $n "component" $comp) }}
+  {{- end }}
 ---
 {{- end }}
+{{- end }}
+
+{{/* Renders Component CR for k8s-service-discovery by merging values from components and the loadbalancer-annotations */}}
+{{- define "ecosystem-core.renderServiceDiscovery" -}}
+  {{- $name := .name -}}
+  {{- $comp := .component -}}
+  {{- $root := .root -}}
+
+  {{- $vals := (index $comp "valuesObject") | default dict -}}
+  {{- $lbs  := (get $vals "loadBalancerService") | default dict -}}
+  {{- $ann := (get $lbs "annotations") | default dict -}}
+  {{- $lbAnn := index $root.Values "loadbalancer-annotations" | default dict -}}
+
+  {{- $valsEff := $vals -}}
+  {{- if and (empty $ann) (not (empty $lbAnn)) }}
+    {{- $lbsEff  := merge (deepCopy $lbs)  (dict "annotations" $lbAnn) -}}
+    {{- $valsEff = merge (deepCopy $vals) (dict "loadBalancerService" $lbsEff) -}}
+  {{- end }}
+
+  {{- $compEff := merge (deepCopy $comp) (dict "valuesObject" $valsEff) -}}
+
+  {{ include "ecosystem-core.renderComponent" (dict "name" $name "component" $compEff) }}
 {{- end }}
