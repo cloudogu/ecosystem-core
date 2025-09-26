@@ -60,20 +60,20 @@ components:
     helmNamespace: "k8s"
     deployNamespace: "my-namespace"
     mainLogLevel: "info"
-    valuesYamlOverwrite: |
+    valuesObject:
       replicaCount: 2
       service:
         name: "myService"
 ```
 
-| Field                 | Type      | Description                                                                                                     |
-|-----------------------|-----------|-----------------------------------------------------------------------------------------------------------------|
-| `disabled`            | `boolean` | Deactivates the component (default: `false`)                                                                    |
-| `version`             | `string`  | Component version (e.g., Docker or Helm tag). By specifying “latest” the newest available version will be used. |
-| `helmNamespace`       | `string`  | Namespace used by the component for Helm operations (default: `k8s`)                                            |
-| `deployNamespace`     | `string`  | Target namespace where the component is installed (default: component namespace)                                |
-| `mainLogLevel`        | `string`  | Log level for the component (`debug`, `info`, `warn`, `error`)                                                  |
-| `valuesYamlOverwrite` | `string`  | Free text YAML block for overwriting default values                                                             |
+| Field             | Type      | Description                                                                                                     |
+|-------------------|-----------|-----------------------------------------------------------------------------------------------------------------|
+| `disabled`        | `boolean` | Deactivates the component (default: `false`)                                                                    |
+| `version`         | `string`  | Component version (e.g., Docker or Helm tag). By specifying “latest” the newest available version will be used. |
+| `helmNamespace`   | `string`  | Namespace used by the component for Helm operations (default: `k8s`)                                            |
+| `deployNamespace` | `string`  | Target namespace where the component is installed (default: component namespace)                                |
+| `mainLogLevel`    | `string`  | Log level for the component (`debug`, `info`, `warn`, `error`)                                                  |
+| `valuesObject`    | `string`  | YAML block for overwriting default values                                                                       |
 
 ## Backup components (`backup`)
 
