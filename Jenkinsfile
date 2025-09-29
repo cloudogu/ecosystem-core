@@ -196,8 +196,15 @@ void stageAutomaticRelease() {
         String releaseVersion = makefile.getVersion()
         String changelogVersion = git.getSimpleBranchName()
 
+        stage('Build & Push Image') {
+            def dockerImage = docker.build("cloudogu/${repositoryName}-default-config:${releaseVersion}")
+            docker.withRegistry('https://registry.hub.docker.com/', 'dockerHubCredentials') {
+                dockerImage.push("${releaseVersion}")
+            }
+        }
+
         stage('Push Helm chart to Harbor') {
-            docker
+            new Docker(this)
                     .image("golang:${goVersion}")
                     .mountJenkinsUser()
                     .inside("--volume ${WORKSPACE}:/${repositoryName} -w /${repositoryName}")
