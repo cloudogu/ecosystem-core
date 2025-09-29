@@ -5,3 +5,5 @@ k8s/helm/charts
 target
 
 .env
+
+default-config/vendor

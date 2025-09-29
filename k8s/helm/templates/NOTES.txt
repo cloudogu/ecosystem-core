@@ -20,7 +20,7 @@ and apply it to the cluster: kubectl apply -f dogu.yaml --namespace={{ .Release.
 Warning: No mandatory credentials for secret {{ $doguSecretName }} specified . You must create it before the setup can start.
     Use the corresponding fields in the values.yaml and upgrade the chart.
     Ignore this warning if you created it manually with:
-        kubectl create secret generic {{ $doguSecretName }} --namespace={{ .Release.Namespace }} --from-literal=username=yourusername --from-literal=password=yourpassword --from-literal=endpoint={{ .Values.dogu_registry_secret.url }}
+        kubectl create secret generic {{ $doguSecretName }} --namespace={{ .Release.Namespace }} --from-literal=username=yourusername --from-literal=password=yourpassword --from-literal=endpoint=https://dogu.cloudogu.com/api/v2/dogus
 {{ end }}
 
 {{- $dockerSecretName := "ces-container-registries" }}
@@ -36,5 +36,5 @@ Warning: No mandatory credentials for secret {{ $dockerSecretName }} specified. 
 Warning: No mandatory credentials for secret {{ $helmSecretName }} specified. You must create it before the setup can start.
     Use the corresponding fields in the values.yaml and upgrade the chart.
     Ignore this warning if you create it manually with:
-        kubectl create secret generic {{ $helmSecretName }} --namespace={{ .Release.Namespace }} --from-literal=config.json="{\"auths\": {\"{{ .Values.helm_registry_secret.host }}": {\"auth\": \"$(printf "%s:%s" "yourusername" "yourpassword" | base64)\"}}}"
+        kubectl create secret generic {{ $helmSecretName }} --namespace={{ .Release.Namespace }} --from-literal=config.json="{\"auths\": {\"registry.cloudogu.com\": {\"auth\": \"$(printf "%s:%s" "yourusername" "yourpassword" | base64)\"}}}"
 {{ end }}

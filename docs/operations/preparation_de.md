@@ -5,9 +5,28 @@ Diese enthalten die Zugangsdaten zu Dogu-, Container- und Helm-Registries.
 
 ## Voraussetzungen
 
+- Die "Component"-CustomResourceDefinition (CRD) muss im Cluster installiert sein.
+  Diese wird vom `k8s-component-operator` benötigt, um Komponenten-Objekte zu verwalten.
 - Zugriff auf das Kubernetes-Cluster (`kubectl` muss konfiguriert sein)
 - Ein gesetztes Kubernetes-Namespace (`$NAMESPACE`)
 - Zugangsdaten zu den Registries (Benutzername, Passwort, ggf. E-Mail)
+
+### Component-CRD
+
+Damit Component-CRs angelegt werden können, muss die zugehörige CustomResourceDefinition (CRD) bereits im Cluster registriert sein.
+Installieren Sie die CRD über das veröffentlichte Helm-Chart aus dem OCI-Repository.
+```bash
+helm upgrade --install k8s-component-operator-crd \
+  oci://registry.cloudogu.com/k8s/k8s-component-operator-crd \
+  --version 1.10.0 \
+  --namespace <namespace>
+```
+
+Verifizieren Sie die Installation:
+```bash
+kubectl get crd components.k8s.cloudogu.com
+```
+Die Ausgabe sollte die CRD `components.k8s.cloudogu.com` zeigen.
 
 ### Dogu-Registry Secret
 
@@ -91,14 +110,3 @@ kubectl create secret generic component-operator-helm-registry \
 | **registry.cloudogu.com** | Hostname der Helm-Registry, für die die Zugangsdaten gelten.                                                                                 |
 | **auth**                  | Base64-kodierte Zeichenkette aus `username:password`. Beispiel: `ZGVtbzpwYXNzd29ydA==` entspricht `demo:password`.                           |
 | **namespace**             | Das Kubernetes-Namespace, in dem das Secret erstellt wird. Der Component-Operator kann das Secret nur innerhalb dieses Namespaces verwenden. |
-
-
----
-
-## Zusammenfassung
-
-- **Dogu-Registry Secret** → `k8s-dogu-operator-dogu-registry`
-- **Container-Registry Secret** → `ces-container-registries`
-- **Helm-Registry ConfigMap & Secret** → `component-operator-helm-repository`, `component-operator-helm-registry`
-
-Diese Ressourcen müssen **vor der Installation von `ecosystem-core`** im gewünschten Namespace erstellt werden.

@@ -1,0 +1,12 @@
+{{- /* Root components */ -}}
+{{- include "ecosystem-core.renderComponentsMap" (dict "map" .Values.components "root" $) }}
+
+{{- /* Backup stack components */ -}}
+{{- if .Values.backup.enabled }}
+{{- include "ecosystem-core.renderComponentsMap" (dict "map" .Values.backup.components) }}
+{{- end }}
+
+{{- /* Monitoring stack components */ -}}
+{{- if .Values.monitoring.enabled }}
+{{- include "ecosystem-core.renderComponentsMap" (dict "map" .Values.monitoring.components) }}
+{{- end }}

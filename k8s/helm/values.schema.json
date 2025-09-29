@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ecosystem-core values schema",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "disabled" : {
+          "type": "boolean",
+          "description": "Disable a component."
+        },
+        "version": {
+          "type": "string",
+          "description": "Component version to deploy."
+        },
+        "helmNamespace": {
+          "type": "string",
+          "description": "Namespace where the Component CR will reference for Helm operations. Defaults to 'k8s'."
+        },
+        "deployNamespace": {
+          "type": "string",
+          "description": "Target namespace where the component is deployed. Defaults to the namespace of the component."
+        },
+        "mainLogLevel": {
+          "type": "string",
+          "description": "Log level passed for the component.",
+          "enum": ["debug", "info", "warn", "error"]
+        },
+        "valuesObject": {
+          "type": "object",
+          "description": "Multiline YAML block to override component values."
+        }
+      },
+      "required": ["version"]
+    }
+  },
+  "properties": {
+    "skipPreconditionValidation": {
+      "type": "boolean",
+      "description": "Skip validation of preconditions. This is useful for local development or in ArgoCD contexts. Default: false."
+    },
+    "loadbalancer-annotations": {
+      "type": "object",
+      "description": "Custom annotations for the loadbalancer to be set in the specific ces-loadbalancer service",
+      "patternProperties": {
+        "^[A-Za-z0-9./-]+$": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "k8s-component-operator": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "manager": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "image": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "The container image to use for the operator.",
+              "properties": {
+                "registry": { "type": "string", "minLength": 1 },
+                "repository": { "type": "string", "minLength": 1 },
+                "tag": { "type": "string", "minLength": 1 }
+              }
+            },
+            "env": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "logLevel": {
+                  "type": "string",
+                  "description": "Log level for the operator.",
+                  "enum": ["debug", "info", "warn", "error"]
+                }
+              }
+            },
+            "resourceLimits": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Resource limits for the operator container.",
+              "properties": {
+                "memory": { "type": "string", "minLength": 1 }
+              }
+            },
+            "resourceRequests": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Resource requests for the operator container.",
+              "properties": {
+                "cpu": { "type": "string", "minLength": 1 },
+                "memory": { "type": "string", "minLength": 1 }
+              }
+            },
+            "networkPolicies": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "Should network policies be enabled for the operator? Defaults to 'true'.",
+              "properties": {
+                "enabled": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "description": "Map of component configurations keyed by component name.",
+      "default": {},
+      "additionalProperties": {
+        "$ref": "#/definitions/component"
+      }
+    },
+    "backup": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable backup stack."
+        },
+        "components": {
+          "type": "object",
+          "description": "Map of the components of the backup stack keyed by component name.",
+          "default": {},
+          "additionalProperties": {
+            "$ref": "#/definitions/component"
+          }
+        }
+      }
+    },
+    "monitoring": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enable monitoring stack."
+        },
+        "components": {
+          "type": "object",
+          "description": "Map of the components of the monitoring stack keyed by component name.",
+          "default": {},
+          "additionalProperties": {
+            "$ref": "#/definitions/component"
+          }
+        }
+      }
+    },
+    "cleanup": {
+      "type": "object",
+      "description": "Settings for pre-delete cleanup job.",
+      "additionalProperties": false,
+      "properties": {
+        "timeoutSeconds": {
+          "type": "integer",
+          "description": "Maximum time in seconds the cleanup job may run.",
+          "minimum": 1
+        },
+        "image": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Container image used by the cleanup job.",
+          "properties": {
+            "registry": { "type": "string", "minLength": 1 },
+            "repository": { "type": "string", "minLength": 1 },
+            "tag": { "type": "string", "minLength": 1 }
+          },
+          "required": ["registry", "repository", "tag"]
+        }
+      },
+      "required": ["timeoutSeconds", "image"]
+    },
+    "defaultConfig": {
+      "type": "object",
+      "description": "Configuration for the default-config init step.",
+      "additionalProperties": false,
+      "properties": {
+        "image": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Container image used to apply the default configuration.",
+          "properties": {
+            "registry": { "type": "string", "minLength": 1 },
+            "repository": { "type": "string", "minLength": 1 },
+            "tag": { "type": "string", "minLength": 1 }
+          },
+          "required": ["registry", "repository", "tag"]
+        },
+        "imagePullPolicy": {
+          "type": "string",
+          "description": "Image pull policy for the default-config container.",
+          "enum": ["Always", "IfNotPresent"]
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "logLevel": {
+              "type": "string",
+              "description": "Log level for the operator.",
+              "enum": ["debug", "info", "warn", "error"]
+            },
+            "waitTimeoutMinutes": {
+              "type": "integer",
+              "description": "The timeout in minutes to wait for the load-balancer service to be get an external IP. Defaults to 5 minutes.",
+              "minimum": 1
+            }
+          }
+        }
+      },
+      "required": ["image"]
+    }
+  }
+}
