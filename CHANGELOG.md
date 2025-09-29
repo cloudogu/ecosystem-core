@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.2.1] - 2025-09-29
+### Fixed
+- Build and Push for release
+
 ## [v0.2.0] - 2025-09-29
 ### Added
 - [#07] Configure annotations for loadbalancer via values.yaml
