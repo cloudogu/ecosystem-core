@@ -2,7 +2,10 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-skipPreconditionValidation: false
+skipPreconditionValidation: true
+
+loadbalancer-annotations: {}
+
 k8s-component-operator:
   manager:
     image:

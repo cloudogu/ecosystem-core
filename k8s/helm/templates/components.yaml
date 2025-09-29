@@ -1,5 +1,5 @@
 {{- /* Root components */ -}}
-{{- include "ecosystem-core.renderComponentsMap" (dict "map" .Values.components) }}
+{{- include "ecosystem-core.renderComponentsMap" (dict "map" .Values.components "root" $) }}
 
 {{- /* Backup stack components */ -}}
 {{- if .Values.backup.enabled }}

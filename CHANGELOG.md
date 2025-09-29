@@ -10,3 +10,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - [#01] Provide helm chart to install core components of the ecosystem
 - [#05] post-install job to initialize default configuration
+- [#07] Configure annotations for loadbalancer via values.yaml

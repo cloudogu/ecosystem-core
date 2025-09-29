@@ -29,8 +29,8 @@
           "description": "Log level passed for the component.",
           "enum": ["debug", "info", "warn", "error"]
         },
-        "valuesYamlOverwrite": {
-          "type": "string",
+        "valuesObject": {
+          "type": "object",
           "description": "Multiline YAML block to override component values."
         }
       },
@@ -41,6 +41,14 @@
     "skipPreconditionValidation": {
       "type": "boolean",
       "description": "Skip validation of preconditions. This is useful for local development or in ArgoCD contexts. Default: false."
+    },
+    "loadbalancer-annotations": {
+      "type": "object",
+      "description": "Custom annotations for the loadbalancer to be set in the specific ces-loadbalancer service",
+      "patternProperties": {
+        "^[A-Za-z0-9./-]+$": { "type": "string" }
+      },
+      "additionalProperties": false
     },
     "k8s-component-operator": {
       "type": "object",
