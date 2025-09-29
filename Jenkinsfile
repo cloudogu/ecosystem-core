@@ -197,7 +197,7 @@ void stageAutomaticRelease() {
         String changelogVersion = git.getSimpleBranchName()
 
         stage('Build & Push Image') {
-            def dockerImage = docker.build("cloudogu/${repositoryName}-default-config:${releaseVersion}")
+            def dockerImage = docker.build("cloudogu/${repositoryName}-default-config:${releaseVersion}", "./default-config")
             docker.withRegistry('https://registry.hub.docker.com/', 'dockerHubCredentials') {
                 dockerImage.push("${releaseVersion}")
             }
