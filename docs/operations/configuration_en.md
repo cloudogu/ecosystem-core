@@ -11,6 +11,7 @@ Configuration is done via the `values.yaml` file.
 | Field                        | Type      | Description                                                                                                                |
 |------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------|
 | `skipPreconditionValidation` | `boolean` | Skips the [precondition check](./preparation_en.md) (e.g., in local development environments or ArgoCD). Default: `false`. |
+| `loadbalancer-annotations`   | `object`  | Writes the provided key value pairs in the annotations of the loadbalancer service of the Ecosystems.                      |
 
 ## Component Operator Configuration (`k8s-component-operator`)
 
@@ -60,20 +61,20 @@ components:
     helmNamespace: "k8s"
     deployNamespace: "my-namespace"
     mainLogLevel: "info"
-    valuesYamlOverwrite: |
+    valuesObject:
       replicaCount: 2
       service:
         name: "myService"
 ```
 
-| Field                 | Type      | Description                                                                                                     |
-|-----------------------|-----------|-----------------------------------------------------------------------------------------------------------------|
-| `disabled`            | `boolean` | Deactivates the component (default: `false`)                                                                    |
-| `version`             | `string`  | Component version (e.g., Docker or Helm tag). By specifying “latest” the newest available version will be used. |
-| `helmNamespace`       | `string`  | Namespace used by the component for Helm operations (default: `k8s`)                                            |
-| `deployNamespace`     | `string`  | Target namespace where the component is installed (default: component namespace)                                |
-| `mainLogLevel`        | `string`  | Log level for the component (`debug`, `info`, `warn`, `error`)                                                  |
-| `valuesYamlOverwrite` | `string`  | Free text YAML block for overwriting default values                                                             |
+| Field             | Type      | Description                                                                                                     |
+|-------------------|-----------|-----------------------------------------------------------------------------------------------------------------|
+| `disabled`        | `boolean` | Deactivates the component (default: `false`)                                                                    |
+| `version`         | `string`  | Component version (e.g., Docker or Helm tag). By specifying “latest” the newest available version will be used. |
+| `helmNamespace`   | `string`  | Namespace used by the component for Helm operations (default: `k8s`)                                            |
+| `deployNamespace` | `string`  | Target namespace where the component is installed (default: component namespace)                                |
+| `mainLogLevel`    | `string`  | Log level for the component (`debug`, `info`, `warn`, `error`)                                                  |
+| `valuesObject`    | `object`  | Free YAML block for overwriting default values from the components                                              |
 
 ## Backup components (`backup`)
 
