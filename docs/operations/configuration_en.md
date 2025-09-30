@@ -11,6 +11,7 @@ Configuration is done via the `values.yaml` file.
 | Field                        | Type      | Description                                                                                                                |
 |------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------|
 | `skipPreconditionValidation` | `boolean` | Skips the [precondition check](./preparation_en.md) (e.g., in local development environments or ArgoCD). Default: `false`. |
+| `loadbalancer-annotations`   | `object`  | Writes the provided key value pairs in the annotations of the loadbalancer service of the Ecosystems.                      |
 
 ## Component Operator Configuration (`k8s-component-operator`)
 

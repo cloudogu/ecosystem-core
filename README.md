@@ -11,7 +11,7 @@ It works standalone or via GitOps tools like [Argo CD](https://argoproj.github.i
 
 ## Validations / preconditions
 
-The "Component" CustomResourceDefinition (CRD) must be installed in the cluster.
+The "Component" CustomResourceDefinition (CRD) must be installed first in the cluster.
 This is required by the `k8s-component-operator` to manage component objects.
 
 This chart can fail fast when required Secrets/ConfigMaps are missing. We use Helm’s `lookup` during install to 
