@@ -92,8 +92,9 @@ func TestNewDefaultConfigApplier(t *testing.T) {
 	mockGlobalRepo := newMockGlobalConfigRepo(t)
 	mockDoguRepo := newMockDoguConfigRepo(t)
 	mockSensitiveDoguRepo := newMockDoguConfigRepo(t)
+	mockSecClient := newMockSecretClient(t)
 
-	applier := NewDefaultConfigApplier(mockGlobalRepo, mockDoguRepo, mockSensitiveDoguRepo)
+	applier := NewDefaultConfigApplier(mockGlobalRepo, mockDoguRepo, mockSensitiveDoguRepo, mockSecClient)
 
 	require.NotNil(t, applier)
 	assert.NotNil(t, applier.passwordGenerator)

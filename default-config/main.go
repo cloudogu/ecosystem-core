@@ -61,7 +61,7 @@ func run(ctx context.Context, cfg jobConfig) error {
 	doguConfigRepo := repository.NewDoguConfigRepository(k8sConfigMapClient)
 	sensitiveDoguConfigRepo := repository.NewSensitiveDoguConfigRepository(k8sSecretClient)
 
-	ca := config.NewDefaultConfigApplier(globalConfigRepo, doguConfigRepo, sensitiveDoguConfigRepo)
+	ca := config.NewDefaultConfigApplier(globalConfigRepo, doguConfigRepo, sensitiveDoguConfigRepo, k8sSecretClient)
 	fa := fqdn.NewApplier(globalConfigRepo, k8sServicesClient)
 
 	if err = applyDefaults(ctx, cfg, ca, fa); err != nil {
