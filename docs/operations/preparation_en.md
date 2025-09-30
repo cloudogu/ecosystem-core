@@ -110,3 +110,31 @@ kubectl create secret generic component-operator-helm-registry \
 | **registry.cloudogu.com** | Hostname of the Helm registry to which the credentials apply.                                                                  |
 | **auth**                  | Base64-encoded string of `username:password`. Example: `ZGVtbzpwYXNzd29ydA==` corresponds to `demo:password`.                  |
 | **namespace**             | The Kubernetes namespace in which the secret is created. The component operator can only use the secret within this namespace. |
+
+
+### Certificate
+
+Communication with web applications operated via the ecosystem is always encrypted using TLS.
+This requires a corresponding TLS certificate, which is stored centrally in the cluster. If no certificate is stored in the cluster,
+a self-signed certificate is generated and provided.
+
+#### Provisioning an external certificate
+
+If you want to use your own external certificate for CES-MN, it should be provided in the cluster before installing the `ecosystem-core`
+and should comply with the [Kubernetes specifications](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets).
+The certificate must be created as a secret with the name `ecosystem-certificate` in the corresponding Dogu namespace:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ecosystem-certificate
+  namespace: ecosystem
+type: kubernetes.io/tls
+data:
+  # values are base64 encoded, which obscures them but does NOT provide
+  # any useful level of confidentiality
+  # Replace the following values with your own base64-encoded certificate and key.
+  tls.crt: "REPLACE_WITH_BASE64_CERT" 
+  tls.key: "REPLACE_WITH_BASE64_KEY"
+```

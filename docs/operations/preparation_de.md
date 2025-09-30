@@ -10,6 +10,7 @@ Diese enthalten die Zugangsdaten zu Dogu-, Container- und Helm-Registries.
 - Zugriff auf das Kubernetes-Cluster (`kubectl` muss konfiguriert sein)
 - Ein gesetztes Kubernetes-Namespace (`$NAMESPACE`)
 - Zugangsdaten zu den Registries (Benutzername, Passwort, ggf. E-Mail)
+- Bereistellung eines TLS-Zertifikats (falls gewünscht)
 
 ### Component-CRD
 
@@ -110,3 +111,31 @@ kubectl create secret generic component-operator-helm-registry \
 | **registry.cloudogu.com** | Hostname der Helm-Registry, für die die Zugangsdaten gelten.                                                                                 |
 | **auth**                  | Base64-kodierte Zeichenkette aus `username:password`. Beispiel: `ZGVtbzpwYXNzd29ydA==` entspricht `demo:password`.                           |
 | **namespace**             | Das Kubernetes-Namespace, in dem das Secret erstellt wird. Der Component-Operator kann das Secret nur innerhalb dieses Namespaces verwenden. |
+
+### Zertifikat
+
+Die Kommunikation mit den Web-Applikationen, die über das Ecosystem betrieben werden, ist grundsätzlich über TLS verschlüsselt.
+Hierfür wird ein entsprechendes TLS-Zertifikat benötigt, dass im Cluster zentral hinterlegt wird. Ist kein Zertifikat im Cluster hinterlegt,
+wird ein selbst-signiertes Zertifikat erzeugt und bereitgestellt.
+
+#### Bereitstellung eines externen Zertifikats
+
+Soll für CES-MN ein eigenes externes Zertifikat verwendet werden, sollte diese vor der Installation des `ecosystem-core`
+im Cluster bereitgestellt werden und den [Vorgaben von Kubernetes](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets) entsprechen. 
+Das Zertifikat muss als Secret mit dem Namen `ecosystem-certificate` im entsprechenden Namespace der Dogus erstellt werden:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ecosystem-certificate
+  namespace: ecosystem
+type: kubernetes.io/tls
+data:
+  # values are base64 encoded, which obscures them but does NOT provide
+  # any useful level of confidentiality
+  # Replace the following values with your own base64-encoded certificate and key.
+  tls.crt: "REPLACE_WITH_BASE64_CERT" 
+  tls.key: "REPLACE_WITH_BASE64_KEY"
+```
+

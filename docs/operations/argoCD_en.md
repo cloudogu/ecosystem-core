@@ -75,6 +75,8 @@ The complete CES-MN can be deployed via ArgoCD using several so-called sync wave
 - **k8s-component-operator-crd** (sync wave -1): installs the Component CRD as a prerequisite for the Component Operator
 - **ecosystem-core** (sync wave 0): installs the Component Operator with all necessary components and creates a default configuration
 - **blueprint** (sync wave 1): installs a blueprint with a user-specific configuration and all desired Dogus
+  
+In addition, further sync waves with priority -1 could be used to provide certificates or secrets in the cluster.
 
 ### k8s-component-operator-crd
 

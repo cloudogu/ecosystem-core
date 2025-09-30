@@ -77,6 +77,8 @@ Das komplette CES-MN kann mittels ArgoCD über mehrere sogenannte Sync-Waves in 
 - **ecosystem-core** (sync-wave 0): installiert den Component-Operator mit allen notwendigen Komponenten und erstellt eine Default-Konfiguration
 - **blueprint** (sync-wave 1): installiert ein Blueprint mit einer nutzerspezfischen Konfiguration sowie alle  gewünschten Dogus
 
+Darüber hinaus könnten weitere Sync-Waves mit Priorität -1 verwendet werden, um Zertifkate oder Secrets im Cluster bereitzustellen.
+
 ### k8s-component-operator-crd
 
 ```yaml
