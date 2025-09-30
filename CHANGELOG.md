@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- [#10] Don't overwrite external certificates by setting the right certificate type in global config
 
 ## [v0.2.1] - 2025-09-29
 ### Fixed
