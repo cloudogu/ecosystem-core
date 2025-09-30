@@ -11,7 +11,7 @@ var globalDefaults = map[string]string{
 	"domain":              "ces.local",
 	"admin_group":         "cesAdmin",
 	"mail_address":        "",
-	"certificate/type":    "selfsigned",
+	"certificate/type":    "",
 	"default_dogu":        "cas",
 	"k8s/use_internal_ip": "false",
 	"k8s/internal_ip":     "",
@@ -62,10 +62,9 @@ type DefaultConfigApplier struct {
 	passwordGenerator  passwordGenerator
 }
 
-func NewDefaultConfigApplier(globalConfigRepo globalConfigRepo, doguConfigRepo doguConfigRepo, sensitiveDoguConfigRepo doguConfigRepo) *DefaultConfigApplier {
-	gcw := &cesGlobalConfigWriter{
-		globalConfigRepo: globalConfigRepo,
-	}
+func NewDefaultConfigApplier(globalConfigRepo globalConfigRepo, doguConfigRepo doguConfigRepo, sensitiveDoguConfigRepo doguConfigRepo, secretClient secretClient) *DefaultConfigApplier {
+	gcw := newCesGlobalConfigWriter(globalConfigRepo, secretClient)
+
 	dcw := &cesDoguConfigWriter{
 		doguConfigRepo:          doguConfigRepo,
 		sensitiveDoguConfigRepo: sensitiveDoguConfigRepo,
