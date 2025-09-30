@@ -131,28 +131,6 @@ spec:
     helm:
       valuesObject:
         skipPreconditionValidation: true
-        components:
-          k8s-blueprint-operator-crd:
-            version: "1.3.0"
-            helmNamespace: "k8s"
-          k8s-blueprint-operator:
-            version: "2.8.0"
-            helmNamespace: "k8s"
-            valuesObject: 
-              healthConfig:
-                components:
-                  required:
-                    - name: k8s-dogu-operator
-                    - name: k8s-service-discovery
-          k8s-service-discovery:
-            version: "3.0.0"
-            helmNamespace: "k8s"
-          k8s-ces-assets:
-            valuesObject:
-              nginx:
-                manager:
-                  config:
-                    defaultDogu: "cockpit"
   destination:
     server: https://kubernetes.default.svc
     namespace: ecosystem
@@ -236,7 +214,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://ecosystem.cloudogu.com/scm/repo/ces/argocd-test
+    repoURL: https://example.local/repo/ces
     targetRevision: main               # branch, tag, or commit
     path: apps/ces-mn                  # folder with manifests
     directory:
