@@ -73,7 +73,7 @@ components:
 | `helmNamespace`   | `string`  | Namespace, den die Komponente für Helm-Operationen nutzt (Standard: `k8s`)                                                    |
 | `deployNamespace` | `string`  | Ziel-Namespace, in den die Komponente installiert wird (Standard: Namespace der Komponente)                                   |
 | `mainLogLevel`    | `string`  | Log-Level für die Komponente (`debug`, `info`, `warn`, `error`)                                                               |
-| `valuesObject`    | `object`  | Freier YAML-Block zum Überschreiben von Standardwerten der Komoponenten                                                       |
+| `valuesObject`    | `object`  | YAML-Block zum Überschreiben von Standardwerten                                                                               |
 
 ## Backup-Komponenten (`backup`)
 

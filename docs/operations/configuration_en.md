@@ -74,7 +74,7 @@ components:
 | `helmNamespace`   | `string`  | Namespace used by the component for Helm operations (default: `k8s`)                                            |
 | `deployNamespace` | `string`  | Target namespace where the component is installed (default: component namespace)                                |
 | `mainLogLevel`    | `string`  | Log level for the component (`debug`, `info`, `warn`, `error`)                                                  |
-| `valuesObject`    | `object`  | Free YAML block for overwriting default values from the components                                              |
+| `valuesObject`    | `string`  | YAML block for overwriting default values                                                                       |
 
 ## Backup components (`backup`)
 

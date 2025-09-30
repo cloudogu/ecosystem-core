@@ -2,7 +2,7 @@
 ARTIFACT_ID=ecosystem-core
 ARTIFACT_ID_DEFAULT_CONFIG=${ARTIFACT_ID}-default-config
 
-VERSION=0.1.0
+VERSION=0.2.2
 GOTAG?=1.25.1
 
 MAKEFILES_VERSION=10.2.1
@@ -117,7 +117,7 @@ images-import: ## import images from ces-importer and
 	@make image-import \
 		IMAGE_DIR=./default-config \
 		IMAGE=${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION} \
-		IMAGE_DEV_VERSION=$(CES_REGISTRY_HOST)$(CES_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH):${VERSION}
+		IMAGE_DEV_VERSION=$(IMAGE_DEV):${VERSION}
 
 .PHONY: helm-values-update-image-version
 helm-values-update-image-version: $(BINARY_YQ)
