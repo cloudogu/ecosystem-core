@@ -103,7 +103,7 @@ func (gcw *cesGlobalConfigWriter) applyDefaultGlobalConfig(ctx context.Context, 
 func (gcw *cesGlobalConfigWriter) getCertificateType(ctx context.Context) (string, error) {
 	external, cErr := gcw.isExternalCertificate(ctx)
 	if cErr != nil {
-		return "", fmt.Errorf("failed to verify external certifivate: %w", cErr)
+		return "", fmt.Errorf("failed to verify external certificate: %w", cErr)
 	}
 
 	if external {
