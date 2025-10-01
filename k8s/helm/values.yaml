@@ -30,7 +30,7 @@ components:
   k8s-blueprint-operator:
     version: 2.7.0
   k8s-ces-gateway:
-    version: 1.0.2
+    version: 1.0.3
   k8s-ces-assets:
     version: 1.0.2
   k8s-ces-control:
