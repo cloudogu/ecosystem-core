@@ -5,6 +5,7 @@ ARTIFACT_ID_DEFAULT_CONFIG=${ARTIFACT_ID}-default-config
 VERSION=0.2.2
 GOTAG?=1.25.1
 
+ADDITIONAL_CLEAN=clean_charts
 MAKEFILES_VERSION=10.2.1
 
 IMAGE=cloudogu/${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION}
@@ -143,3 +144,12 @@ template-image-pull-policy: $(BINARY_YQ)
 		echo "Setting pull policy to always!" ; \
 		$(BINARY_YQ) -i e ".defaultConfig.imagePullPolicy=\"Always\"" "${K8S_COMPONENT_TARGET_VALUES}" ; \
 	fi
+
+clean_charts:
+	rm -rf ${HELM_SOURCE_DIR}/charts
+
+
+.PHONY: ecosystem-core-release
+ecosystem-core-release: ## Interactively starts the release workflow for ecosystem-core
+	@echo "Starting git flow release..."
+	@build/make/release.sh ecosystem-core
