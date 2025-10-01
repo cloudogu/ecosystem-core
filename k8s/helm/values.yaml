@@ -30,22 +30,16 @@ components:
   k8s-blueprint-operator:
     version: 2.7.0
   k8s-ces-gateway:
-    version: 1.0.1
+    version: 1.0.2
   k8s-ces-assets:
-    version: 1.0.1
+    version: 1.0.2
   k8s-ces-control:
     disabled: true
     version: 1.7.1
   k8s-debug-mode-operator-crd:
-    version: 0.2.3
+    version: 1.0.0
   k8s-debug-mode-operator:
-    version: 0.3.0
-  k8s-support-mode-operator-crd:
-    disabled: true
-    version: 0.2.0
-  k8s-support-mode-operator:
-    disabled: true
-    version: 0.3.0
+    version: 1.0.0
 backup:
   enabled: false
   components:
@@ -68,6 +62,10 @@ monitoring:
       version: 2.9.1-9
     k8s-alloy:
       version: 1.1.2-1
+    k8s-support-archive-operator-crd:
+      version: 1.0.0
+    k8s-support-archive-operator:
+      version: 1.0.1
 cleanup:
   timeoutSeconds: 900
   image:
