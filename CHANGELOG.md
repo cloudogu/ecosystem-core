@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.3.0] - 2025-10-01
+### Changed
+- [#13] Update to latest component versions
+
 ## [v0.2.2] - 2025-09-30
 ### Fixed
 - [#10] Don't overwrite external certificates by setting the right certificate type in global config

@@ -10,6 +10,7 @@ Die Konfiguration erfolgt über die Datei `values.yaml`.
 | Feld                         | Typ       | Beschreibung                                                                                                                                 |
 |------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | `skipPreconditionValidation` | `boolean` | Überspringt die [Prüfung von Voraussetzungen](./preparation_de.md) (z. B. in lokalen Entwicklungsumgebungen oder ArgoCD). Standard: `false`. |
+| `loadbalancer-annotations`   | `object`  | Schreibt die übergebenen Key-Value Pairs als Annotation in den LoadBalancer-Service des Ecosystems.                                          |
 
 ## Component-Operator-Konfiguration (`k8s-component-operator`)
 
