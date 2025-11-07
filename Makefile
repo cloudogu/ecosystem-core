@@ -2,7 +2,7 @@
 ARTIFACT_ID=ecosystem-core
 ARTIFACT_ID_DEFAULT_CONFIG=${ARTIFACT_ID}-default-config
 
-VERSION=0.5.0
+VERSION=1.0.0
 GOTAG?=1.25.1
 
 ADDITIONAL_CLEAN=clean_charts
