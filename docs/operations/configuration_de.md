@@ -64,6 +64,9 @@ components:
       replicaCount: 2
       service:
         name: "myService"
+    valuesConfigRef:
+      name: "configMapName"
+      key: "configMapKey"    
 ```
 
 | Feld              | Typ       | Beschreibung                                                                                                                  |
@@ -74,6 +77,7 @@ components:
 | `deployNamespace` | `string`  | Ziel-Namespace, in den die Komponente installiert wird (Standard: Namespace der Komponente)                                   |
 | `mainLogLevel`    | `string`  | Log-Level für die Komponente (`debug`, `info`, `warn`, `error`)                                                               |
 | `valuesObject`    | `object`  | YAML-Block zum Überschreiben von Standardwerten                                                                               |
+| `valuesConfigRef` | `object`  | Angabe einer Referenz auf eine ConfigMap und einen darin enthaltenen Key zum Überschreiben von Standardwerten.                |
 
 ## Backup-Komponenten (`backup`)
 

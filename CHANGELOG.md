@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.5.0] - 2025-11-07
+### Added
+- [#20] support config map references for components
+### Changed
+- [#15] update go dependencies
+
 ## [v0.4.0] - 2025-10-01
 ### Changed
 - Update k8s-ces-gateway to v1.0.3
