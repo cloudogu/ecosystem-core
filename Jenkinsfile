@@ -100,7 +100,7 @@ node('docker') {
 							k3d.assignExternalIP()
                             k3d.kubectl("--namespace default create configmap global-config --from-literal=config.yaml='fqdn: ${k3d.@externalIP}'")
 
-                            k3d.helm("install ${repositoryName} ${helmChartDir}")
+                            k3d.helm("install ${repositoryName} ${helmChartDir} --set monitoring.components.k8s-prometheus.valuesObject.kube-prometheus-stack.nodeExporter.enabled=false")
                         }
                     }
 
