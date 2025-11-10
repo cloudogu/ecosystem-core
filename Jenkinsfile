@@ -100,7 +100,7 @@ node('docker') {
 							k3d.assignExternalIP()
                             k3d.kubectl("--namespace default create configmap global-config --from-literal=config.yaml='fqdn: ${k3d.@externalIP}'")
 
-                            k3d.helm("install ${repositoryName} ${helmChartDir} --set monitoring.components.k8s-prometheus.valuesObject.kube-prometheus-stack.nodeExporter.enabled=false")
+                            k3d.helm("install ${repositoryName} ${helmChartDir} --set monitoring.components.k8s-prometheus.valuesObject.kube-prometheus-stack.nodeExporter.enabled=false --set backup.components.k8s-snapshot-controller.disabled=false --set backup.components.k8s-snapshot-controller-crd.disabled=false")
                         }
                     }
 
@@ -110,6 +110,7 @@ node('docker') {
                         	"app.kubernetes.io/name=k8s-component-operator",
                         	"k8s.cloudogu.com/component.name=k8s-minio",
                             "k8s.cloudogu.com/component.name=k8s-loki",
+                            "k8s.cloudogu.com/component.name=k8s-snapshot-controller",
                             "k8s.cloudogu.com/component.name=k8s-velero",
                             "k8s.cloudogu.com/component.name=k8s-ces-control",
                             "k8s.cloudogu.com/component.name=k8s-promtail",
