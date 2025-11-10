@@ -25,5 +25,5 @@ appVersion: "0.0.0-replaceme"
 
 dependencies:
   - name: k8s-component-operator
-    version: "^1.11.0"
+    version: "^1.12.0"
     repository: "oci://registry.cloudogu.com/k8s"

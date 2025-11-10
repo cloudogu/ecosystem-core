@@ -8,7 +8,7 @@ k8s-component-operator:
     image:
       registry: docker.io
       repository: cloudogu/k8s-component-operator
-      tag: 1.10.0
+      tag: 1.12.0
     env:
       logLevel: info
     resourceLimits:
@@ -35,7 +35,7 @@ components:
     version: 1.0.3
   k8s-ces-control:
     disabled: true
-    version: 1.7.3
+    version: 1.8.0
   k8s-debug-mode-operator-crd:
     version: 1.0.0
   k8s-debug-mode-operator:
@@ -46,7 +46,7 @@ backup:
     k8s-backup-operator-crd:
       version: 1.7.0
     k8s-backup-operator:
-      version: 1.6.0
+      version: 2.0.0
     k8s-velero:
       version: 10.0.1-5
 monitoring:
@@ -76,7 +76,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 0.4.0
+    tag: 1.0.0
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info
