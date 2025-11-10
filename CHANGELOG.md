@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [v1.0.0] - 2025-11-07
+### Changed
+- [#22] update component operator dependency
+
+## [v0.5.0] - 2025-11-07
+[WARNING, THIS VERSION IS BROKEN, WE'D RECOMMEND USING THE NEXT RELEASE!]
+### Added
+- [#20] support config map references for components
 ### Changed
 - [#15] update go dependencies
 

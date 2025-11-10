@@ -8,6 +8,20 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "valuesConfigRef": {
+          "type": "object",
+          "description": "Reference to a config map for configuration of values.",
+          "properties": {
+            "name":{
+              "type": "string",
+              "description": "Name of the config map."
+            },
+            "key":{
+              "type": "string",
+              "description": "Key of the config map."
+            }
+          }
+        },
         "disabled" : {
           "type": "boolean",
           "description": "Disable a component."

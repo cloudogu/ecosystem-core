@@ -140,6 +140,11 @@ spec:
   {{- if $c.deployNamespace }}
   deployNamespace: {{ $c.deployNamespace }}
   {{- end }}
+  {{- if $c.valuesConfigRef }}
+  valuesConfigRef:
+    name: {{ $c.valuesConfigRef.name }}
+    key: {{ $c.valuesConfigRef.key }}
+  {{- end }}
   {{- if $c.mainLogLevel }}
   mappedValues:
     mainLogLevel: {{ $c.mainLogLevel }}

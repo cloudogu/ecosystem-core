@@ -3,4 +3,4 @@ dependencies:
   repository: oci://registry.cloudogu.com/k8s
   version: 1.12.0
 digest: sha256:fd817e3fba1bf8cb20083376b62bb4e7bea35026882a1f66000125f64fb2a5d7
-generated: "2025-11-10T10:48:24.506576002+01:00"
+generated: "2025-11-07T16:11:44.841717062+01:00"
