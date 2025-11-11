@@ -94,13 +94,16 @@ node('docker') {
                     stage('Deploy ecosystem-core') {
                         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'harborhelmchartpush', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD']]) {
                             k3d.helm("registry login ${registryUrl} --username '${HARBOR_USERNAME}' --password '${HARBOR_PASSWORD}'")
-                            k3d.helm("install k8s-component-operator-crd oci://registry.cloudogu.com/k8s/k8s-component-operator-crd  --version 1.10.0")
+                            k3d.helm("install k8s-component-operator-crd oci://registry.cloudogu.com/k8s/k8s-component-operator-crd  --version 1.13.0")
                             k3d.helm("registry logout ${registryUrl}")
 
 							k3d.assignExternalIP()
                             k3d.kubectl("--namespace default create configmap global-config --from-literal=config.yaml='fqdn: ${k3d.@externalIP}'")
 
-                            k3d.helm("install ${repositoryName} ${helmChartDir}")
+                            k3d.helm("install ${repositoryName} ${helmChartDir} " +
+                                "--set monitoring.components.k8s-prometheus.valuesObject.kube-prometheus-stack.nodeExporter.enabled=false " +
+                                "--set backup.components.k8s-snapshot-controller.disabled=false --set backup.components.k8s-snapshot-controller-crd.disabled=false " +
+                                "--set-json='monitoring.components.k8s-promtail.valuesObject.promtail.config.clients=[{\"url\": \"http://k8s-loki-gateway.default.svc.cluster.local/loki/api/v1/push\", \"basic_auth\": {\"username\": \"\${LOKI_USERNAME}\", \"password\": \"\${LOKI_PASSWORD}\"}}]'")
                         }
                     }
 
@@ -108,11 +111,22 @@ node('docker') {
                         // Labels we wait for
                         def labels = [
                         	"app.kubernetes.io/name=k8s-component-operator",
+                        	"k8s.cloudogu.com/component.name=k8s-minio",
+                            "k8s.cloudogu.com/component.name=k8s-loki",
+                            "k8s.cloudogu.com/component.name=k8s-snapshot-controller",
+                            "k8s.cloudogu.com/component.name=k8s-velero",
+                            "k8s.cloudogu.com/component.name=k8s-ces-control",
+                            "k8s.cloudogu.com/component.name=k8s-promtail",
+                            "k8s.cloudogu.com/component.name=k8s-alloy",
                             "k8s.cloudogu.com/component.name=k8s-dogu-operator",
                             "k8s.cloudogu.com/component.name=k8s-service-discovery",
                             "k8s.cloudogu.com/component.name=k8s-blueprint-operator",
                             "k8s.cloudogu.com/component.name=k8s-ces-gateway",
-                            "k8s.cloudogu.com/component.name=k8s-ces-assets"
+                            "k8s.cloudogu.com/component.name=k8s-ces-assets",
+                            "k8s.cloudogu.com/component.name=k8s-debug-mode-operator",
+                            "k8s.cloudogu.com/component.name=k8s-backup-operator",
+                            "k8s.cloudogu.com/component.name=k8s-prometheus",
+                            "k8s.cloudogu.com/component.name=k8s-support-archive-operator"
                         ]
 
                         // Timeout (same for all, adjust as needed)

@@ -52,6 +52,7 @@
     }
   },
   "properties": {
+    "global": { "type": "object" },
     "skipPreconditionValidation": {
       "type": "boolean",
       "description": "Skip validation of preconditions. This is useful for local development or in ArgoCD contexts. Default: false."
