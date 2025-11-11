@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.1.0] - 2025-11-11
+### Changed
+- [#18] Allow global property at root level. With this change, other charts can use this chart as a dependency.
+- [#19] Update components to the newest versions
+
 ## [v1.0.0] - 2025-11-07
 ### Changed
 - [#22] update component operator dependency
