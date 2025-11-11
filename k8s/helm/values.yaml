@@ -34,7 +34,6 @@ components:
   k8s-ces-assets:
     version: 1.0.3
   k8s-ces-control:
-    disabled: false
     version: 1.8.0
   k8s-debug-mode-operator-crd:
     version: 1.0.0
@@ -63,7 +62,7 @@ monitoring:
     k8s-minio:
       version: 2025.6.13-2
     k8s-loki:
-      version: 3.3.2-5
+      version: 3.3.2-6
     k8s-promtail:
       version: 2.9.1-9
     k8s-alloy:
