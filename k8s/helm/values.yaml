@@ -28,7 +28,7 @@ components:
   k8s-blueprint-operator-crd:
     version: 3.1.0
   k8s-blueprint-operator:
-    version: 3.0.0
+    version: 3.0.1
   k8s-ces-gateway:
     version: 1.0.3
   k8s-ces-assets:
@@ -81,7 +81,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 1.1.0
+    tag: 1.1.1
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.1.1] - 2025-11-12
+### Changed
+- [#25] Update k8s-blueprint-operator to v3.0.1
+
 ## [v1.1.0] - 2025-11-11
 ### Changed
 - [#18] Allow global property at root level. With this change, other charts can use this chart as a dependency.
