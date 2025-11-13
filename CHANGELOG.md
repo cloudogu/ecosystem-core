@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.2.0] - 2025-11-13
+
 ### Changed
 - Update k8s-ces-gateway to v1.0.4. This removes the default ingress class and prevents conflicts with other ingress controllers.
 
