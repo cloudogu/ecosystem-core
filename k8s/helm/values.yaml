@@ -28,9 +28,9 @@ components:
   k8s-blueprint-operator-crd:
     version: 3.1.0
   k8s-blueprint-operator:
-    version: 3.0.1
+    version: 3.0.2
   k8s-ces-gateway:
-    version: 1.0.3
+    version: 1.0.4
   k8s-ces-assets:
     version: 1.0.3
   k8s-ces-control:
