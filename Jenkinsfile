@@ -113,7 +113,6 @@ node('docker') {
                         	"app.kubernetes.io/name=k8s-component-operator",
                         	"k8s.cloudogu.com/component.name=k8s-minio",
                             "k8s.cloudogu.com/component.name=k8s-loki",
-                            "k8s.cloudogu.com/component.name=k8s-velero",
                             "k8s.cloudogu.com/component.name=k8s-ces-control",
                             "k8s.cloudogu.com/component.name=k8s-promtail",
                             "k8s.cloudogu.com/component.name=k8s-alloy",
@@ -123,7 +122,6 @@ node('docker') {
                             "k8s.cloudogu.com/component.name=k8s-ces-gateway",
                             "k8s.cloudogu.com/component.name=k8s-ces-assets",
                             "k8s.cloudogu.com/component.name=k8s-debug-mode-operator",
-                            "k8s.cloudogu.com/component.name=k8s-backup-operator",
                             "k8s.cloudogu.com/component.name=k8s-prometheus",
                             "k8s.cloudogu.com/component.name=k8s-support-archive-operator"
                         ]
