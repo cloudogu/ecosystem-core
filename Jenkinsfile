@@ -102,7 +102,6 @@ node('docker') {
 
                             k3d.helm("install ${repositoryName} ${helmChartDir} " +
                                 "--set monitoring.components.k8s-prometheus.valuesObject.kube-prometheus-stack.nodeExporter.enabled=false " +
-                                "--set backup.components.k8s-snapshot-controller.disabled=false --set backup.components.k8s-snapshot-controller-crd.disabled=false " +
                                 "--set-json='monitoring.components.k8s-promtail.valuesObject.promtail.config.clients=[{\"url\": \"http://k8s-loki-gateway.default.svc.cluster.local/loki/api/v1/push\", \"basic_auth\": {\"username\": \"\${LOKI_USERNAME}\", \"password\": \"\${LOKI_PASSWORD}\"}}]'")
                         }
                     }
@@ -113,7 +112,6 @@ node('docker') {
                         	"app.kubernetes.io/name=k8s-component-operator",
                         	"k8s.cloudogu.com/component.name=k8s-minio",
                             "k8s.cloudogu.com/component.name=k8s-loki",
-                            "k8s.cloudogu.com/component.name=k8s-snapshot-controller",
                             "k8s.cloudogu.com/component.name=k8s-velero",
                             "k8s.cloudogu.com/component.name=k8s-ces-control",
                             "k8s.cloudogu.com/component.name=k8s-promtail",
