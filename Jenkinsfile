@@ -1,5 +1,5 @@
 #!groovy
-@Library('github.com/cloudogu/ces-build-lib@4.3.0')
+@Library('github.com/cloudogu/ces-build-lib@feature/153-support-release-of-multiple-major-versions')
 import com.cloudogu.ces.cesbuildlib.*
 
 git = new Git(this, "cesmarvin")
@@ -180,6 +180,8 @@ void stageStaticAnalysisSonarQube() {
         sh "git config 'remote.origin.fetch' '+refs/heads/*:refs/remotes/origin/*'"
         gitWithCredentials("fetch --all")
 
+        developmentBranch = makefile.determineGitFlowDevelopBranch()
+
         if (currentBranch == productionReleaseBranch) {
             echo "This branch has been detected as the production branch."
             sh "${scannerHome}/bin/sonar-scanner -Dsonar.branch.name=${env.BRANCH_NAME}"
@@ -234,7 +236,9 @@ void stageAutomaticRelease() {
         }
 
         stage('Finish Release') {
-            gitflow.finishRelease(changelogVersion, productionReleaseBranch)
+            productionReleaseBranch = makefile.determineGitFlowMainBranch(productionReleaseBranch)
+            developmentBranch = makefile.determineGitFlowDevelopBranch()
+            gitflow.finishRelease(releaseVersion, productionReleaseBranch, developmentBranch)
         }
 
         stage('Add Github-Release') {
