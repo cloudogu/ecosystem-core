@@ -102,6 +102,7 @@ node('docker') {
 
                             k3d.helm("install ${repositoryName} ${helmChartDir} " +
                                 "--set monitoring.components.k8s-prometheus.valuesObject.kube-prometheus-stack.nodeExporter.enabled=false " +
+                                "--set backup.enabled=false " +
                                 "--set-json='monitoring.components.k8s-promtail.valuesObject.promtail.config.clients=[{\"url\": \"http://k8s-loki-gateway.default.svc.cluster.local/loki/api/v1/push\", \"basic_auth\": {\"username\": \"\${LOKI_USERNAME}\", \"password\": \"\${LOKI_PASSWORD}\"}}]'")
                         }
                     }
