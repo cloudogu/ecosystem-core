@@ -40,7 +40,7 @@ components:
   k8s-debug-mode-operator:
     version: 1.0.0
 backup:
-  enabled: false
+  enabled: true
   # The backup stack requires the snapshot api and snapshot controller to be installed. It is not party of the ecosystem and should be seen as an infrastructure component like the storage provisioner.
   # In cloud environments like GKE, the snapshot controller is installed by default. In other environments, it needs to be installed manually.
   # For manual installation (like in k3s environments) see https://github.com/kubernetes-csi/external-snapshotter.
@@ -52,7 +52,7 @@ backup:
     k8s-velero:
       version: 10.0.1-5
 monitoring:
-  enabled: false
+  enabled: true
   components:
     k8s-prometheus:
       version: 75.3.5-3
