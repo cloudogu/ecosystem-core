@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.0.0] - 2025-11-28
+### Changed
+- [#30] Updated k8s-ces-gateway, k8s-ces-assets and k8s-service-discovery to fix a redirection bug for the default dogu.
+
+### BREAKING CHANGES
+
+- The updated components require a migration of the existing ingressclass.
+- Since it is now contained by another component (k8s-ces-gateway), the existing ingressclass has to be patched.
+  - See: https://github.com/cloudogu/k8s-ces-gateway/commit/8f2d639390f5bd940866431639ef1b2f4e5d2fa7
+- On new installations, this change does not require any action.
+
+### Removed
+- [#32] Removed snapshot controller and api components.
+
 ## [v1.2.0] - 2025-11-13
 
 ### Changed
