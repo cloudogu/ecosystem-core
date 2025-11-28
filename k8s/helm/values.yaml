@@ -22,17 +22,17 @@ components:
   k8s-dogu-operator-crd:
     version: 2.10.0
   k8s-dogu-operator:
-    version: 3.15.0
+    version: 3.16.0
   k8s-service-discovery:
-    version: 3.0.0
+    version: 4.0.0
   k8s-blueprint-operator-crd:
     version: 3.1.0
   k8s-blueprint-operator:
     version: 3.0.2
   k8s-ces-gateway:
-    version: 1.0.4
+    version: 2.0.0
   k8s-ces-assets:
-    version: 1.0.3
+    version: 1.0.4
   k8s-ces-control:
     version: 1.8.0
   k8s-debug-mode-operator-crd:
@@ -41,6 +41,9 @@ components:
     version: 1.0.0
 backup:
   enabled: true
+  # The backup stack requires the snapshot api and snapshot controller to be installed. It is not party of the ecosystem and should be seen as an infrastructure component like the storage provisioner.
+  # In cloud environments like GKE, the snapshot controller is installed by default. In other environments, it needs to be installed manually.
+  # For manual installation (like in k3s environments) see https://github.com/kubernetes-csi/external-snapshotter.
   components:
     k8s-backup-operator-crd:
       version: 1.7.0
@@ -48,12 +51,6 @@ backup:
       version: 2.0.0
     k8s-velero:
       version: 10.0.1-5
-    k8s-snapshot-controller:
-      version: 8.2.1-3
-      disabled: true
-    k8s-snapshot-controller-crd:
-      version: 8.2.1-3
-      disabled: true
 monitoring:
   enabled: true
   components:
