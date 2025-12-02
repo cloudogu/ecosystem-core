@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.0.1] - 2025-12-02
+### Fixed
+- [#34] Update k8s-ces-gateway to v2.0.1 to use the correct controller class name `ingress-nginx`.
+
 ## [v2.0.0] - 2025-11-28
 ### Changed
 - [#30] Updated k8s-ces-gateway, k8s-ces-assets and k8s-service-discovery to fix a redirection bug for the default dogu.
