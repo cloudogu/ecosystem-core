@@ -146,57 +146,39 @@ spec:
 ### blueprint
 
 ```yaml
-apiVersion: k8s.cloudogu.com/v2
-kind: Blueprint
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  labels:
-    app: ces
-    app.kubernetes.io/name: k8s-blueprint-lib
   name: blueprint
+  namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  blueprint:
-    dogus:
-      - name: "official/ldap"
-        version: "2.6.8-4"
-      - name: "official/gotenberg"
-        version: "8.18.0-1"
-      - name: "official/jenkins"
-        version: "2.492.3-4"
-      - name: "official/cockpit"
-        version: "2.3.0-3"
-      - name: "official/mysql"
-        version: "8.4.6-1"
-      - name: "official/nexus"
-        version: "3.75.0-4"
-      - name: "official/plantuml"
-        version: "2025.2-1"
-      - name: "official/postfix"
-        version: "3.10.2-2"
-      - name: "official/postgresql"
-        version: "14.17-1"
-      - name: "official/redis"
-        version: "6.2.17-2"
-      - name: "official/redmine"
-        version: "5.1.6-2"
-      - name: "official/scm"
-        version: "3.8.0-1"
-      - name: "official/smeagol"
-        version: "1.7.8-1"
-      - name: "official/sonar"
-        version: "25.1.0-3"
-      - name: "official/swaggerui"
-        version: "5.21.0-1"
-      - name: "official/usermgt"
-        version: "1.20.0-4"
-      - name: "premium/admin"
-        version: "2.13.2-1"
-      - name: "premium/grafana"
-        version: "11.5.2-1"
-      - name: "official/cas"
-        version: "7.2.6-3"
+  project: default
+  source:
+    repoURL: registry.cloudogu.com/k8s
+    chart: k8s-blueprint
+    targetRevision: "1.1.1"
+    path: "."  # required for Helm OCI sources
+    # You can override the default configuration here.
+    # See https://github.com/cloudogu/k8s-blueprint-helm/blob/develop/k8s/helm/values.yaml for all available options.
+    #helm:
+    #  valuesObject:
+    #    spec:
+    #      blueprint:
+    #        official/cas: "7.2.7-5"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ecosystem
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true          # safer deletion
 ```
 
 ### CES-MN
