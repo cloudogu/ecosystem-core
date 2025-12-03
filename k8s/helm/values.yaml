@@ -57,7 +57,7 @@ monitoring:
     k8s-prometheus:
       version: 75.3.5-3
     k8s-minio:
-      version: 2025.6.13-2
+      version: 2025.6.13-3
     k8s-loki:
       version: 3.3.2-6
     k8s-promtail:
@@ -78,7 +78,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 2.0.1
+    tag: 2.0.2
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info
