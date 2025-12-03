@@ -1,5 +1,5 @@
 #!groovy
-@Library('github.com/cloudogu/ces-build-lib@feature/153-support-release-of-multiple-major-versions')
+@Library('github.com/cloudogu/ces-build-lib@4.4.0')
 import com.cloudogu.ces.cesbuildlib.*
 
 git = new Git(this, "cesmarvin")
@@ -12,8 +12,6 @@ makefile = new Makefile(this)
 Docker docker = new Docker(this)
 
 repositoryName = "ecosystem-core"
-productionReleaseBranch = "main"
-developmentBranch = "develop"
 currentBranch = "${env.BRANCH_NAME}"
 
 registryNamespace = "k8s"
@@ -181,6 +179,7 @@ void stageStaticAnalysisSonarQube() {
         gitWithCredentials("fetch --all")
 
         developmentBranch = makefile.determineGitFlowDevelopBranch()
+        productionReleaseBranch = makefile.determineGitFlowMainBranch()
 
         if (currentBranch == productionReleaseBranch) {
             echo "This branch has been detected as the production branch."
@@ -236,12 +235,13 @@ void stageAutomaticRelease() {
         }
 
         stage('Finish Release') {
-            productionReleaseBranch = makefile.determineGitFlowMainBranch(productionReleaseBranch)
+            productionReleaseBranch = makefile.determineGitFlowMainBranch()
             developmentBranch = makefile.determineGitFlowDevelopBranch()
             gitflow.finishRelease(releaseVersion, productionReleaseBranch, developmentBranch)
         }
 
         stage('Add Github-Release') {
+            productionReleaseBranch = makefile.determineGitFlowMainBranch()
             releaseId = github.createReleaseWithChangelog(changelogVersion, changelog, productionReleaseBranch)
         }
     }
