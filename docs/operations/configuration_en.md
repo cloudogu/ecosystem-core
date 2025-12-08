@@ -23,8 +23,8 @@ k8s-component-operator:
   manager:
     image:
       registry: registry.cloudogu.com
-      repository: k8s-component-operator
-      tag: 1.0.0
+      repository: k8s/k8s-component-operator
+      tag: 1.12.0
     env:
       logLevel: info
     resourceLimits:
