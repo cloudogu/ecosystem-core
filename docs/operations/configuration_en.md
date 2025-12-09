@@ -22,8 +22,8 @@ The **Component Operator** manages the installation and lifecycle management of 
 k8s-component-operator:
   manager:
     image:
-      registry: registry.cloudogu.com
-      repository: k8s/k8s-component-operator
+      registry: docker.io
+      repository: cloudogu/k8s-component-operator
       tag: 1.12.0
     env:
       logLevel: info
