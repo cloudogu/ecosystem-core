@@ -17,14 +17,17 @@ Configuration is done via the `values.yaml` file.
 
 The **Component Operator** manages the installation and lifecycle management of the components.
 
+Note: Configuring the `image` section is rarely needed as the component-operator image is defined in the `Chart.yaml` of ecosystem-core.
+You can leave the `image` section out to use the defaults.
+
 ### Example
 ```yaml
 k8s-component-operator:
   manager:
-    image:
-      registry: registry.cloudogu.com
-      repository: k8s-component-operator
-      tag: 1.0.0
+#    image:
+#      registry: docker.io
+#      repository: cloudogu/k8s-component-operator
+#      tag: 1.12.0
     env:
       logLevel: info
     resourceLimits:
