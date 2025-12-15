@@ -16,14 +16,17 @@ Die Konfiguration erfolgt über die Datei `values.yaml`.
 
 Der **Component Operator** verwaltet die Installation und das Lifecycle-Management der Komponenten.
 
+Anmerkung: Es ist selten nötig, den `image`-Bereich zu ändern, da das Component-Operator-Image durch die `Chart.yaml` von ecosystem-core festgelegt wird.
+Der Bereich kann normalerweise auskommentiert bleiben.
+
 ### Beispiel
 ```yaml
 k8s-component-operator:
   manager:
-    image:
-      registry: registry.cloudogu.com
-      repository: k8s-component-operator
-      tag: 1.0.0
+#    image:
+#      registry: docker.io
+#      repository: cloudogu/k8s-component-operator
+#      tag: 1.12.0
     env:
       logLevel: info
     resourceLimits:
