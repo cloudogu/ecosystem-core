@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- [#37] Update dogu and blueprint operator to support configurable storageclasses for dogus on installation.
 - Update the backup-operator to 2.1.0 to fix deletion and synchronization of backups.
 
 ## [v2.0.2] - 2025-12-03
