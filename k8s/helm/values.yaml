@@ -67,7 +67,7 @@ monitoring:
     k8s-support-archive-operator-crd:
       version: 1.0.0
     k8s-support-archive-operator:
-      version: 1.0.1
+      version: 1.1.0
 cleanup:
   timeoutSeconds: 900
   image:
@@ -78,7 +78,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 2.1.0
+    tag: 2.2.0
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info

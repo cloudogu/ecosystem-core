@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v2.2.0] - 2026-01-06
+### Changed
+- [#39] Update support-archive-operator to 1.1.0 to support configurable storageclass.
+
 ## [v2.1.0] - 2026-01-05
 ### Changed
 - [#37] Update dogu and blueprint operator to support configurable storageclasses for dogus on installation.
