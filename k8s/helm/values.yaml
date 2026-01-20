@@ -1,6 +1,9 @@
 # Default values for ecosystem-core.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+global:
+  imagePullSecrets:
+    - name: ces-container-registries
 skipPreconditionValidation: true
 loadbalancer-annotations: {}
 k8s-component-operator:
@@ -78,7 +81,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 2.2.0
+    tag: 2.2.1
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info
