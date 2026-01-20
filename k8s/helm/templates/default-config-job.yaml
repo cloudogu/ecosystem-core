@@ -95,5 +95,9 @@ spec:
               value: {{ .Values.defaultConfig.env.logLevel | quote }}
             - name: WAIT_TIMEOUT_MINUTES
               value: {{ .Values.defaultConfig.env.waitTimeoutMinutes | quote }}
+      {{- if .Values.global }}
+      {{- with .Values.global.imagePullSecrets }}
       imagePullSecrets:
-        - name: ces-container-registries
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
