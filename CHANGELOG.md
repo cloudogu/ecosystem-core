@@ -6,8 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
-- [#43] Use pre Hooks for the config job on helm and argocd deployments.
-  - The hook is required for the service-discovery to start.
+- [#43] Modify hooks for the job config templates
+  - The config job creates the global-config for the service-discovery, and the service-discovery creates the loadblancer service needed by the job. 
+    - Use ArgoCD Sync Hooks because both the job and the component installations need to run at the same time.
+    - Use helm post-hooks because of the same reason.
 
 ## [v2.2.1] - 2026-01-20
 ### Fixed
