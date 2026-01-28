@@ -8,10 +8,10 @@ metadata:
     # Helm hooks
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "0"
-    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+    helm.sh/hook-delete-policy: hook-succeeded,hook-failed
     # Argo CD hook
-    argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded,BeforeHookCreation
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
@@ -21,9 +21,9 @@ metadata:
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "0"
-    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
-    argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded,BeforeHookCreation
+    helm.sh/hook-delete-policy: hook-succeeded,hook-failed
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
 rules:
   # Adjust as needed for your script (example allows namespaced reads)
   - apiGroups: [""]
@@ -41,9 +41,9 @@ metadata:
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "0"
-    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
-    argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded,BeforeHookCreation
+    helm.sh/hook-delete-policy: hook-succeeded,hook-failed
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -67,10 +67,10 @@ metadata:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-weight: "0"
     # Re-run on every install/upgrade: delete old job before creating new
-    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+    helm.sh/hook-delete-policy: hook-succeeded,hook-failed
     # Argo CD: run after sync
-    argocd.argoproj.io/hook: PostSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded,BeforeHookCreation
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded,HookFailed
 spec:
   backoffLimit: 0
   ttlSecondsAfterFinished: 60
