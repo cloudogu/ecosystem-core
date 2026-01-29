@@ -14,7 +14,7 @@ import (
 func Test_applyDefaults(t *testing.T) {
 	testCtx := context.Background()
 
-	cfg := jobConfig{waitTimeout: defaultWaitTimeoutMinutes * time.Minute}
+	cfg := jobConfig{waitTimeout: defaultWaitTimeoutMinutes * time.Minute, enableFqdnApply: true}
 
 	t.Run("should apply defaults", func(t *testing.T) {
 		ca := newMockConfigApplier(t)
@@ -24,6 +24,18 @@ func Test_applyDefaults(t *testing.T) {
 		fa.EXPECT().ApplyInitialFQDN(testCtx, cfg.waitTimeout).Return(nil)
 
 		err := applyDefaults(testCtx, cfg, ca, fa)
+
+		require.NoError(t, err)
+	})
+
+	t.Run("should not apply fqdn", func(t *testing.T) {
+		noFqdnApplyCfg := jobConfig{waitTimeout: defaultWaitTimeoutMinutes * time.Minute, enableFqdnApply: false}
+		ca := newMockConfigApplier(t)
+		ca.EXPECT().ApplyDefaultConfig(testCtx).Return(nil)
+
+		fa := newMockFqdnApplier(t)
+
+		err := applyDefaults(testCtx, noFqdnApplyCfg, ca, fa)
 
 		require.NoError(t, err)
 	})
@@ -68,13 +80,16 @@ func Test_readConfig(t *testing.T) {
 			os.Setenv("NAMESPACE", "")
 			os.Setenv("LOG_LEVEL", "")
 			os.Setenv("WAIT_TIMEOUT_MINUTES", "")
+			os.Setenv("ENABLE_FQDN_APPLY", "")
 		}()
 		os.Setenv("NAMESPACE", "ecosystem")
 		os.Setenv("LOG_LEVEL", "debug")
 		os.Setenv("WAIT_TIMEOUT_MINUTES", "15")
+		os.Setenv("ENABLE_FQDN_APPLY", "true")
 		job := readConfig()
 		assert.Equal(t, job.namespace, "ecosystem")
 		assert.Equal(t, job.logLevel, "debug")
+		assert.Equal(t, true, job.enableFqdnApply)
 		assert.Equal(t, time.Duration(15)*time.Minute, job.waitTimeout)
 	})
 	t.Run("success with default", func(t *testing.T) {
@@ -88,6 +103,7 @@ func Test_readConfig(t *testing.T) {
 		job := readConfig()
 		assert.Equal(t, job.namespace, "ecosystem")
 		assert.Equal(t, job.logLevel, "debug")
+		assert.Equal(t, false, job.enableFqdnApply)
 		assert.Equal(t, time.Duration(5)*time.Minute, job.waitTimeout)
 	})
 }
