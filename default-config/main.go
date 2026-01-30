@@ -122,6 +122,7 @@ func readConfig() jobConfig {
 	enableFqdnApply, err := strconv.ParseBool(os.Getenv("ENABLE_FQDN_APPLY"))
 	if err != nil {
 		slog.Warn("failed to parse ENABLE_FQDN_APPLY. Using default value.", "err", err, "defaultEnableFqdnApply", defaultEnableFqdnApply)
+		enableFqdnApply = defaultEnableFqdnApply
 	}
 
 	return jobConfig{
