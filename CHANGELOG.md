@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.0.0] - 2026-01-30
+
+** BREAKING CHANGES **
+
+### Changed
+- [#45] Make the applying of the fqdn configurable and set the default to `false`.
+  - This can now break installations of ecosystem-core in development environments where no dns is used for the ecosystem fqdn.
+  - To enable it again, set the following helm value to `true`: `defaultConfig.env.enableFqdnApplier`.
+  - In production environments it is required to set the fqdn via the blueprint.
+
 ## [v2.2.2] - 2026-01-28
 ### Fixed
 - [#43] Modify hooks for the job config templates

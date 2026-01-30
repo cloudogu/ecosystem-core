@@ -15,7 +15,10 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-const defaultWaitTimeoutMinutes = 5
+const (
+	defaultWaitTimeoutMinutes = 5
+	defaultEnableFqdnApply    = false
+)
 
 type configApplier interface {
 	ApplyDefaultConfig(ctx context.Context) error
@@ -76,8 +79,10 @@ func applyDefaults(ctx context.Context, cfg jobConfig, configApplier configAppli
 		return fmt.Errorf("failed to apply default config: %w", err)
 	}
 
-	if err := fqdnApplier.ApplyInitialFQDN(ctx, cfg.waitTimeout); err != nil {
-		return fmt.Errorf("failed to apply intial fqdn: %w", err)
+	if cfg.enableFqdnApply {
+		if err := fqdnApplier.ApplyInitialFQDN(ctx, cfg.waitTimeout); err != nil {
+			return fmt.Errorf("failed to apply intial fqdn: %w", err)
+		}
 	}
 
 	return nil
@@ -101,9 +106,10 @@ func configureLogger(logLevel string) {
 }
 
 type jobConfig struct {
-	namespace   string
-	logLevel    string
-	waitTimeout time.Duration
+	namespace       string
+	logLevel        string
+	waitTimeout     time.Duration
+	enableFqdnApply bool
 }
 
 func readConfig() jobConfig {
@@ -113,9 +119,16 @@ func readConfig() jobConfig {
 		waitTimeoutMinutes = defaultWaitTimeoutMinutes
 	}
 
+	enableFqdnApply, err := strconv.ParseBool(os.Getenv("ENABLE_FQDN_APPLY"))
+	if err != nil {
+		slog.Warn("failed to parse ENABLE_FQDN_APPLY. Using default value.", "err", err, "defaultEnableFqdnApply", defaultEnableFqdnApply)
+		enableFqdnApply = defaultEnableFqdnApply
+	}
+
 	return jobConfig{
-		namespace:   os.Getenv("NAMESPACE"),
-		logLevel:    os.Getenv("LOG_LEVEL"),
-		waitTimeout: time.Duration(waitTimeoutMinutes) * time.Minute,
+		namespace:       os.Getenv("NAMESPACE"),
+		logLevel:        os.Getenv("LOG_LEVEL"),
+		waitTimeout:     time.Duration(waitTimeoutMinutes) * time.Minute,
+		enableFqdnApply: enableFqdnApply,
 	}
 }
