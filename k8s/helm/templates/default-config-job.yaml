@@ -95,6 +95,8 @@ spec:
               value: {{ .Values.defaultConfig.env.logLevel | quote }}
             - name: WAIT_TIMEOUT_MINUTES
               value: {{ .Values.defaultConfig.env.waitTimeoutMinutes | quote }}
+            - name: ENABLE_FQDN_APPLY
+              value: {{ .Values.defaultConfig.env.enableFqdnApplier | quote }}
       {{- if .Values.global }}
       {{- with .Values.global.imagePullSecrets }}
       imagePullSecrets:
