@@ -216,7 +216,7 @@ All components of the application can be found in the repository `repoURL` in th
 
 The EcoSystem will create component and dogu CRs with [ecosystem-core](#ecosystem-core) and [blueprint](#blueprint).
 These CRDs are not known to ArgoCD, so it is not possible to visualize the actual health status in ArgoCD without assistance.
-In this case, a [health check](https://argoproj.github.io/argo-cd/user-guide/health/#health-checks) can be defined.
+In this case, a [health check](https://argo-cd.readthedocs.io/en/stable/operator-manual/health/) can be defined.
 To do this, the `argocd-cm` ConfigMap should be extended:
 
 ```yaml
