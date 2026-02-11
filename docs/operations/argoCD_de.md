@@ -213,3 +213,54 @@ spec:
 ```
 
 Alle Bestandteile der Applikation finden sich im Repositry `repoURL` im Branch/Tag/Commit `targetRevision` unter dem Pfad `path`.
+
+
+
+### Health Checks
+
+Das EcoSystem wird mit [ecosystem-core](#ecosystem-core) und [blueprint](#blueprint) Component- und Dogu-CRs erstellen.
+Diese CRDs sind ArgoCD nicht bekannt und somit ist es ohne Hilfe nicht möglich den wirklichen Health-Status in ArgoCD zu visualisieren.
+Daher kann in diesem Fall ein [Healthcheck](https://argoproj.github.io/argo-cd/user-guide/health/#health-checks) definiert werden.
+Dazu sollte die `argocd-cm` ConfigMap erweitert werden:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  resource.customizations.health.k8s.cloudogu.com_Component: |
+    hs = {}
+    if obj.status ~= nil and obj.status.status == "installed" and obj.status.health == "available" then
+      hs.status = "Healthy"
+    else
+      hs.status = "Progressing"
+    end
+    if obj.status ~= nil and obj.status.health ~= nil then
+      hs.message = obj.status.health
+    end
+    
+    return hs
+  resource.customizations.health.k8s.cloudogu.com_Dogu: |
+    hs = {}
+    hs.status = "Progressing"
+    if obj.status ~= nil and obj.status.conditions ~= nil then
+      for i, cond in ipairs(obj.status.conditions) do
+        if cond.type == "healthy" then
+          if cond.status == "True" then
+            hs.status = "Healthy"
+          end
+          if cond.message ~= nil then
+            hs.message = cond.message
+          end
+          break
+        end
+      end
+    end
+    
+    return hs
+```
