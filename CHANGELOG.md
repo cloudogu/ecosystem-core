@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- [#48] Add health check docs for argocd.
+- [#47] Add health check docs for argocd.
 
 ## [v3.0.0] - 2026-01-30
 
