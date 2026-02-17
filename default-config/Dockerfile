@@ -9,7 +9,7 @@
 ################################################################################
 # Create a stage for building the application.
 
-ARG GO_VERSION=1.25.1
+ARG GO_VERSION=1.26.0
 
 ARG UID=65532
 ARG GID=$UID
