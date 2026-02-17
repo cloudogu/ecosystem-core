@@ -11,7 +11,7 @@ k8s-component-operator:
     image:
       registry: docker.io
       repository: cloudogu/k8s-component-operator
-      tag: 1.12.0
+      tag: 1.12.1
     env:
       logLevel: info
     resourceLimits:
