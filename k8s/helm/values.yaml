@@ -76,7 +76,7 @@ cleanup:
   image:
     registry: docker.io
     repository: alpine/kubectl
-    tag: 1.34.0
+    tag: 1.35.2
 defaultConfig:
   image:
     registry: docker.io
