@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.0.1] - 2026-03-06
+
 ### Security
 - [#49] Fix Go stdlib CVE-2025-68121
   - Update `k8s-component-operator` to `1.12.1`
