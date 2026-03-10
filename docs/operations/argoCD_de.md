@@ -218,10 +218,71 @@ Alle Bestandteile der Applikation finden sich im Repositry `repoURL` im Branch/T
 
 ### Health Checks
 
-Das EcoSystem wird mit [ecosystem-core](#ecosystem-core) und [blueprint](#blueprint) Component- und Dogu-CRs erstellen.
+Das EcoSystem wird mit [ecosystem-core](#ecosystem-core) und [blueprint](#blueprint) Component-CRs und eine Blueprint-CR erstellen.
 Diese CRDs sind ArgoCD nicht bekannt und somit ist es ohne Hilfe nicht möglich den wirklichen Health-Status in ArgoCD zu visualisieren.
 Daher kann in diesem Fall ein [Healthcheck](https://argo-cd.readthedocs.io/en/stable/operator-manual/health/) definiert werden.
 Dazu sollte die `argocd-cm` ConfigMap erweitert werden:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  resource.customizations.health.k8s.cloudogu.com_Component: |
+    hs = {}
+    if obj.status ~= nil and obj.status.status == "installed" and obj.status.health == "available" then
+      hs.status = "Healthy"
+    else
+      hs.status = "Progressing"
+    end
+    if obj.status ~= nil and obj.status.health ~= nil then
+      hs.message = obj.status.health
+    end
+    
+    return hs
+  resource.customizations.health.k8s.cloudogu.com_Blueprint: |
+    blueprintCompleted = false
+    blueprintCompletedMsg = "Blueprint uncompleted"
+    ecosystemHealthy = false
+    ecosystemHealthyMsg = "Ecosystem unhealthy"
+
+    hs = {}
+    hs.status = "Progressing"
+    
+    if obj.status ~= nil and obj.status.conditions ~= nil then
+      for i, cond in ipairs(obj.status.conditions) do
+        if cond.type == "Completed" then
+          if cond.status == "True" then
+            blueprintCompleted = true
+            blueprintCompletedMsg = cond.message or "Blueprint completed"
+          end
+        end
+    
+        if cond.type == "EcosystemHealthy" then
+          if cond.status == "True" then
+           ecosystemHealthy = true
+           ecosystemHealthyMsg = cond.message or "Ecosystem healthy"
+          end
+        end
+      end
+    
+      if blueprintCompleted and ecosystemHealthy then
+        hs.status = "Healthy"
+      end
+    
+    end
+
+    hs.message = blueprintCompletedMsg .. " and " .. ecosystemHealthyMsg
+    
+    return hs
+```
+
+Falls kein Blueprint verwendet wird, sondern das Ecosystem ausschließlich mit Dogu-CRs aufgesetzt wird, kann folgender Healthcheck verwendet werden:
 
 ```yaml
 apiVersion: v1
