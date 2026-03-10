@@ -11,7 +11,7 @@ k8s-component-operator:
     image:
       registry: docker.io
       repository: cloudogu/k8s-component-operator
-      tag: 1.12.0
+      tag: 1.12.1
     env:
       logLevel: info
     resourceLimits:
@@ -76,12 +76,12 @@ cleanup:
   image:
     registry: docker.io
     repository: alpine/kubectl
-    tag: 1.34.0
+    tag: 1.35.2
 defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 3.0.0
+    tag: 3.0.1
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info

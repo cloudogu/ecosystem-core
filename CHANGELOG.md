@@ -5,9 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-
 ### Added
 - [#47] Add health check docs for argocd.
+
+## [v3.0.1] - 2026-03-06
+
+### Security
+- [#49] Fix Go stdlib CVE-2025-68121
+  - Update `k8s-component-operator` to `1.12.1`
+  - Update `alpine/kubectl` to `1.35.2`
 
 ## [v3.0.0] - 2026-01-30
 
