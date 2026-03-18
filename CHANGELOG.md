@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- [#54] Change ``k8s-component-operator`` to a conditional dependency
+
 ### Added
 - [#47] Add health check docs for argocd.
 
