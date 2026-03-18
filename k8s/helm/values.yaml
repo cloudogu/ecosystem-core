@@ -7,11 +7,12 @@ global:
 skipPreconditionValidation: true
 loadbalancer-annotations: {}
 k8s-component-operator:
+  enabled: true
   manager:
     image:
       registry: docker.io
       repository: cloudogu/k8s-component-operator
-      tag: 1.12.1
+      tag: 1.12.0
     env:
       logLevel: info
     resourceLimits:
@@ -81,7 +82,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 3.0.1
+    tag: 3.0.2
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info

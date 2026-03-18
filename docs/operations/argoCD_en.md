@@ -211,3 +211,113 @@ spec:
 ```
 
 All components of the application can be found in the repository `repoURL` in the branch/tag/commit `targetRevision` under the path `path`.
+
+### Health Checks
+
+The EcoSystem will create component CRs and a blueprint CR with [ecosystem-core](#ecosystem-core) and [blueprint](#blueprint).
+These CRDs are not known to ArgoCD, so it is not possible to visualize the actual health status in ArgoCD without assistance.
+In this case, a [health check](https://argo-cd.readthedocs.io/en/stable/operator-manual/health/) can be defined.
+To do this, the `argocd-cm` ConfigMap should be extended:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  resource.customizations.health.k8s.cloudogu.com_Component: |
+    hs = {}
+    if obj.status ~= nil and obj.status.status == "installed" and obj.status.health == "available" then
+      hs.status = "Healthy"
+    else
+      hs.status = "Progressing"
+    end
+    if obj.status ~= nil and obj.status.health ~= nil then
+      hs.message = obj.status.health
+    end
+
+    return hs
+  resource.customizations.health.k8s.cloudogu.com_Blueprint: |
+    blueprintCompleted = false
+    blueprintCompletedMsg = "Blueprint uncompleted"
+    ecosystemHealthy = false
+    ecosystemHealthyMsg = "Ecosystem unhealthy"
+
+    hs = {}
+    hs.status = "Progressing"
+
+    if obj.status ~= nil and obj.status.conditions ~= nil then
+      for i, cond in ipairs(obj.status.conditions) do
+        if cond.type == "Completed" then
+          if cond.status == "True" then
+            blueprintCompleted = true
+            blueprintCompletedMsg = cond.message or "Blueprint completed"
+          end
+        end
+
+        if cond.type == "EcosystemHealthy" then
+          if cond.status == "True" then
+           ecosystemHealthy = true
+           ecosystemHealthyMsg = cond.message or "Ecosystem healthy"
+          end
+        end
+      end
+
+      if blueprintCompleted and ecosystemHealthy then
+        hs.status = "Healthy"
+      end
+
+    end
+
+    hs.message = blueprintCompletedMsg .. " and " .. ecosystemHealthyMsg
+
+    return hs
+```
+
+If no blueprint is used and the ecosystem is set up exclusively with Dogu CRs, the following health check can be used:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  resource.customizations.health.k8s.cloudogu.com_Component: |
+    hs = {}
+    if obj.status ~= nil and obj.status.status == "installed" and obj.status.health == "available" then
+      hs.status = "Healthy"
+    else
+      hs.status = "Progressing"
+    end
+    if obj.status ~= nil and obj.status.health ~= nil then
+      hs.message = obj.status.health
+    end
+    
+    return hs
+  resource.customizations.health.k8s.cloudogu.com_Dogu: |
+    hs = {}
+    hs.status = "Progressing"
+    if obj.status ~= nil and obj.status.conditions ~= nil then
+      for i, cond in ipairs(obj.status.conditions) do
+        if cond.type == "healthy" then
+          if cond.status == "True" then
+            hs.status = "Healthy"
+          end
+          if cond.message ~= nil then
+            hs.message = cond.message
+          end
+          break
+        end
+      end
+    end
+    
+    return hs
+```

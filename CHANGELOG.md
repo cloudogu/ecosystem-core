@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.0.2] - 2026-03-18
+### Changed
+- [#54] Change `k8s-component-operator` to a conditional dependency
+
+### Added
+- [#47] Add health check docs for argocd.
+
 ## [v3.0.1] - 2026-03-06
 
 ### Security
