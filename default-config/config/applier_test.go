@@ -2,6 +2,7 @@ package config
 
 import (
 	"context"
+	"maps"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -30,6 +31,36 @@ func TestDefaultConfigApplier_ApplyDefaultConfig(t *testing.T) {
 			passwordGenerator:  mockPg,
 			globalConfigWriter: mockGcw,
 			doguConfigWriter:   mockDcw,
+		}
+
+		err := dca.ApplyDefaultConfig(testCtx)
+
+		require.NoError(t, err)
+	})
+
+	t.Run("should apply default config with custom initial domain", func(t *testing.T) {
+		mockPg := newMockPasswordGenerator(t)
+		mockPg.EXPECT().generatePassword(passwordLength).Return("password")
+
+		expectedGlobalConfig := maps.Clone(globalDefaults)
+		expectedGlobalConfig["domain"] = "example.com"
+		mockGcw := newMockGlobalConfigWriter(t)
+		mockGcw.EXPECT().applyDefaultGlobalConfig(testCtx, expectedGlobalConfig).Return(nil)
+
+		expectedSensitiveConfig := map[string]map[string]string{
+			"ldap": {
+				"admin_password": "password",
+			},
+		}
+
+		mockDcw := newMockDoguConfigWriter(t)
+		mockDcw.EXPECT().applyDefaultDoguConfig(testCtx, doguDefaults, expectedSensitiveConfig).Return(nil)
+
+		dca := &DefaultConfigApplier{
+			passwordGenerator:  mockPg,
+			globalConfigWriter: mockGcw,
+			doguConfigWriter:   mockDcw,
+			initialDomain:      "example.com",
 		}
 
 		err := dca.ApplyDefaultConfig(testCtx)
@@ -94,7 +125,7 @@ func TestNewDefaultConfigApplier(t *testing.T) {
 	mockSensitiveDoguRepo := newMockDoguConfigRepo(t)
 	mockSecClient := newMockSecretClient(t)
 
-	applier := NewDefaultConfigApplier(mockGlobalRepo, mockDoguRepo, mockSensitiveDoguRepo, mockSecClient)
+	applier := NewDefaultConfigApplier(mockGlobalRepo, mockDoguRepo, mockSensitiveDoguRepo, mockSecClient, "example.com")
 
 	require.NotNil(t, applier)
 	assert.NotNil(t, applier.passwordGenerator)

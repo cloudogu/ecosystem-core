@@ -3,12 +3,13 @@ package config
 import (
 	"context"
 	"fmt"
+	"maps"
 )
 
 const passwordLength = 20
 
 var globalDefaults = map[string]string{
-	"domain":              "ces.local",
+	"domain":              "ces.localdomain",
 	"admin_group":         "cesAdmin",
 	"mail_address":        "",
 	"certificate/type":    "",
@@ -60,9 +61,16 @@ type DefaultConfigApplier struct {
 	globalConfigWriter globalConfigWriter
 	doguConfigWriter   doguConfigWriter
 	passwordGenerator  passwordGenerator
+	initialDomain      string
 }
 
-func NewDefaultConfigApplier(globalConfigRepo globalConfigRepo, doguConfigRepo doguConfigRepo, sensitiveDoguConfigRepo doguConfigRepo, secretClient secretClient) *DefaultConfigApplier {
+func NewDefaultConfigApplier(
+	globalConfigRepo globalConfigRepo,
+	doguConfigRepo doguConfigRepo,
+	sensitiveDoguConfigRepo doguConfigRepo,
+	secretClient secretClient,
+	initialDomain string,
+) *DefaultConfigApplier {
 	gcw := newCesGlobalConfigWriter(globalConfigRepo, secretClient)
 
 	dcw := &cesDoguConfigWriter{
@@ -74,12 +82,18 @@ func NewDefaultConfigApplier(globalConfigRepo globalConfigRepo, doguConfigRepo d
 		globalConfigWriter: gcw,
 		doguConfigWriter:   dcw,
 		passwordGenerator:  &adminPasswordGenerator{},
+		initialDomain:      initialDomain,
 	}
 }
 
 func (dca *DefaultConfigApplier) ApplyDefaultConfig(ctx context.Context) error {
+	// clone to avoid side effects
+	globalConfig := maps.Clone(globalDefaults)
+	if dca.initialDomain != "" {
+		globalConfig["domain"] = dca.initialDomain
+	}
 
-	if err := dca.globalConfigWriter.applyDefaultGlobalConfig(ctx, globalDefaults); err != nil {
+	if err := dca.globalConfigWriter.applyDefaultGlobalConfig(ctx, globalConfig); err != nil {
 		return fmt.Errorf("failed to apply default global config: %w", err)
 	}
 
