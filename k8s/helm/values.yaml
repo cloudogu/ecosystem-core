@@ -12,7 +12,7 @@ k8s-component-operator:
     image:
       registry: docker.io
       repository: cloudogu/k8s-component-operator
-      tag: 1.12.0
+      tag: 1.12.2
     env:
       logLevel: info
     resourceLimits:
@@ -24,25 +24,25 @@ k8s-component-operator:
       enabled: true
 components:
   k8s-dogu-operator-crd:
-    version: 2.11.0
+    version: 2.13.0
   k8s-dogu-operator:
-    version: 3.18.0
+    version: 3.21.0
   k8s-service-discovery:
-    version: 4.0.0
+    version: 6.0.1
   k8s-blueprint-operator-crd:
     version: 3.2.0
   k8s-blueprint-operator:
-    version: 3.1.0
+    version: 3.2.0
   k8s-ces-gateway:
-    version: 2.0.1
+    version: 3.0.3
   k8s-ces-assets:
-    version: 1.0.4
+    version: 2.0.2
   k8s-ces-control:
-    version: 1.8.0
+    version: 1.10.3
   k8s-debug-mode-operator-crd:
     version: 1.0.0
   k8s-debug-mode-operator:
-    version: 1.0.0
+    version: 1.0.2
 backup:
   enabled: true
   # The backup stack requires the snapshot api and snapshot controller to be installed. It is not party of the ecosystem and should be seen as an infrastructure component like the storage provisioner.
@@ -50,28 +50,28 @@ backup:
   # For manual installation (like in k3s environments) see https://github.com/kubernetes-csi/external-snapshotter.
   components:
     k8s-backup-operator-crd:
-      version: 1.7.0
+      version: 1.8.0
     k8s-backup-operator:
-      version: 2.1.0
+      version: 3.0.3
     k8s-velero:
-      version: 10.0.1-5
+      version: 11.4.0-2
 monitoring:
   enabled: true
   components:
     k8s-prometheus:
-      version: 75.3.5-3
+      version: 75.3.5-5
     k8s-minio:
       version: 2025.6.13-3
     k8s-loki:
-      version: 3.3.2-6
+      version: 3.5.10-1
     k8s-promtail:
-      version: 2.9.1-9
+      version: 2.9.17-1
     k8s-alloy:
-      version: 1.1.2-1
+      version: 1.1.2-3
     k8s-support-archive-operator-crd:
       version: 1.0.0
     k8s-support-archive-operator:
-      version: 1.1.0
+      version: 1.1.1
 cleanup:
   timeoutSeconds: 900
   image:
