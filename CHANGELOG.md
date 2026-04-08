@@ -6,6 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.0.0] - 2026-04-08
+### Changed
+- [#58] update components to newest versions:
+  - k8s-component-operator-crd 1.10.0 -> 1.14.0
+  - k8s-component-operator 1.12.0 -> 1.12.2
+  - k8s-dogu-operator-crd 2.11.0 -> 2.13.0
+  - k8s-dogu-operator 3.18.0 -> 3.21.0
+  - k8s-service-discovery 4.0.0 -> 6.0.1
+  - k8s-blueprint-operator 3.1.0 -> 3.2.0
+  - k8s-ces-gateway 2.0.1 -> 3.0.3
+  - k8s-ces-assets 1.0.4 -> 2.0.2
+  - k8s-ces-control 1.8.0 -> 1.10.3
+  - k8s-debug-mode-operator 1.0.0 -> 1.0.2
+  - k8s-backup-operator-crd 1.7.0 -> 1.8.0
+  - k8s-backup-operator 2.1.0 -> 3.0.3
+  - k8s-velero 10.0.1-5 -> 11.4.0-2
+  - k8s-prometheus 75.3.5-3 -> 75.3.5-5
+  - k8s-loki 3.3.2-6 -> 3.5.10-1
+  - k8s-promtail 2.9.1-9 -> 2.9.17-1
+  - k8s-alloy 1.1.2-1 -> 1.1.2-3
+  - k8s-support-archive-operator 1.1.0 -> 1.1.1
+
 ## [v3.0.2] - 2026-03-18
 ### Changed
 - [#54] Change `k8s-component-operator` to a conditional dependency

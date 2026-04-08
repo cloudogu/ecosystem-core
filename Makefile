@@ -2,7 +2,7 @@
 ARTIFACT_ID=ecosystem-core
 ARTIFACT_ID_DEFAULT_CONFIG=${ARTIFACT_ID}-default-config
 
-VERSION=3.0.2
+VERSION=4.0.0
 GOTAG?=1.26.0
 LINT_VERSION=v2.9.0
 
@@ -18,7 +18,7 @@ K8S_COMPONENT_TARGET_VALUES = ${HELM_TARGET_DIR}/values.yaml
 HELM_PRE_GENERATE_TARGETS = helm-values-update-image-version
 HELM_POST_GENERATE_TARGETS = helm-values-replace-image-repo template-log-level template-image-pull-policy
 COMPONENT_CRD_CHART_REF ?= oci://registry.cloudogu.com/k8s/k8s-component-operator-crd
-COMPONENT_CRD_VERSION ?= 1.10.0
+COMPONENT_CRD_VERSION ?= 1.14.0
 
 include build/make/variables.mk
 include build/make/self-update.mk
