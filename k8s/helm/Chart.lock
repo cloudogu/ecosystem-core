@@ -1,6 +1,6 @@
 dependencies:
 - name: k8s-component-operator
   repository: oci://registry.cloudogu.com/k8s
-  version: 1.12.0
-digest: sha256:fd817e3fba1bf8cb20083376b62bb4e7bea35026882a1f66000125f64fb2a5d7
-generated: "2025-11-07T16:11:44.841717062+01:00"
+  version: 1.12.2
+digest: sha256:799b1d1649ebbcbbee29780720c5c3bad061d0d6b4c58f3483d7479c13c1b2be
+generated: "2026-04-07T09:49:04.62226245+02:00"
