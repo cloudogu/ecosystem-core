@@ -12,8 +12,8 @@ update_versions_modify_files() {
   chartLockYAML=k8s/helm/Chart.lock
 
   # Set new version for defaultConfig image
-  yq -i ".defaultConfig.image.tag = \"${newReleaseVersion}\"" "${valuesYAML}"
-  yq -i ".values.images.defaultConfig |= sub(\":(([0-9]+)\.([0-9]+)\.([0-9]+)((?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))|(?:\+[0-9A-Za-z-]+))?)\", \":${newReleaseVersion}\")" "${componentPatchTplYAML}"
+  ./.bin/yq -i ".defaultConfig.image.tag = \"${newReleaseVersion}\"" "${valuesYAML}"
+  ./.bin/yq -i ".values.images.defaultConfig |= sub(\":(([0-9]+)\.([0-9]+)\.([0-9]+)((?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))|(?:\+[0-9A-Za-z-]+))?)\", \":${newReleaseVersion}\")" "${componentPatchTplYAML}"
 
   # Extract component-operator chart
   local componentOperatorVersion
