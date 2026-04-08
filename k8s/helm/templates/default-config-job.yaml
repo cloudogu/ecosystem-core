@@ -97,6 +97,10 @@ spec:
               value: {{ .Values.defaultConfig.env.waitTimeoutMinutes | quote }}
             - name: ENABLE_FQDN_APPLY
               value: {{ .Values.defaultConfig.env.enableFqdnApplier | quote }}
+            {{ with .Values.defaultConfig.env.initialDomain }}
+            - name: INITIAL_DOMAIN
+              value: {{ . | quote }}
+            {{ end }}
       {{- if .Values.global }}
       {{- with .Values.global.imagePullSecrets }}
       imagePullSecrets:

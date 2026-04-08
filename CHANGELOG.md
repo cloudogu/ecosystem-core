@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.1.0] - 2026-04-08
+### Added
+- [#56] Option `defaultConfig.env.initialDomain` in Helm values to set a custom domain
+  - This change is necessary because once we have the LOP-IDP component,
+    we need to have the correct domain set when it is installed because we do not support domain changes in LDAP.
+### Changed
+- Default for the domain in the global config is now `ces.localdomain` as `*.local` should be used for mDNS only.
+
 ## [v4.0.0] - 2026-04-08
 ### Changed
 - [#58] update components to newest versions:
