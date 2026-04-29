@@ -59,7 +59,7 @@ monitoring:
   enabled: true
   components:
     k8s-prometheus:
-      version: 75.3.5-5
+      version: 75.3.5-7
     k8s-minio:
       version: 2025.6.13-3
     k8s-loki:
