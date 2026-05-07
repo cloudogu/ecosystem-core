@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.1.1] - 2026-05-07
+### Changed
+- [#62] Update k8s-ces-gateway to v3.2.1
+
 ## [v4.1.0] - 2026-04-08
 ### Added
 - [#56] Option `defaultConfig.env.initialDomain` in Helm values to set a custom domain
