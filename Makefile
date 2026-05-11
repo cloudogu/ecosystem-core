@@ -31,6 +31,7 @@ include build/make/static-analysis.mk
 include build/make/clean.mk
 include build/make/k8s-component.mk
 include build/make/release.mk
+include build/make/ecosystem-core.mk
 
 test-default-config: $(GO_JUNIT_REPORT)
 	@echo "Compiling default-config..."

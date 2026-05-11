@@ -1,6 +1,7 @@
-#!/usr/bin/env sh
-
-set -eu
+#!/bin/bash
+set -o errexit
+set -o nounset
+set -o pipefail
 
 CURL_BIN="$(command -v curl || true)"
 
@@ -9,9 +10,9 @@ if [ -z "$CURL_BIN" ]; then
   exit 1
 fi
 
-YAML_FILE="values.yaml"
-YQ_BIN="../../.bin/yq"
-MAPPING_FILE="repo-mapping.txt"
+YAML_FILE="k8s/helm/values.yaml"
+YQ_BIN=".bin/yq"
+MAPPING_FILE="build/make/repo-mapping.txt"
 
 AUTH_HEADER=""
 
