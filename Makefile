@@ -31,7 +31,6 @@ include build/make/static-analysis.mk
 include build/make/clean.mk
 include build/make/k8s-component.mk
 include build/make/release.mk
-include build/make/ecosystem-core.mk
 
 test-default-config: $(GO_JUNIT_REPORT)
 	@echo "Compiling default-config..."
@@ -155,3 +154,7 @@ clean_charts:
 ecosystem-core-release: ## Interactively starts the release workflow for ecosystem-core
 	@echo "Starting git flow release..."
 	@build/make/release.sh ecosystem-core
+
+.PHONY: update-ecosystem-versions
+update-ecosystem-versions:
+	./ecosystem-core-update-versions.sh

@@ -12,7 +12,7 @@ fi
 
 YAML_FILE="k8s/helm/values.yaml"
 YQ_BIN=".bin/yq"
-MAPPING_FILE="build/make/repo-mapping.txt"
+MAPPING_FILE="repo-mapping.txt"
 
 AUTH_HEADER=""
 
