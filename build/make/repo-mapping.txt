@@ -1,0 +1,5 @@
+k8s-dogu-operator-crd=k8s-dogu-lib
+k8s-blueprint-operator-crd=k8s-blueprint-lib
+k8s-debug-mode-operator-crd=k8s-debug-mode-cr-lib
+k8s-backup-operator-crd=k8s-backup-lib
+k8s-support-archive-operator-crd=k8s-support-archive-lib
