@@ -6,7 +6,7 @@ set -o pipefail
 CURL_BIN="$(command -v curl || true)"
 
 if [ -z "$CURL_BIN" ]; then
-  echo "ERROR: curl ist nicht installiert"
+  echo "ERROR: curl not installed"
   exit 1
 fi
 
@@ -44,7 +44,7 @@ COMPONENT_PATHS=$(
   ' "$YAML_FILE"
 )
 
-echo "Suche Komponenten in $YAML_FILE ..."
+echo "Searching Components in $YAML_FILE ..."
 
 for PATH in $COMPONENT_PATHS; do
   COMPONENT="${PATH##*.}"
@@ -82,8 +82,6 @@ for PATH in $COMPONENT_PATHS; do
     done < "$MAPPING_FILE"
   fi
 
-  echo "Hole neueste Version für $COMPONENT (Repo: $REPO_NAME) ..."
-
   RESPONSE=$($CURL_BIN -s \
     -H "Accept: application/vnd.github+json" \
     -H "User-Agent: update-versions-script" \
@@ -95,18 +93,22 @@ for PATH in $COMPONENT_PATHS; do
   VERSION="${VERSION#v}"
 
   if [ -z "$VERSION" ]; then
-    echo "WARNUNG: Keine Release-Version für $COMPONENT gefunden"
+    echo "WARNING: No Release-Version found for $COMPONENT"
     continue
   fi
 
-  echo " -> $VERSION"
+  CURRENT_VERSION=$(
+    $YQ_BIN eval ".${PATH}.version" "$YAML_FILE"
+  )
 
-  $YQ_BIN eval -i \
-    ".${PATH}.version = \"${VERSION}\"" \
-    "$YAML_FILE"
+  if [ "$CURRENT_VERSION" != "$VERSION" ]; then
+    echo " - Bump Version of $COMPONENT from $CURRENT_VERSION to $VERSION"
+
+    $YQ_BIN eval -i \
+      ".${PATH}.version = \"${VERSION}\"" \
+      "$YAML_FILE"
+  fi
 done
-
-echo "Hole neueste Version für k8s-component-operator ..."
 
 RESPONSE=$($CURL_BIN -s \
   -H "Accept: application/vnd.github+json" \
@@ -120,13 +122,19 @@ VERSION=$(printf '%s' "$RESPONSE" | $YQ_BIN -r '.tag_name // ""' 2>/dev/null || 
 VERSION="${VERSION#v}"
 
 if [ -n "$VERSION" ]; then
-  echo " -> $VERSION"
+  CURRENT_VERSION=$(
+    $YQ_BIN eval '.k8s-component-operator.manager.image.tag' "$YAML_FILE"
+  )
 
-  $YQ_BIN eval -i \
-    '.k8s-component-operator.manager.image.tag = "'"$VERSION"'"' \
-    "$YAML_FILE"
+  if [ "$CURRENT_VERSION" != "$VERSION" ]; then
+    echo " - Bump Version of k8s-component-operator from $CURRENT_VERSION to $VERSION"
+
+    $YQ_BIN eval -i \
+      '.k8s-component-operator.manager.image.tag = "'"$VERSION"'"' \
+      "$YAML_FILE"
+  fi
 else
-  echo "WARNUNG: Keine Version für k8s-component-operator gefunden"
+  echo "WARNING: No Release-Version found for k8s-component-operator"
 fi
 
-echo "Fertig."
+echo "Finished."

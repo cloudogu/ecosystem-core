@@ -156,5 +156,5 @@ ecosystem-core-release: ## Interactively starts the release workflow for ecosyst
 	@build/make/release.sh ecosystem-core
 
 .PHONY: update-ecosystem-versions
-update-ecosystem-versions:
+update-ecosystem-versions: $(BINARY_YQ)
 	./ecosystem-core-update-versions.sh
