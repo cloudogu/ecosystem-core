@@ -154,3 +154,7 @@ clean_charts:
 ecosystem-core-release: ## Interactively starts the release workflow for ecosystem-core
 	@echo "Starting git flow release..."
 	@build/make/release.sh ecosystem-core
+
+.PHONY: update-ecosystem-versions
+update-ecosystem-versions: $(BINARY_YQ)
+	./ecosystem-core-update-versions.sh
