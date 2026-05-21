@@ -2,7 +2,7 @@
 ARTIFACT_ID=ecosystem-core
 ARTIFACT_ID_DEFAULT_CONFIG=${ARTIFACT_ID}-default-config
 
-VERSION=4.1.1
+VERSION=4.2.0
 GOTAG?=1.26.0
 LINT_VERSION=v2.9.0
 
@@ -154,3 +154,7 @@ clean_charts:
 ecosystem-core-release: ## Interactively starts the release workflow for ecosystem-core
 	@echo "Starting git flow release..."
 	@build/make/release.sh ecosystem-core
+
+.PHONY: update-ecosystem-versions
+update-ecosystem-versions: $(BINARY_YQ)
+	./ecosystem-core-update-versions.sh

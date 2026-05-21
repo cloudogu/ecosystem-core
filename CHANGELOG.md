@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.2.0] - 2026-05-21
+### Changed
+- [#66] Update components
+  - Bump Version of k8s-dogu-operator from 3.21.0 to 3.25.0
+  - Bump Version of k8s-service-discovery from 6.0.1 to 6.0.2
+  - Bump Version of k8s-blueprint-operator from 3.2.0 to 3.3.0
+  - Bump Version of k8s-ces-gateway from 3.2.1 to 3.3.0
+  - Bump Version of k8s-ces-control from 1.10.3 to 1.10.4
+  - Bump Version of k8s-debug-mode-operator from 1.0.2 to 1.0.3
+  - Bump Version of k8s-backup-operator from 3.0.3 to 3.2.0
+  - Bump Version of k8s-prometheus from 75.3.5-5 to 75.3.5-7
+  - Bump Version of k8s-component-operator from 1.12.2 to 1.14.0
+
 ## [v4.1.1] - 2026-05-07
 ### Changed
 - [#62] Update k8s-ces-gateway to v3.2.1
