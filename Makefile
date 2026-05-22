@@ -158,3 +158,4 @@ ecosystem-core-release: ## Interactively starts the release workflow for ecosyst
 .PHONY: update-ecosystem-versions
 update-ecosystem-versions: $(BINARY_YQ)
 	./ecosystem-core-update-versions.sh
+	$(MAKE) helm-update-dependencies
