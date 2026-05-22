@@ -2,7 +2,7 @@
 ARTIFACT_ID=ecosystem-core
 ARTIFACT_ID_DEFAULT_CONFIG=${ARTIFACT_ID}-default-config
 
-VERSION=4.2.0
+VERSION=4.2.1
 GOTAG?=1.26.0
 LINT_VERSION=v2.9.0
 
@@ -158,3 +158,4 @@ ecosystem-core-release: ## Interactively starts the release workflow for ecosyst
 .PHONY: update-ecosystem-versions
 update-ecosystem-versions: $(BINARY_YQ)
 	./ecosystem-core-update-versions.sh
+	$(MAKE) helm-update-dependencies

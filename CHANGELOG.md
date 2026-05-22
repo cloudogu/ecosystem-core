@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.2.1] - 2026-05-22
+### Fixed
+- [#66] patch Chart.yaml instead of values.yaml
+
 ## [v4.2.0] - 2026-05-21
 ### Changed
 - [#66] Update components
