@@ -11,6 +11,7 @@ if [ -z "$CURL_BIN" ]; then
 fi
 
 YAML_FILE="k8s/helm/values.yaml"
+CHART_FILE="k8s/helm/Chart.yaml"
 YQ_BIN=".bin/yq"
 MAPPING_FILE="repo-mapping.txt"
 
@@ -123,15 +124,15 @@ VERSION="${VERSION#v}"
 
 if [ -n "$VERSION" ]; then
   CURRENT_VERSION=$(
-    $YQ_BIN eval '.k8s-component-operator.manager.image.tag' "$YAML_FILE"
+    $YQ_BIN eval '.dependencies[] | select(.name == "k8s-component-operator") | .version' "$CHART_FILE"
   )
 
   if [ "$CURRENT_VERSION" != "$VERSION" ]; then
     echo " - Bump Version of k8s-component-operator from $CURRENT_VERSION to $VERSION"
 
-    $YQ_BIN eval -i \
-      '.k8s-component-operator.manager.image.tag = "'"$VERSION"'"' \
-      "$YAML_FILE"
+    $YQ_BIN eval -i '
+          (.dependencies[] | select(.name == "k8s-component-operator") | .version) = "'"^$VERSION"'"
+        ' "$CHART_FILE"
   fi
 else
   echo "WARNING: No Release-Version found for k8s-component-operator"
