@@ -102,8 +102,7 @@ node('docker') {
 
                             k3d.helm("install ${repositoryName} ${helmChartDir} " +
                                 "--set monitoring.components.k8s-prometheus.valuesObject.kube-prometheus-stack.nodeExporter.enabled=false " +
-                                "--set backup.enabled=false " +
-                                "--set-json='monitoring.components.k8s-promtail.valuesObject.promtail.config.clients=[{\"url\": \"http://k8s-loki-gateway.default.svc.cluster.local/loki/api/v1/push\", \"basic_auth\": {\"username\": \"\${LOKI_USERNAME}\", \"password\": \"\${LOKI_PASSWORD}\"}}]'")
+                                "--set backup.enabled=false ")
                         }
                     }
 
@@ -114,7 +113,6 @@ node('docker') {
                         	"k8s.cloudogu.com/component.name=k8s-minio",
                             "k8s.cloudogu.com/component.name=k8s-loki",
                             "k8s.cloudogu.com/component.name=k8s-ces-control",
-                            "k8s.cloudogu.com/component.name=k8s-promtail",
                             "k8s.cloudogu.com/component.name=k8s-alloy",
                             "k8s.cloudogu.com/component.name=k8s-dogu-operator",
                             "k8s.cloudogu.com/component.name=k8s-service-discovery",

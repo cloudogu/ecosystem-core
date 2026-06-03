@@ -64,8 +64,6 @@ monitoring:
       version: 2025.6.13-3
     k8s-loki:
       version: 3.5.10-1
-    k8s-promtail:
-      version: 2.9.17-1
     k8s-alloy:
       version: 1.1.2-3
     k8s-support-archive-operator-crd:
@@ -82,7 +80,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 4.2.1
+    tag: 4.3.0
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.3.0] - 2026-06-03
+### Removed
+- [#69] Removed now deprecated `k8s-promtail`
+
 ## [v4.2.1] - 2026-05-22
 ### Fixed
 - [#66] patch Chart.yaml instead of values.yaml
