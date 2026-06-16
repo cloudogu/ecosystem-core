@@ -56,6 +56,7 @@ backup:
     k8s-velero:
       version: 11.4.0-2
 monitoring:
+  # Make sure to disable the k8s-ces-control component if you disable the monitoring stack!
   enabled: true
   components:
     k8s-prometheus:

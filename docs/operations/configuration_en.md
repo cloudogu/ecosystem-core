@@ -102,6 +102,7 @@ backup:
 ## Monitoring components (`monitoring`)
 
 Enables and manages the **monitoring stack** and its components.
+Warning: If you disable the monitoring stack you also have to disable the k8s-ces-control component!
 
 ```yaml
 monitoring:
