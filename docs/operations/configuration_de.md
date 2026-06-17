@@ -100,7 +100,8 @@ backup:
 
 ## Monitoring-Komponenten (`monitoring`)
 
-Aktiviert und verwaltet den **Monitoring-Stacks** und dessen Komponenten.
+Aktiviert und verwaltet den **Monitoring-Stack** und dessen Komponenten.
+Achtung: Wenn der Monitoring-Stack deaktiviert wird, muss auch die k8s-ces-control-Komponente deaktiviert werden!
 
 ```yaml
 monitoring:
