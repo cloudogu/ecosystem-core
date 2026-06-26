@@ -12,6 +12,7 @@ Configuration is done via the `values.yaml` file.
 |------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------|
 | `skipPreconditionValidation` | `boolean` | Skips the [precondition check](./preparation_en.md) (e.g., in local development environments or ArgoCD). Default: `false`. |
 | `loadbalancer-annotations`   | `object`  | Writes the provided key value pairs in the annotations of the loadbalancer service of the Ecosystems.                      |
+| `use-lop-idp`                | `boolean` | Enables the LOP-IDP stack. Default: `false`. See [LOP-IDP stack](#lop-idp-stack-use-lop-idp).                             |
 
 ## Component Operator Configuration (`k8s-component-operator`)
 
@@ -82,6 +83,27 @@ components:
 | `mainLogLevel`    | `string`  | Log level for the component (`debug`, `info`, `warn`, `error`)                                                  |
 | `valuesObject`    | `string`  | YAML block for overwriting default values                                                                       |
 | `valuesConfigRef` | `object`  | Specifies a reference to a ConfigMap and a key contained therein to override default values.                    |
+
+## LOP-IDP stack (`use-lop-idp`)
+
+Setting `use-lop-idp: true` activates the identity provider stack for authentication registration.
+The following changes are applied automatically:
+
+- Components `k8s-auth-registration-crd`, `lop-idp` and `postfix` are enabled.
+- `k8s-dogu-operator` is configured with:
+  ```yaml
+  controllerManager:
+    env:
+      authRegistrationEnabled: true
+      disablePostfixDependencyCheck: true
+  ```
+- `k8s-blueprint-operator` is configured with:
+  ```yaml
+  manager:
+    env:
+      authRegistrationEnabled: true
+      disablePostfixDependencyCheck: true
+  ```
 
 ## Backup components (`backup`)
 

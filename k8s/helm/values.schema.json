@@ -57,6 +57,10 @@
       "type": "boolean",
       "description": "Skip validation of preconditions. This is useful for local development or in ArgoCD contexts. Default: false."
     },
+    "use-lop-idp": {
+      "type": "boolean",
+      "description": "Enable the LOP-IDP stack. Activates k8s-auth-registration-crd, lop-idp and postfix components and configures dogu-operator and blueprint-operator for auth registration."
+    },
     "loadbalancer-annotations": {
       "type": "object",
       "description": "Custom annotations for the loadbalancer to be set in the specific ces-loadbalancer service",

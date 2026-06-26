@@ -1,5 +1,7 @@
+{{- $comps := include "ecosystem-core.effectiveComponents" . | fromYaml -}}
+
 {{- /* Root components */ -}}
-{{- include "ecosystem-core.renderComponentsMap" (dict "map" .Values.components "root" $) }}
+{{- include "ecosystem-core.renderComponentsMap" (dict "map" $comps "root" $) }}
 
 {{- /* Backup stack components */ -}}
 {{- if .Values.backup.enabled }}

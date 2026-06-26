@@ -62,6 +62,7 @@ type DefaultConfigApplier struct {
 	doguConfigWriter   doguConfigWriter
 	passwordGenerator  passwordGenerator
 	initialDomain      string
+	useLopIdp          bool
 }
 
 func NewDefaultConfigApplier(
@@ -70,6 +71,7 @@ func NewDefaultConfigApplier(
 	sensitiveDoguConfigRepo doguConfigRepo,
 	secretClient secretClient,
 	initialDomain string,
+	useLopIdp bool,
 ) *DefaultConfigApplier {
 	gcw := newCesGlobalConfigWriter(globalConfigRepo, secretClient)
 
@@ -83,6 +85,7 @@ func NewDefaultConfigApplier(
 		doguConfigWriter:   dcw,
 		passwordGenerator:  &adminPasswordGenerator{},
 		initialDomain:      initialDomain,
+		useLopIdp:          useLopIdp,
 	}
 }
 
@@ -103,7 +106,12 @@ func (dca *DefaultConfigApplier) ApplyDefaultConfig(ctx context.Context) error {
 		},
 	}
 
-	if err := dca.doguConfigWriter.applyDefaultDoguConfig(ctx, doguDefaults, sensitiveDoguDefaults); err != nil {
+	defaultDoguConfig := maps.Clone(doguDefaults)
+	if dca.useLopIdp {
+		delete(defaultDoguConfig, "postfix")
+	}
+
+	if err := dca.doguConfigWriter.applyDefaultDoguConfig(ctx, defaultDoguConfig, sensitiveDoguDefaults); err != nil {
 		return fmt.Errorf("failed to apply default dogu config: %w", err)
 	}
 
