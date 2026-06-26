@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"maps"
 )
 
@@ -62,6 +63,7 @@ type DefaultConfigApplier struct {
 	doguConfigWriter   doguConfigWriter
 	passwordGenerator  passwordGenerator
 	initialDomain      string
+	initialFQDN        string
 	useLopIdp          bool
 }
 
@@ -71,6 +73,7 @@ func NewDefaultConfigApplier(
 	sensitiveDoguConfigRepo doguConfigRepo,
 	secretClient secretClient,
 	initialDomain string,
+	initialFQDN string,
 	useLopIdp bool,
 ) *DefaultConfigApplier {
 	gcw := newCesGlobalConfigWriter(globalConfigRepo, secretClient)
@@ -85,6 +88,7 @@ func NewDefaultConfigApplier(
 		doguConfigWriter:   dcw,
 		passwordGenerator:  &adminPasswordGenerator{},
 		initialDomain:      initialDomain,
+		initialFQDN:        initialFQDN,
 		useLopIdp:          useLopIdp,
 	}
 }
@@ -95,9 +99,17 @@ func (dca *DefaultConfigApplier) ApplyDefaultConfig(ctx context.Context) error {
 	if dca.initialDomain != "" {
 		globalConfig["domain"] = dca.initialDomain
 	}
+	if dca.initialFQDN != "" {
+		globalConfig["fqdn"] = dca.initialFQDN
+	}
 
 	if err := dca.globalConfigWriter.applyDefaultGlobalConfig(ctx, globalConfig); err != nil {
 		return fmt.Errorf("failed to apply default global config: %w", err)
+	}
+
+	if dca.useLopIdp {
+		slog.Info("Not applying default dogu configs, because LOP IdP is used...")
+		return nil
 	}
 
 	sensitiveDoguDefaults := map[string]map[string]string{
@@ -106,12 +118,7 @@ func (dca *DefaultConfigApplier) ApplyDefaultConfig(ctx context.Context) error {
 		},
 	}
 
-	defaultDoguConfig := maps.Clone(doguDefaults)
-	if dca.useLopIdp {
-		delete(defaultDoguConfig, "postfix")
-	}
-
-	if err := dca.doguConfigWriter.applyDefaultDoguConfig(ctx, defaultDoguConfig, sensitiveDoguDefaults); err != nil {
+	if err := dca.doguConfigWriter.applyDefaultDoguConfig(ctx, doguDefaults, sensitiveDoguDefaults); err != nil {
 		return fmt.Errorf("failed to apply default dogu config: %w", err)
 	}
 

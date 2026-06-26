@@ -105,6 +105,15 @@ The following changes are applied automatically:
       disablePostfixDependencyCheck: true
   ```
 
+When using `use-lop-idp`, the following additional values must be configured:
+
+```yaml
+defaultConfig:
+  env:
+    initialDomain: "your.domain.com"   # required: must be known at install time
+    initialFQDN: "your.fqdn.com"       # required if enableFqdnApplier is false
+```
+
 ## Backup components (`backup`)
 
 Enables and manages the **backup stack** and its components.
@@ -137,6 +146,24 @@ monitoring:
 |--------------|-----------|-------------------------------------------------------------|
 | `enabled`    | `boolean` | Enables the monitoring stack                                |
 | `components` | `map`     | List of monitoring components, structured like `components` |
+
+## Default config job (`defaultConfig`)
+
+The default config job runs once after install and upgrade to write initial values into the CES global config and dogu configs.
+
+```yaml
+defaultConfig:
+  env:
+    enableFqdnApplier: false
+    initialFQDN: ""
+    initialDomain: ""
+```
+
+| Field                   | Type      | Description                                                                                                                            |
+|-------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `env.enableFqdnApplier` | `boolean` | Polls for the LoadBalancer IP and writes it as `fqdn` into the global config. Has no effect if `initialFQDN` is set. Default: `false`. |
+| `env.initialFQDN`       | `string`  | Sets the initial `fqdn` in the global config. Takes precedence over `enableFqdnApplier`. Required when using `use-lop-idp`.            |
+| `env.initialDomain`     | `string`  | Sets the initial `domain` in the global config. Required when using `use-lop-idp`.                                                     |
 
 ## Cleanup job (`cleanup`)
 

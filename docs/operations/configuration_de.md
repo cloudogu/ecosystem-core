@@ -104,6 +104,15 @@ Folgende Änderungen werden automatisch vorgenommen:
       disablePostfixDependencyCheck: true
   ```
 
+Bei Verwendung von `use-lop-idp` müssen zusätzlich folgende Werte konfiguriert werden:
+
+```yaml
+defaultConfig:
+  env:
+    initialDomain: "your.domain.com"   # erforderlich: muss zur Installationszeit bekannt sein
+    initialFQDN: "your.fqdn.com"       # erforderlich, wenn enableFqdnApplier false ist
+```
+
 ## Backup-Komponenten (`backup`)
 
 Aktiviert und verwaltet den **Backup-Stack** und dessen Komponenten.
@@ -136,6 +145,24 @@ monitoring:
 |--------------|-----------|-----------------------------------------------------------------|
 | `enabled`    | `boolean` | Aktiviert den Monitoring-Stack                                  |
 | `components` | `map`     | Liste der Monitoring-Komponenten, strukturiert wie `components` |
+
+## Default-Config-Job (`defaultConfig`)
+
+Der Default-Config-Job läuft einmalig nach Installation und Upgrade und schreibt initiale Werte in die globale CES-Konfiguration und die Dogu-Konfigurationen.
+
+```yaml
+defaultConfig:
+  env:
+    enableFqdnApplier: false
+    initialFQDN: ""
+    initialDomain: ""
+```
+
+| Feld                    | Typ       | Beschreibung                                                                                                                                                      |
+|-------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `env.enableFqdnApplier` | `boolean` | Wartet auf die LoadBalancer-IP und schreibt sie als `fqdn` in die globale Konfiguration. Hat keine Auswirkung, wenn `initialFQDN` gesetzt ist. Standard: `false`. |
+| `env.initialFQDN`       | `string`  | Setzt die initiale `fqdn` in der globalen Konfiguration. Hat Vorrang vor `enableFqdnApplier`. Erforderlich bei Verwendung von `use-lop-idp`.                      |
+| `env.initialDomain`     | `string`  | Setzt die initiale `domain` in der globalen Konfiguration. Erforderlich bei Verwendung von `use-lop-idp`.                                                         |
 
 ## Cleanup-Job (`cleanup`)
 

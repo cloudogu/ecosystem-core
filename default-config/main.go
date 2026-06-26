@@ -66,8 +66,9 @@ func run(ctx context.Context, cfg jobConfig) error {
 	sensitiveDoguConfigRepo := repository.NewSensitiveDoguConfigRepository(k8sSecretClient)
 
 	initialDomain := os.Getenv("INITIAL_DOMAIN")
+	initialFQDN := os.Getenv("INITIAL_FQDN")
 
-	ca := config.NewDefaultConfigApplier(globalConfigRepo, doguConfigRepo, sensitiveDoguConfigRepo, k8sSecretClient, initialDomain, cfg.useLopIdp)
+	ca := config.NewDefaultConfigApplier(globalConfigRepo, doguConfigRepo, sensitiveDoguConfigRepo, k8sSecretClient, initialDomain, initialFQDN, cfg.useLopIdp)
 	fa := fqdn.NewApplier(globalConfigRepo, k8sServicesClient)
 
 	if err = applyDefaults(ctx, cfg, ca, fa); err != nil {

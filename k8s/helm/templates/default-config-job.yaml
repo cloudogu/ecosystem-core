@@ -103,6 +103,10 @@ spec:
             - name: INITIAL_DOMAIN
               value: {{ . | quote }}
             {{- end }}
+            {{- with .Values.defaultConfig.env.initialFQDN }}
+            - name: INITIAL_FQDN
+              value: {{ . | quote }}
+            {{- end }}
       {{- if .Values.global }}
       {{- with .Values.global.imagePullSecrets }}
       imagePullSecrets:

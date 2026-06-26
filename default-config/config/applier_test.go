@@ -68,6 +68,36 @@ func TestDefaultConfigApplier_ApplyDefaultConfig(t *testing.T) {
 		require.NoError(t, err)
 	})
 
+	t.Run("should apply default config with custom initial fdqn", func(t *testing.T) {
+		mockPg := newMockPasswordGenerator(t)
+		mockPg.EXPECT().generatePassword(passwordLength).Return("password")
+
+		expectedGlobalConfig := maps.Clone(globalDefaults)
+		expectedGlobalConfig["fqdn"] = "instance.example.com"
+		mockGcw := newMockGlobalConfigWriter(t)
+		mockGcw.EXPECT().applyDefaultGlobalConfig(testCtx, expectedGlobalConfig).Return(nil)
+
+		expectedSensitiveConfig := map[string]map[string]string{
+			"ldap": {
+				"admin_password": "password",
+			},
+		}
+
+		mockDcw := newMockDoguConfigWriter(t)
+		mockDcw.EXPECT().applyDefaultDoguConfig(testCtx, doguDefaults, expectedSensitiveConfig).Return(nil)
+
+		dca := &DefaultConfigApplier{
+			passwordGenerator:  mockPg,
+			globalConfigWriter: mockGcw,
+			doguConfigWriter:   mockDcw,
+			initialFQDN:        "instance.example.com",
+		}
+
+		err := dca.ApplyDefaultConfig(testCtx)
+
+		require.NoError(t, err)
+	})
+
 	t.Run("should fail to apply default global config", func(t *testing.T) {
 		mockPg := newMockPasswordGenerator(t)
 
@@ -118,27 +148,13 @@ func TestDefaultConfigApplier_ApplyDefaultConfig(t *testing.T) {
 		assert.ErrorContains(t, err, "failed to apply default dogu config:")
 	})
 
-	t.Run("should not apply postfix config when lop-idp is in use", func(t *testing.T) {
-		mockPg := newMockPasswordGenerator(t)
-		mockPg.EXPECT().generatePassword(passwordLength).Return("password")
-
+	t.Run("should not apply dogu configs when lop-idp is in use", func(t *testing.T) {
 		mockGcw := newMockGlobalConfigWriter(t)
 		mockGcw.EXPECT().applyDefaultGlobalConfig(testCtx, globalDefaults).Return(nil)
 
-		expectedSensitiveConfig := map[string]map[string]string{
-			"ldap": {
-				"admin_password": "password",
-			},
-		}
-
-		expectedDefaultConfig := maps.Clone(doguDefaults)
-		delete(expectedDefaultConfig, "postfix")
-
 		mockDcw := newMockDoguConfigWriter(t)
-		mockDcw.EXPECT().applyDefaultDoguConfig(testCtx, expectedDefaultConfig, expectedSensitiveConfig).Return(nil)
 
 		dca := &DefaultConfigApplier{
-			passwordGenerator:  mockPg,
 			globalConfigWriter: mockGcw,
 			doguConfigWriter:   mockDcw,
 			useLopIdp:          true,
@@ -157,7 +173,7 @@ func TestNewDefaultConfigApplier(t *testing.T) {
 	mockSensitiveDoguRepo := newMockDoguConfigRepo(t)
 	mockSecClient := newMockSecretClient(t)
 
-	applier := NewDefaultConfigApplier(mockGlobalRepo, mockDoguRepo, mockSensitiveDoguRepo, mockSecClient, "example.com", false)
+	applier := NewDefaultConfigApplier(mockGlobalRepo, mockDoguRepo, mockSensitiveDoguRepo, mockSecClient, "example.com", "instance.example.com", false)
 
 	require.NotNil(t, applier)
 	assert.NotNil(t, applier.passwordGenerator)
@@ -169,5 +185,7 @@ func TestNewDefaultConfigApplier(t *testing.T) {
 	assert.IsType(t, &cesDoguConfigWriter{}, applier.doguConfigWriter)
 	assert.Equal(t, mockDoguRepo, applier.doguConfigWriter.(*cesDoguConfigWriter).doguConfigRepo)
 	assert.Equal(t, mockSensitiveDoguRepo, applier.doguConfigWriter.(*cesDoguConfigWriter).sensitiveDoguConfigRepo)
+	assert.Equal(t, "example.com", applier.initialDomain)
+	assert.Equal(t, "instance.example.com", applier.initialFQDN)
 	assert.False(t, applier.useLopIdp)
 }
