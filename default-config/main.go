@@ -18,6 +18,7 @@ import (
 const (
 	defaultWaitTimeoutMinutes = 5
 	defaultEnableFqdnApply    = false
+	defaultUseLopIdp          = false
 )
 
 type configApplier interface {
@@ -34,7 +35,7 @@ func main() {
 
 	err := run(ctx, cfg)
 	if err != nil {
-		panic(fmt.Errorf("failed to run default-comfig: %w", err))
+		panic(fmt.Errorf("failed to run default-config: %w", err))
 	}
 
 	slog.Info("exiting")
@@ -66,7 +67,7 @@ func run(ctx context.Context, cfg jobConfig) error {
 
 	initialDomain := os.Getenv("INITIAL_DOMAIN")
 
-	ca := config.NewDefaultConfigApplier(globalConfigRepo, doguConfigRepo, sensitiveDoguConfigRepo, k8sSecretClient, initialDomain)
+	ca := config.NewDefaultConfigApplier(globalConfigRepo, doguConfigRepo, sensitiveDoguConfigRepo, k8sSecretClient, initialDomain, cfg.useLopIdp)
 	fa := fqdn.NewApplier(globalConfigRepo, k8sServicesClient)
 
 	if err = applyDefaults(ctx, cfg, ca, fa); err != nil {
@@ -112,6 +113,7 @@ type jobConfig struct {
 	logLevel        string
 	waitTimeout     time.Duration
 	enableFqdnApply bool
+	useLopIdp       bool
 }
 
 func readConfig() jobConfig {
@@ -127,10 +129,17 @@ func readConfig() jobConfig {
 		enableFqdnApply = defaultEnableFqdnApply
 	}
 
+	useLopIdp, err := strconv.ParseBool(os.Getenv("USE_LOP_IDP"))
+	if err != nil {
+		slog.Warn("failed to parse USE_LOP_IDP. Using default value.", "err", err, "defaultUseLopIdp", defaultUseLopIdp)
+		useLopIdp = defaultUseLopIdp
+	}
+
 	return jobConfig{
 		namespace:       os.Getenv("NAMESPACE"),
 		logLevel:        os.Getenv("LOG_LEVEL"),
 		waitTimeout:     time.Duration(waitTimeoutMinutes) * time.Minute,
 		enableFqdnApply: enableFqdnApply,
+		useLopIdp:       useLopIdp,
 	}
 }

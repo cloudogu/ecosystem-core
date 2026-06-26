@@ -6,6 +6,7 @@ global:
     - name: ces-container-registries
 skipPreconditionValidation: true
 loadbalancer-annotations: {}
+use-lop-idp: false
 k8s-component-operator:
   enabled: true
   manager:
@@ -26,11 +27,11 @@ components:
   k8s-dogu-operator-crd:
     version: 2.13.0
   k8s-dogu-operator:
-    version: 3.25.0
+    version: 3.26.0
   k8s-service-discovery:
     version: 6.0.2
   k8s-blueprint-operator-crd:
-    version: 3.2.0
+    version: 3.3.0
   k8s-blueprint-operator:
     version: 3.3.0
   k8s-ces-gateway:
@@ -43,6 +44,15 @@ components:
     version: 1.0.0
   k8s-debug-mode-operator:
     version: 1.0.3
+  k8s-auth-registration-crd:
+    disabled: true
+    version: 1.0.0
+  lop-idp:
+    disabled: true
+    version: 1.1.1
+  postfix:
+    disabled: true
+    version: 3.10.8-3
 backup:
   enabled: true
   # The backup stack requires the snapshot api and snapshot controller to be installed. It is not party of the ecosystem and should be seen as an infrastructure component like the storage provisioner.
