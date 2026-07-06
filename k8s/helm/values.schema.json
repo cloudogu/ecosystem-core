@@ -57,6 +57,10 @@
       "type": "boolean",
       "description": "Skip validation of preconditions. This is useful for local development or in ArgoCD contexts. Default: false."
     },
+    "use-lop-idp": {
+      "type": "boolean",
+      "description": "Enable the LOP-IDP stack. Activates k8s-auth-registration-crd, lop-idp and postfix components and configures dogu-operator and blueprint-operator for auth registration."
+    },
     "loadbalancer-annotations": {
       "type": "object",
       "description": "Custom annotations for the loadbalancer to be set in the specific ces-loadbalancer service",
@@ -223,6 +227,18 @@
               "type": "integer",
               "description": "The timeout in minutes to wait for the load-balancer service to be get an external IP. Defaults to 5 minutes.",
               "minimum": 1
+            },
+            "initialFQDN": {
+              "type": "string",
+              "description": "Sets the initial fqdn in the global config. Takes precedence over enableFqdnApplier. Required when using use-lop-idp."
+            },
+            "initialDomain": {
+              "type": "string",
+              "description": "Sets the initial domain in the global config. Required when using use-lop-idp."
+            },
+            "enableFqdnApplier": {
+              "type": "boolean",
+              "description": "If set to true, the fqdn applier will poll for the LoadBalancer IP and write it as fqdn into the global config. Has no effect if initialFQDN is set."
             }
           }
         }
