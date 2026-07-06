@@ -11,6 +11,7 @@ Die Konfiguration erfolgt über die Datei `values.yaml`.
 |------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | `skipPreconditionValidation` | `boolean` | Überspringt die [Prüfung von Voraussetzungen](./preparation_de.md) (z. B. in lokalen Entwicklungsumgebungen oder ArgoCD). Standard: `false`. |
 | `loadbalancer-annotations`   | `object`  | Schreibt die übergebenen Key-Value Pairs als Annotation in den LoadBalancer-Service des Ecosystems.                                          |
+| `use-lop-idp`                | `boolean` | Aktiviert den LOP-IDP-Stack. Standard: `false`. Siehe [LOP-IDP-Stack](#lop-idp-stack-use-lop-idp).                                          |
 
 ## Component-Operator-Konfiguration (`k8s-component-operator`)
 
@@ -82,6 +83,36 @@ components:
 | `valuesObject`    | `object`  | YAML-Block zum Überschreiben von Standardwerten                                                                               |
 | `valuesConfigRef` | `object`  | Angabe einer Referenz auf eine ConfigMap und einen darin enthaltenen Key zum Überschreiben von Standardwerten.                |
 
+## LOP-IDP-Stack (`use-lop-idp`)
+
+Mit `use-lop-idp: true` wird der Identity-Provider-Stack für die Authentifizierungsregistrierung aktiviert.
+Folgende Änderungen werden automatisch vorgenommen:
+
+- Die Komponenten `k8s-auth-registration-crd`, `lop-idp` und `postfix` werden aktiviert.
+- `k8s-dogu-operator` wird konfiguriert mit:
+  ```yaml
+  controllerManager:
+    env:
+      authRegistrationEnabled: true
+      disablePostfixDependencyCheck: true
+  ```
+- `k8s-blueprint-operator` wird konfiguriert mit:
+  ```yaml
+  manager:
+    env:
+      authRegistrationEnabled: true
+      disablePostfixDependencyCheck: true
+  ```
+
+Bei Verwendung von `use-lop-idp` müssen zusätzlich folgende Werte konfiguriert werden:
+
+```yaml
+defaultConfig:
+  env:
+    initialDomain: "your.domain.com"   # erforderlich: muss zur Installationszeit bekannt sein
+    initialFQDN: "your.fqdn.com"       # erforderlich, wenn enableFqdnApplier false ist
+```
+
 ## Backup-Komponenten (`backup`)
 
 Aktiviert und verwaltet den **Backup-Stack** und dessen Komponenten.
@@ -100,7 +131,8 @@ backup:
 
 ## Monitoring-Komponenten (`monitoring`)
 
-Aktiviert und verwaltet den **Monitoring-Stacks** und dessen Komponenten.
+Aktiviert und verwaltet den **Monitoring-Stack** und dessen Komponenten.
+Achtung: Wenn der Monitoring-Stack deaktiviert wird, muss auch die k8s-ces-control-Komponente deaktiviert werden!
 
 ```yaml
 monitoring:
@@ -113,6 +145,24 @@ monitoring:
 |--------------|-----------|-----------------------------------------------------------------|
 | `enabled`    | `boolean` | Aktiviert den Monitoring-Stack                                  |
 | `components` | `map`     | Liste der Monitoring-Komponenten, strukturiert wie `components` |
+
+## Default-Config-Job (`defaultConfig`)
+
+Der Default-Config-Job läuft einmalig nach Installation und Upgrade und schreibt initiale Werte in die globale CES-Konfiguration und die Dogu-Konfigurationen.
+
+```yaml
+defaultConfig:
+  env:
+    enableFqdnApplier: false
+    initialFQDN: ""
+    initialDomain: ""
+```
+
+| Feld                    | Typ       | Beschreibung                                                                                                                                                      |
+|-------------------------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `env.enableFqdnApplier` | `boolean` | Wartet auf die LoadBalancer-IP und schreibt sie als `fqdn` in die globale Konfiguration. Hat keine Auswirkung, wenn `initialFQDN` gesetzt ist. Standard: `false`. |
+| `env.initialFQDN`       | `string`  | Setzt die initiale `fqdn` in der globalen Konfiguration. Hat Vorrang vor `enableFqdnApplier`. Erforderlich bei Verwendung von `use-lop-idp`.                      |
+| `env.initialDomain`     | `string`  | Setzt die initiale `domain` in der globalen Konfiguration. Erforderlich bei Verwendung von `use-lop-idp`.                                                         |
 
 ## Cleanup-Job (`cleanup`)
 

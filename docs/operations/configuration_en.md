@@ -12,6 +12,7 @@ Configuration is done via the `values.yaml` file.
 |------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------|
 | `skipPreconditionValidation` | `boolean` | Skips the [precondition check](./preparation_en.md) (e.g., in local development environments or ArgoCD). Default: `false`. |
 | `loadbalancer-annotations`   | `object`  | Writes the provided key value pairs in the annotations of the loadbalancer service of the Ecosystems.                      |
+| `use-lop-idp`                | `boolean` | Enables the LOP-IDP stack. Default: `false`. See [LOP-IDP stack](#lop-idp-stack-use-lop-idp).                             |
 
 ## Component Operator Configuration (`k8s-component-operator`)
 
@@ -83,6 +84,36 @@ components:
 | `valuesObject`    | `string`  | YAML block for overwriting default values                                                                       |
 | `valuesConfigRef` | `object`  | Specifies a reference to a ConfigMap and a key contained therein to override default values.                    |
 
+## LOP-IDP stack (`use-lop-idp`)
+
+Setting `use-lop-idp: true` activates the identity provider stack for authentication registration.
+The following changes are applied automatically:
+
+- Components `k8s-auth-registration-crd`, `lop-idp` and `postfix` are enabled.
+- `k8s-dogu-operator` is configured with:
+  ```yaml
+  controllerManager:
+    env:
+      authRegistrationEnabled: true
+      disablePostfixDependencyCheck: true
+  ```
+- `k8s-blueprint-operator` is configured with:
+  ```yaml
+  manager:
+    env:
+      authRegistrationEnabled: true
+      disablePostfixDependencyCheck: true
+  ```
+
+When using `use-lop-idp`, the following additional values must be configured:
+
+```yaml
+defaultConfig:
+  env:
+    initialDomain: "your.domain.com"   # required: must be known at install time
+    initialFQDN: "your.fqdn.com"       # required if enableFqdnApplier is false
+```
+
 ## Backup components (`backup`)
 
 Enables and manages the **backup stack** and its components.
@@ -102,6 +133,7 @@ backup:
 ## Monitoring components (`monitoring`)
 
 Enables and manages the **monitoring stack** and its components.
+Warning: If you disable the monitoring stack you also have to disable the k8s-ces-control component!
 
 ```yaml
 monitoring:
@@ -114,6 +146,24 @@ monitoring:
 |--------------|-----------|-------------------------------------------------------------|
 | `enabled`    | `boolean` | Enables the monitoring stack                                |
 | `components` | `map`     | List of monitoring components, structured like `components` |
+
+## Default config job (`defaultConfig`)
+
+The default config job runs once after install and upgrade to write initial values into the CES global config and dogu configs.
+
+```yaml
+defaultConfig:
+  env:
+    enableFqdnApplier: false
+    initialFQDN: ""
+    initialDomain: ""
+```
+
+| Field                   | Type      | Description                                                                                                                            |
+|-------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `env.enableFqdnApplier` | `boolean` | Polls for the LoadBalancer IP and writes it as `fqdn` into the global config. Has no effect if `initialFQDN` is set. Default: `false`. |
+| `env.initialFQDN`       | `string`  | Sets the initial `fqdn` in the global config. Takes precedence over `enableFqdnApplier`. Required when using `use-lop-idp`.            |
+| `env.initialDomain`     | `string`  | Sets the initial `domain` in the global config. Required when using `use-lop-idp`.                                                     |
 
 ## Cleanup job (`cleanup`)
 
