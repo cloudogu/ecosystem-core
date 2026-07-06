@@ -35,6 +35,8 @@ components:
     version: 3.3.0
   k8s-ces-gateway:
     version: 3.3.0
+  k8s-warp-menu-entry-crd:
+    version: 0.2.0
   k8s-ces-assets:
     version: 2.0.2
   k8s-ces-control:
