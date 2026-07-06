@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - [#74] Update k8s-dogu-operator to 3.27.0 and enable warp cr support
 - [#74] Update k8s-ces-assets to 3.0.0 for processing warp crs
+- [#74] Update makesfiles to 10.10.0
 
 ## [v4.3.0] - 2026-06-03
 ### Removed
