@@ -119,7 +119,8 @@ images-import: ## import images from ces-importer and
 	@make image-import \
 		IMAGE_DIR=./default-config \
 		IMAGE=${ARTIFACT_ID_DEFAULT_CONFIG}:${VERSION} \
-		IMAGE_DEV_VERSION=$(IMAGE_DEV):${VERSION}
+		IMAGE_DEV_VERSION=$(IMAGE_DEV):${VERSION} \
+		IMAGE_DEV_PUSH=$(IMAGE_PUSH_REGISTRY_HOST)$(IMAGE_PUSH_REGISTRY_NAMESPACE)/$(ARTIFACT_ID_DEFAULT_CONFIG)/$(GIT_BRANCH)
 
 .PHONY: helm-values-update-image-version
 helm-values-update-image-version: $(BINARY_YQ)
