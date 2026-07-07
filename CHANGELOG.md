@@ -13,6 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#74] Update k8s-ces-assets to 3.0.0 for processing warp crs
 - [#74] Update makesfiles to 10.10.0
 
+## [v4.4.0] - 2026-07-06
+### Added
+- [#64] New Helm value `use-lop-idp` (default: `false`) to enable the LOP-IDP stack
+  - Activates the `k8s-auth-registration-crd`, `lop-idp` and `postfix` components
+  - Configures `k8s-dogu-operator` and `k8s-blueprint-operator` with `authRegistrationEnabled: true` and `disablePostfixDependencyCheck: true`
+
+### Fixed
+- [#64] postfix-dogu-config will not be crated when `use-lop-idp` is set to `true` 
+
+### Changed
+- [#64] Update components
+  - Bump Version of k8s-dogu-operator from 3.25.0 to 3.26.0
+  - Bump Version of k8s-blueprint-operator from 3.2.0 to 3.3.0
+
 ## [v4.3.0] - 2026-06-03
 ### Removed
 - [#69] Removed now deprecated `k8s-promtail`

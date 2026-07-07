@@ -124,6 +124,30 @@ Usage:
 {{- printf "\n" }}
 {{- end }}
 
+{{/*
+Builds the effective components map by applying use-lop-idp overrides when the flag is set.
+The $_* assignments are required to suppress the return value of `set`, which would otherwise
+be rendered as text output into the generated YAML.
+*/}}
+{{- define "ecosystem-core.effectiveComponents" -}}
+{{- $comps := deepCopy .Values.components -}}
+{{- if index .Values "use-lop-idp" -}}
+  {{- $_authReg := set (index $comps "k8s-auth-registration-crd") "disabled" false -}}
+  {{- $_lopidp := set (index $comps "lop-idp") "disabled" false -}}
+  {{- $_postfix := set (index $comps "postfix") "disabled" false -}}
+
+  {{- $doguOp := index $comps "k8s-dogu-operator" -}}
+  {{- $doguOpPatch := dict "controllerManager" (dict "env" (dict "authRegistrationEnabled" true "disablePostfixDependencyCheck" true)) -}}
+  {{- $_doguOp := set $doguOp "valuesObject" (mergeOverwrite (index $doguOp "valuesObject" | default dict) $doguOpPatch) -}}
+
+  {{- $bpOp := index $comps "k8s-blueprint-operator" -}}
+  {{- $bpOpPatch := dict "manager" (dict "env" (dict "authRegistrationEnabled" true "disablePostfixDependencyCheck" true)) -}}
+  {{- $_bpOp := set $bpOp "valuesObject" (mergeOverwrite (index $bpOp "valuesObject" | default dict) $bpOpPatch) -}}
+{{- end -}}
+{{- $comps | toYaml -}}
+{{- end -}}
+
+
 {{/* Renders a single Component CR from a map entry (name + component spec) */}}
 {{- define "ecosystem-core.renderComponent" -}}
 {{- $name := .name -}}
