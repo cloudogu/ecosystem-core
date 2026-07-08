@@ -143,6 +143,10 @@ be rendered as text output into the generated YAML.
   {{- $bpOp := index $comps "k8s-blueprint-operator" -}}
   {{- $bpOpPatch := dict "manager" (dict "env" (dict "authRegistrationEnabled" true "disablePostfixDependencyCheck" true)) -}}
   {{- $_bpOp := set $bpOp "valuesObject" (mergeOverwrite (index $bpOp "valuesObject" | default dict) $bpOpPatch) -}}
+
+  {{- $svcDisc := index $comps "k8s-service-discovery" -}}
+  {{- $svcDiscPatch := dict "exposition" (dict "discoverExpositionCR" true) -}}
+  {{- $_svcDisc := set $svcDisc "valuesObject" (mergeOverwrite (index $svcDisc "valuesObject" | default dict) $svcDiscPatch) -}}
 {{- end -}}
 {{- $comps | toYaml -}}
 {{- end -}}
