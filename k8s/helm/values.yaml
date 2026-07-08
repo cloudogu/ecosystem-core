@@ -34,6 +34,8 @@ components:
           warpMenuEntryEnabled: true
   k8s-service-discovery:
     version: 6.1.0
+  k8s-exposition-crd:
+    version: 1.0.0
   k8s-blueprint-operator-crd:
     version: 3.2.0
   k8s-blueprint-operator:
