@@ -99,7 +99,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 4.5.0
+    tag: 4.6.0
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info
