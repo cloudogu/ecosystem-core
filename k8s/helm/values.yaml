@@ -33,7 +33,7 @@ components:
         env:
           warpMenuEntryEnabled: true
   k8s-service-discovery:
-    version: 6.0.2
+    version: 6.1.0
   k8s-blueprint-operator-crd:
     version: 3.2.0
   k8s-blueprint-operator:

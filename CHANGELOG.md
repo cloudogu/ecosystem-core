@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- [#77] Enable `exposition.discoverExpositionCR: true` on `k8s-service-discovery` when `use-lop-idp` is set, so the Exposition CRs created by the LOP-IDP sub-components are translated into routes (required for `lop-idp` >= 1.2.0; otherwise all paths return 404 after the upgrade)
+- [#77] Bump Version of k8s-service-discovery from 6.0.2 to 6.1.0
 
 ## [v4.5.0] - 2026-07-07
 ### Added
