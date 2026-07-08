@@ -104,6 +104,13 @@ The following changes are applied automatically:
       authRegistrationEnabled: true
       disablePostfixDependencyCheck: true
   ```
+- `k8s-service-discovery` is updated to version `6.1.0` and configured with:
+  ```yaml
+  exposition:
+    discoverExpositionCR: true
+  ```
+  This translates the Exposition CRs created by the LOP-IDP sub-components into routes. Without this configuration, all paths become unreachable from outside the cluster after upgrading to `lop-idp` >= 1.2.0 (404).
+- `k8s-exposition-crd` (1.0.0) is installed, providing the Exposition CRD that `k8s-service-discovery` reconciles when `discoverExpositionCR` is enabled.
 
 When using `use-lop-idp`, the following additional values must be configured:
 
