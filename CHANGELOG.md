@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- [#79] Add `k8s-serviceaccount-crd` and `serviceaccount-operator` components
+
+### Fixed
+- [#79] Remove wrong default values for `use-lop-idp`, `initialFQDN`and `initialDomain` 
 
 ## [v4.6.0] - 2026-07-08
 ### Changed
