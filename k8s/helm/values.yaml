@@ -6,7 +6,7 @@ global:
     - name: ces-container-registries
 skipPreconditionValidation: true
 loadbalancer-annotations: {}
-use-lop-idp: true
+use-lop-idp: false
 k8s-component-operator:
   enabled: true
   manager:
@@ -52,6 +52,10 @@ components:
     version: 1.0.0
   k8s-debug-mode-operator:
     version: 1.0.3
+  k8s-serviceaccount-crd:
+    version: 2.0.1
+  service-account-operator:
+    version: 1.0.0
   k8s-auth-registration-crd:
     disabled: true
     version: 1.0.0
@@ -111,7 +115,7 @@ defaultConfig:
     enableFqdnApplier: false
     # Sets the initial fqdn in the global config. Takes precedence over enableFqdnApplier.
     # Required when using use-lop-idp, as the fqdn must be known at install time.
-    initialFQDN: "dev1.k3ces.localdomain"
+    initialFQDN: ""
     # Sets the initial domain in the global config.
     # Required when using use-lop-idp, as the domain must be known at install time.
-    initialDomain: "k3ces.localdomain"
+    initialDomain: ""
