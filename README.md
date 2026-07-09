@@ -12,7 +12,10 @@ It works standalone or via GitOps tools like [Argo CD](https://argoproj.github.i
 ## Validations / preconditions
 
 The "Component" CustomResourceDefinition (CRD) must be installed first in the cluster.
-This is required by the `k8s-component-operator` to manage component objects.
+This is required by the `k8s-component-operator` to manage component objects.  
+If you want to run `helm template`, you'll have to add this API like so:  
+`helm template --api-versions k8s.cloudogu.com/v1/Component ...`.  
+Note that this is not necessary on Argo CD, if you install the CRDs first, see [docs/argoCD](docs/operations/argoCD_en.md) - `argocd.argoproj.io/sync-wave: "-1"`)
 
 This chart can fail fast when required Secrets/ConfigMaps are missing. We use Helm’s `lookup` during install to 
 verify they exist and (optionally) contain specific keys. 

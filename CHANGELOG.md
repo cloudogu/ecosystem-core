@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.7.0] - 2026-07-09
+### Added
+- [#79] Add `k8s-serviceaccount-crd` and `serviceaccount-operator` components
+
+### Fixed
+- [#79] Remove wrong default values for `use-lop-idp`, `initialFQDN`and `initialDomain` 
+
 ## [v4.6.0] - 2026-07-08
 ### Changed
 - [#77] Enable `exposition.discoverExpositionCR: true` on `k8s-service-discovery` when `use-lop-idp` is set, so the Exposition CRs created by the LOP-IDP sub-components are translated into routes
