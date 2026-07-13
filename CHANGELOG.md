@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.8.0] - 2026-07-13
+### Changed
+- [#81] Bump Version of lop-idp from 1.3.0 to 1.3.1
+- [#81] Bump Version of k8s-warp-menu-entry-crd from 0.2.0 to 1.0.0
+- [#81] Bump Version of k8s-ces-gateway from 3.3.0 to 3.3.3
+
 ## [v4.7.0] - 2026-07-09
 ### Added
 - [#79] Add `k8s-serviceaccount-crd` and `serviceaccount-operator` components
@@ -17,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - [#77] Enable `exposition.discoverExpositionCR: true` on `k8s-service-discovery` when `use-lop-idp` is set, so the Exposition CRs created by the LOP-IDP sub-components are translated into routes
 - [#77] Bump Version of k8s-service-discovery from 6.0.2 to 6.1.0
-- [#77] Bump Version of lop-ido from 1.2.0 to 1.3.0
+- [#77] Bump Version of lop-idp from 1.2.0 to 1.3.0
 - [#77] Add `k8s-exposition-crd` (1.0.0) component, which provides the Exposition CRD consumed by `k8s-service-discovery` with `discoverExpositionCR: true`
 
 ## [v4.5.0] - 2026-07-07
