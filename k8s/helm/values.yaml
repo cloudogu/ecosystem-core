@@ -6,7 +6,6 @@ global:
     - name: ces-container-registries
 skipPreconditionValidation: true
 loadbalancer-annotations: {}
-use-lop-idp: false
 k8s-component-operator:
   enabled: true
   manager:
@@ -28,43 +27,22 @@ components:
     version: 2.13.0
   k8s-dogu-operator:
     version: 3.27.0
-    valuesObject:
-      controllerManager:
-        env:
-          warpMenuEntryEnabled: true
   k8s-service-discovery:
-    version: 6.1.0
-  k8s-exposition-crd:
-    version: 1.0.0
+    version: 6.1.1
   k8s-blueprint-operator-crd:
     version: 3.2.0
   k8s-blueprint-operator:
     version: 3.3.0
   k8s-ces-gateway:
-    version: 3.3.3
-  k8s-warp-menu-entry-crd:
-    version: 1.0.0
+    version: 3.3.4
   k8s-ces-assets:
     version: 3.0.0
   k8s-ces-control:
-    version: 1.10.4
+    version: 1.11.2
   k8s-debug-mode-operator-crd:
     version: 1.0.0
   k8s-debug-mode-operator:
     version: 1.0.3
-  k8s-serviceaccount-crd:
-    version: 2.0.1
-  service-account-operator:
-    version: 1.0.0
-  k8s-auth-registration-crd:
-    disabled: true
-    version: 1.0.0
-  lop-idp:
-    disabled: true
-    version: 1.3.1
-  postfix:
-    disabled: true
-    version: 3.10.8-3
 backup:
   enabled: true
   # The backup stack requires the snapshot api and snapshot controller to be installed. It is not party of the ecosystem and should be seen as an infrastructure component like the storage provisioner.
@@ -74,7 +52,7 @@ backup:
     k8s-backup-operator-crd:
       version: 1.8.0
     k8s-backup-operator:
-      version: 3.2.0
+      version: 3.3.3
     k8s-velero:
       version: 11.4.0-2
 monitoring:
@@ -82,17 +60,17 @@ monitoring:
   enabled: true
   components:
     k8s-prometheus:
-      version: 75.3.5-7
+      version: 87.5.1-3
     k8s-minio:
       version: 2025.6.13-3
     k8s-loki:
-      version: 3.5.10-1
+      version: 3.5.10-3
     k8s-alloy:
-      version: 1.1.2-3
+      version: 1.1.2-5
     k8s-support-archive-operator-crd:
       version: 1.0.0
     k8s-support-archive-operator:
-      version: 1.1.1
+      version: 1.1.2
 cleanup:
   timeoutSeconds: 900
   image:
@@ -103,7 +81,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 4.8.0
+    tag: 4.3.0
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info
@@ -113,9 +91,4 @@ defaultConfig:
     # While deploying the components, the applier will wait for the loadbalancer service to be created and use the external ip to set it in the global config as fqdn.
     # If set to false, the fqdn has to be set by the blueprint config or manually. This is required for dogus to start.
     enableFqdnApplier: false
-    # Sets the initial fqdn in the global config. Takes precedence over enableFqdnApplier.
-    # Required when using use-lop-idp, as the fqdn must be known at install time.
-    initialFQDN: ""
-    # Sets the initial domain in the global config.
-    # Required when using use-lop-idp, as the domain must be known at install time.
     initialDomain: ""
