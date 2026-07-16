@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.8.1] - 2026-07-16
+### Changed
+- [#83] Bump Version of lop-idp from 1.3.1 to 1.3.2
+- [#83] Bump Version of k8s-service-discovery from 6.1.0 to 6.1.1
+
 ## [v4.8.0] - 2026-07-13
 ### Changed
 - [#81] Bump Version of lop-idp from 1.3.0 to 1.3.1
