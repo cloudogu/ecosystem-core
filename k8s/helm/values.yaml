@@ -41,13 +41,13 @@ components:
   k8s-blueprint-operator:
     version: 3.3.0
   k8s-ces-gateway:
-    version: 3.3.3
+    version: 3.3.4
   k8s-warp-menu-entry-crd:
     version: 1.0.0
   k8s-ces-assets:
     version: 3.0.0
   k8s-ces-control:
-    version: 1.10.4
+    version: 1.11.2
   k8s-debug-mode-operator-crd:
     version: 1.0.0
   k8s-debug-mode-operator:
@@ -86,7 +86,7 @@ monitoring:
     k8s-minio:
       version: 2025.6.13-3
     k8s-loki:
-      version: 3.5.10-1
+      version: 3.5.10-3
     k8s-alloy:
       version: 1.1.2-3
     k8s-support-archive-operator-crd:
