@@ -27,14 +27,12 @@ patches:
         tag: "{{ tagFrom .images.defaultConfig }}"
     flux2:
       cli:
-        registry: "{{ registryFrom .images.fluxCLI }}"
-        repository: "{{ repositoryFrom .images.fluxCLI }}"
+        image: "{{ registryFrom .images.fluxCLI }}/{{ repositoryFrom .images.fluxCLI }}"
         tag: "{{ tagFrom .images.fluxCLI }}"
       helmController:
-        registry: "{{ registryFrom .images.fluxHelmController }}"
-        repository: "{{ repositoryFrom .images.fluxHelmController }}"
+        image: "{{ registryFrom .images.fluxHelmController }}/{{ repositoryFrom .images.fluxHelmController }}"
         tag: "{{ tagFrom .images.fluxHelmController }}"
       sourceController:
-        registry: "{{ registryFrom .images.fluxSourceController }}"
-        repository: "{{ repositoryFrom .images.fluxSourceController }}"
+        image: "{{ registryFrom .images.fluxSourceController }}/{{ repositoryFrom .images.fluxSourceController }}"
         tag: "{{ tagFrom .images.fluxSourceController }}"
+
