@@ -21,11 +21,11 @@ installiert. Mithilfe der Annotation bleiben Ressourcen bestehen, selbst wenn ih
 ### Sharding
 Flux unterstützt nativ [Sharding](https://fluxcd.io/flux/installation/configuration/sharding/) wodurch es möglich ist 
 mehrere Flux-Operatoren/Controller parallel im Cluster betreiben zu können. Mit aktivierten Sharding überwachen die jeweiligen
-Controller nur die für sie relevanten Ressource. Sowohl der Source- als auch Helm-Controller sind für den Sharding-Key
+Controller nur die für sie relevanten Ressourcen. Sowohl der Source- als auch Helm-Controller sind für den Sharding-Key
 `sharding.fluxcd.io/key=ces` konfiguriert. D.h. es werden nur Ressourcen überwacht, die als Label den Key `sharding.fluxcd.io/key=ces`
 tragen. 
 
-Mit Nutzung eines eigenen Sharding-Keys ermöglichen wird es Kunden weiterhin ihre eigenen Flux-Komponenten zu nutzen, ohne Seiteneffekte
+Mit Nutzung eines eigenen Sharding-Keys ermöglichen wir es Kunden weiterhin ihre eigenen Flux-Komponenten zu nutzen, ohne Seiteneffekte
 mit unserer Plattform zu haben. 
 
 ### Begrenzung des Namespaces
@@ -36,7 +36,7 @@ der Namespace auf den Namespace des Ecosystem-Core begrenzt, in den auch Flux au
 ### Monitoring
 
 Grundsätzlich bietet Flux die Möglichkeit Prometheus mithilfe eines `PodMonitor` anzubinden und Metriken der einzelne Controller
-zu exportieren. Dies setzte voraus, dass die `PodMontior`-CRD im Cluster existiert, was zum Zeitpunkt der Installation des Ecosystem-Core
+zu exportieren. Dies setzt voraus, dass die `PodMonitor`-CRD im Cluster existiert, was zum Zeitpunkt der Installation des Ecosystem-Core
 nicht gegeben ist. Prometheus selbst wird bei uns erst später als Komponente mit ihren CRDs installiert. Aus diesem Grund 
 wird das Monitoring zum jetzigen Zeitpunkt **deaktiviert**. 
 
@@ -47,7 +47,7 @@ dieser Annahme sind die NetworkPolices, die das Helm-Chart mit ausbringt sehr "b
 Pods** des Namespaces, was bei uns zu Seiteneffekten führe würde. Aus diesem Grund wurden die NetworkPolicies des Charts **deaktiviert**.
 
 Da der Helm-Controller jedoch Zugriff auf Source-Controller braucht, um das Helm-Chart lokal zu laden, bringt der Ecosystem-Core
-hierfür eine eigenen NetworkPolicy `flux-source-controller-allow-helm-controller` (`flux-network-policies.yaml`) aus.
+hierfür eine eigene NetworkPolicy `flux-source-controller-allow-helm-controller` (`flux-network-policies.yaml`) aus.
 
 ### Retries für fehlgeschlagene Helm-Operationen
 
