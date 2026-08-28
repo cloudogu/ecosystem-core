@@ -13,12 +13,12 @@ metadata:
 spec:
   ingress:
     - from:
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: {{ .Release.Namespace | quote }}
-        - podSelector:
-            matchLabels:
-              app: helm-controller
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: {{ .Release.Namespace | quote }}
+        podSelector:
+          matchLabels:
+            app: helm-controller
   podSelector:
     matchLabels:
       app: source-controller
