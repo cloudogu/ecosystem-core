@@ -24,3 +24,7 @@ dependencies:
     version: "^1.14.0"
     repository: "oci://registry.cloudogu.com/k8s"
     condition: k8s-component-operator.enabled
+  - name: flux2
+    version: "^2.19.0"
+    repository: "https://fluxcd-community.github.io/helm-charts"
+    condition: flux.enabled

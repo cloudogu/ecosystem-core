@@ -4,6 +4,8 @@
 global:
   imagePullSecrets:
     - name: ces-container-registries
+  networkPolicies:
+    enabled: true
 skipPreconditionValidation: true
 loadbalancer-annotations: {}
 use-lop-idp: false
@@ -119,3 +121,42 @@ defaultConfig:
     # Sets the initial domain in the global config.
     # Required when using use-lop-idp, as the domain must be known at install time.
     initialDomain: ""
+# Feature flag to enable support for Flux
+flux:
+  enabled: false
+# Configuration for the flux sub chart
+flux2:
+  installCRDs: true
+  crds:
+    annotations:
+      # Keep CRDs so Dogus are not deleted accidentally because of a missing CRD
+      "helm.sh/resource-policy": keep
+  helmController:
+    create: true
+    container:
+      additionalArgs:
+        - "--feature-gates=DefaultToRetryOnFailure=true"
+        - "--watch-label-selector=sharding.fluxcd.io/key=ces"
+  imageAutomationController:
+    create: false
+  imageReflectionController:
+    create: false
+  kustomizeController:
+    create: false
+  notificationController:
+    create: false
+  sourceController:
+    create: true
+    container:
+      additionalArgs:
+        - "--watch-label-selector=sharding.fluxcd.io/key=ces"
+  sourceWatcher:
+    create: false
+  policies:
+    create: false
+  watchAllNamespaces: false
+  imagePullSecrets:
+    - name: ces-container-registries
+  prometheus:
+    podMonitor:
+      create: false
