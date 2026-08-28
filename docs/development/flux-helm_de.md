@@ -1,6 +1,6 @@
 ## Flux als Komponente für Helm
 
-Im [ADR63](TODO) haben wir festgelegt, dass wir Flux für die Ausbringung von Helm-Charts verwenden möchten. Dies betrifft
+Wir haben entschieden, dass wir Flux für die Ausbringung von Helm-Charts verwenden möchten. Dies betrifft
 vor allem den Dogu-Operator für die Ausbringung von Dogus in V3. Um Flux auch anderen Komponenten zur Verfügung zu stellen,
 wird Flux als zentraler Bestandteil der Plattform über den Ecosystem-Core verwaltet. Hierfür wurde das [Community-Chart](https://github.com/fluxcd-community/helm-charts)
 verwendet und für die LOP angepasst. Flux kann über das Flag `flux.enabled` für die LOP aktiviert werden.
