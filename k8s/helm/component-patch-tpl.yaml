@@ -1,9 +1,12 @@
 apiVersion: v1
 values:
   images:
-    componentOperator: cloudogu/k8s-component-operator:1.14.0
-    defaultConfig: cloudogu/ecosystem-core-default-config:4.8.1
+    componentOperator: cloudogu/k8s-component-operator:1.14.1
+    defaultConfig: cloudogu/ecosystem-core-default-config:4.9.0
     kubectl: docker.io/alpine/kubectl:1.35.2
+    fluxHelmController: ghcr.io/fluxcd/helm-controller:v1.6.2
+    fluxSourceController: ghcr.io/fluxcd/source-controller:v1.9.2
+    fluxCLI: ghcr.io/fluxcd/flux-cli:v2.9.1
 patches:
   values.yaml:
     k8s-component-operator:
@@ -22,3 +25,13 @@ patches:
         registry: "{{ registryFrom .images.defaultConfig }}"
         repository: "{{ repositoryFrom .images.defaultConfig }}"
         tag: "{{ tagFrom .images.defaultConfig }}"
+    flux2:
+      cli:
+        image: "{{ registryFrom .images.fluxCLI }}/{{ repositoryFrom .images.fluxCLI }}"
+        tag: "{{ tagFrom .images.fluxCLI }}"
+      helmController:
+        image: "{{ registryFrom .images.fluxHelmController }}/{{ repositoryFrom .images.fluxHelmController }}"
+        tag: "{{ tagFrom .images.fluxHelmController }}"
+      sourceController:
+        image: "{{ registryFrom .images.fluxSourceController }}/{{ repositoryFrom .images.fluxSourceController }}"
+        tag: "{{ tagFrom .images.fluxSourceController }}"

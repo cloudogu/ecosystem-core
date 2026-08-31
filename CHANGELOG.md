@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.9.0] - 2026-08-31
+### Added
+- [#87] Add flux as dependency for ecosystem-core
+
 ## [v4.8.1] - 2026-07-16
 ### Changed
 - [#83] Bump Version of lop-idp from 1.3.1 to 1.3.2

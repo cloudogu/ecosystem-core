@@ -1,6 +1,9 @@
 dependencies:
 - name: k8s-component-operator
   repository: oci://registry.cloudogu.com/k8s
-  version: 1.14.0
-digest: sha256:eae7eea1b7071019de92cd1bdb321e8c129c27b912348f9be3dccb738ea7acdb
-generated: "2026-05-21T09:50:32.815333466+02:00"
+  version: 1.14.1
+- name: flux2
+  repository: https://fluxcd-community.github.io/helm-charts
+  version: 2.19.0
+digest: sha256:c81926cf477666a2f4dfae96c18ee2a2b9d2054d3c52ced7ee37e4e0213917ce
+generated: "2026-08-28T14:39:50.577609968+02:00"
