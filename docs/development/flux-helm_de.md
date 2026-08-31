@@ -47,7 +47,8 @@ dieser Annahme sind die NetworkPolices, die das Helm-Chart mit ausbringt sehr "b
 Pods** des Namespaces, was bei uns zu Seiteneffekten führe würde. Aus diesem Grund wurden die NetworkPolicies des Charts **deaktiviert**.
 
 Da der Helm-Controller jedoch Zugriff auf Source-Controller braucht, um das Helm-Chart lokal zu laden, bringt der Ecosystem-Core
-hierfür eine eigene NetworkPolicy `flux-source-controller-allow-helm-controller` (`flux-network-policies.yaml`) aus.
+hierfür eine eigene NetworkPolicy `flux-source-controller-allow-artifact-access` (`flux-network-policies.yaml`) aus.
+Neben dem Helm-Controller ist darin auch der Dogu-Operator freigeschaltet, da dieser die Artefakte ebenfalls direkt abruft.
 
 ### Retries für fehlgeschlagene Helm-Operationen
 

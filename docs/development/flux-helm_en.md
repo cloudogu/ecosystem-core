@@ -47,7 +47,8 @@ the NetworkPolicies that the Helm chart deploys are set up very "broadly" and **
 pods** of the namespace, which would lead to side effects in our case. For this reason, the NetworkPolicies of the chart have been **disabled**.
 
 However, since the Helm Controller needs access to the Source Controller in order to load the Helm chart locally, the Ecosystem-Core
-deploys its own NetworkPolicy `flux-source-controller-allow-helm-controller` (`flux-network-policies.yaml`) for this purpose.
+deploys its own NetworkPolicy `flux-source-controller-allow-artifact-access` (`flux-network-policies.yaml`) for this purpose.
+Besides the Helm Controller, the Dogu Operator is granted access as well, since it also fetches the artifacts directly.
 
 ### Retries for failed Helm operations
 
