@@ -1,5 +1,5 @@
 #!groovy
-@Library('github.com/cloudogu/ces-build-lib@bugfix/173-fix-k3d-install-url-in-k3dinstallk3d')
+@Library('github.com/cloudogu/ces-build-lib@5.6.1')
 import com.cloudogu.ces.cesbuildlib.*
 
 git = new Git(this, "cesmarvin")
