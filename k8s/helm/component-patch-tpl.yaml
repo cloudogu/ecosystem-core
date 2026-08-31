@@ -1,8 +1,8 @@
 apiVersion: v1
 values:
   images:
-    componentOperator: cloudogu/k8s-component-operator:1.14.0
-    defaultConfig: cloudogu/ecosystem-core-default-config:4.8.1
+    componentOperator: cloudogu/k8s-component-operator:1.14.1
+    defaultConfig: cloudogu/ecosystem-core-default-config:4.9.0
     kubectl: docker.io/alpine/kubectl:1.35.2
     fluxHelmController: ghcr.io/fluxcd/helm-controller:v1.6.2
     fluxSourceController: ghcr.io/fluxcd/source-controller:v1.9.2
@@ -35,4 +35,3 @@ patches:
       sourceController:
         image: "{{ registryFrom .images.fluxSourceController }}/{{ repositoryFrom .images.fluxSourceController }}"
         tag: "{{ tagFrom .images.fluxSourceController }}"
-
