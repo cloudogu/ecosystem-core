@@ -15,7 +15,7 @@ k8s-component-operator:
     image:
       registry: docker.io
       repository: cloudogu/k8s-component-operator
-      tag: 1.14.0
+      tag: 1.14.1
     env:
       logLevel: info
     resourceLimits:
@@ -105,7 +105,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 4.8.1
+    tag: 4.9.0
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info
