@@ -19,6 +19,12 @@ spec:
         podSelector:
           matchLabels:
             app: helm-controller
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: {{ .Release.Namespace | quote }}
+        podSelector:
+          matchLabels:
+            k8s.cloudogu.com/component.name: k8s-dogu-operator
   podSelector:
     matchLabels:
       app: source-controller
