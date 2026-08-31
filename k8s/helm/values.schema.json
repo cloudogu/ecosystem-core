@@ -244,6 +244,15 @@
         }
       },
       "required": ["image"]
-    }
+    },
+    "flux": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Should flux be enabled for the chart? Defaults to 'false'.",
+      "properties": {
+        "enabled": { "type": "boolean" }
+      }
+    },
+    "flux2": { "type": "object" }
   }
 }
