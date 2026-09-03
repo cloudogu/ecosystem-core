@@ -115,6 +115,7 @@ node('docker') {
                             "k8s.cloudogu.com/component.name=k8s-ces-control",
                             "k8s.cloudogu.com/component.name=k8s-alloy",
                             "k8s.cloudogu.com/component.name=k8s-dogu-operator",
+                            "k8s.cloudogu.com/component.name=k8s-cert-manager",
                             "k8s.cloudogu.com/component.name=k8s-service-discovery",
                             "k8s.cloudogu.com/component.name=k8s-blueprint-operator",
                             "k8s.cloudogu.com/component.name=k8s-ces-gateway",
