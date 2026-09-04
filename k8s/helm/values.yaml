@@ -27,13 +27,15 @@ k8s-component-operator:
       enabled: true
 components:
   k8s-dogu-operator-crd:
-    version: 2.13.0
+    version: 3.0.0
   k8s-dogu-operator:
-    version: 3.27.0
+    version: 3.29.0
     valuesObject:
       controllerManager:
         env:
           warpMenuEntryEnabled: true
+  k8s-cert-manager:
+    version: 1.21.1-1
   k8s-service-discovery:
     version: 6.1.1
   k8s-exposition-crd:
@@ -41,7 +43,7 @@ components:
   k8s-blueprint-operator-crd:
     version: 3.2.0
   k8s-blueprint-operator:
-    version: 3.3.0
+    version: 3.4.0
   k8s-ces-gateway:
     version: 3.3.3
   k8s-warp-menu-entry-crd:
@@ -105,7 +107,7 @@ defaultConfig:
   image:
     registry: docker.io
     repository: cloudogu/ecosystem-core-default-config
-    tag: 4.9.0
+    tag: 4.10.0
   imagePullPolicy: IfNotPresent
   env:
     logLevel: info

@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v4.10.0] - 2026-09-04
+### Changed
+- [89] Bump Version of `k8s-dogu-lib` to 3.0.0
+- [89] Bump Version of `k8s-dogu-operator` to 3.29.0
+- [89] Bump Version of `k8s-blueprint-operator` to 3.4.0
+
+### Added
+- [89] `k8s-cert-manager` required for `k8s-dogu-operator` webhook certificate generation
+
 ## [v4.9.0] - 2026-08-31
 ### Added
 - [#87] Add flux as dependency for ecosystem-core
