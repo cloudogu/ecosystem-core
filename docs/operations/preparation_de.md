@@ -139,3 +139,72 @@ data:
   tls.key: "REPLACE_WITH_BASE64_KEY"
 ```
 
+## Dogu-API v3 mittels Flux
+
+[Flux](https://fluxcd.io/) stellt Operatoren und dazugehörige CRDs bereit, die automatisiert Helm-Releases verwalten
+können. Der [Dogu-Operator](https://github.com/cloudogu/k8s-dogu-operator/) verwendet diese, um Dogus nach der Dogu-API
+v3 zu installieren.
+
+`flux` konfiguriert dabei die Installationsroutine wohingegen und `flux2` die Konfigurationen des eigentlichen
+Sub-Charts enthält.
+
+Weitere Werte, die nicht durch `ecosystem-core` für den regulären Betrieb im Cloudogu EcoSystem bereitgestellt werden,
+werden in der [Flux-Helm-Chart-Beschreibung](https://github.com/fluxcd-community/helm-charts/tree/main/charts/flux2).
+genannt.
+
+```yaml
+flux:
+  enabled: true
+flux2:
+  installCRDs: true
+  crds:
+    annotations:
+      "helm.sh/resource-policy": keep
+  helmController:
+    create: true
+    container:
+      additionalArgs:
+        - "--feature-gates=DefaultToRetryOnFailure=true"
+        - "--watch-label-selector=sharding.fluxcd.io/key=ces"
+  imageAutomationController:
+    create: false
+  imageReflectionController:
+    create: false
+  kustomizeController:
+    create: false
+  notificationController:
+    create: false
+  sourceController:
+    create: true
+    container:
+      additionalArgs:
+        - "--watch-label-selector=sharding.fluxcd.io/key=ces"
+  sourceWatcher:
+    create: false
+  policies:
+    create: false
+  watchAllNamespaces: false
+  imagePullSecrets:
+    - name: ces-container-registries
+  prometheus:
+    podMonitor:
+      create: false
+```
+
+| Feld                                              | Typ                | Beschreibung                                                                                                                                                                                                            |
+|---------------------------------------------------|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `flux.enabled`                                    | `bool`             | Steuert die grundsätzliche Installation von Flux für Dogu v3. Standardwert `false`.                                                                                                                                     |
+| `flux2.installCRDs`                               | `bool`             | Steuert die automatische Installation der nötigen Flux-CRDs. Standardwert `true`.                                                                                                                                       |
+| `flux2.crds.annotations.helm.sh/resource-policy`  | `string`           | Steuert die Helm-Resource Lösch-Policy. Der Wert `keep` erlaubt, dass CRDs und damit Dogus trotz einer (unabsichtlchen) Löschung von Flux im Cluster bestehen bleiben. Standardwert `keep`.                             |
+| `flux2.helmController.container.additionalArgs`   | Liste von `string` | Erlaubt die Anreicherung des Flux HelmRelease Controllers mit weiteren Argumenten. Standardwerte: <br/>`- "--feature-gates=DefaultToRetryOnFailure=true"` <br/> `- "--watch-label-selector=sharding.fluxcd.io/key=ces"` |
+| `flux2.imageAutomationController.create`          | `bool`             | Steuert die Installation vom Flux Image Automation Controller. Standardwert `false`.                                                                                                                                    |
+| `flux2.imageReflectionController.create`          | `bool`             | Steuert die Installation vom Flux Image Reflection Controller. Standardwert `false`.                                                                                                                                    |
+| `flux2.kustomizeController.create`                | `bool`             | Steuert die Installation vom Flux Kustomize Controller. Standardwert `false`.                                                                                                                                           |
+| `flux2.notificationController.create`             | `bool`             | Steuert die Installation vom Flux Notification Controller. Standardwert `false`.                                                                                                                                        |
+| `flux2.sourceController.create`                   | `bool`             | Steuert die Installation vom Flux Source Controller. Standardwert `true`.                                                                                                                                               |
+| `flux2.sourceController.container.additionalArgs` | `string`           | Erlaubt die Anreicherung des Source-Controllers mit weiteren Argumenten. Standardwerte: <br/>`- "--watch-label-selector=sharding.fluxcd.io/key=ces"`                                                                    |
+| `flux2.sourceWatcher.create`                      | `bool`             | Steuert die Installation vom Flux Source-Watcher Controller. Standardwert `false`.                                                                                                                                      |
+| `flux2.policies.create`                           | `bool`             | Steuert die Installation von ingress und egress NetworkPolicies für Flux. Standardwert `false`.                                                                                                                         |
+| `flux2.watchAllNamespaces`                        | `bool`             | Steuert, ob Flux-Operatoren alle (anstelle eines einzelnen) Cluster-Namespaces beobachten sollen. Standardwert `false`.                                                                                                 |
+| `flux2.imagePullSecrets[].name`                   | `string`           | Erlaubt die Hinterlegung von Zugangsdaten für unterschiedliche OCI-Registries. Standardwert `ces-container-registries`.                                                                                             |
+| `flux2.prometheus.podMonitor.create`              | `bool`             | Aktiviert den Prometheus podMonitor-Endpunkt. Standardwert `false`.                                                                                                                                                     |
