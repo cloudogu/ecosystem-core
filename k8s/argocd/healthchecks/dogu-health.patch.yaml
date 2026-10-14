@@ -1,0 +1,42 @@
+# Apply as a merge patch to preserve the existing ArgoCD configuration:
+# kubectl -n argocd patch configmap argocd-cm --type=merge --patch-file k8s/argocd/healthchecks/dogu-health.patch.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+data:
+  resource.customizations.health.k8s.cloudogu.com_Dogu: |
+    local hs = {status = "Progressing", message = "Warte auf Dogu-Health"}
+    if obj.status == nil then
+      return hs
+    end
+
+    for _, condition in ipairs(obj.status.conditions or {}) do
+      if condition.type == "healthy" then
+        if obj.metadata ~= nil
+          and obj.metadata.generation ~= nil
+          and condition.observedGeneration ~= nil
+          and condition.observedGeneration < obj.metadata.generation then
+          hs.message = "Warte auf Dogu-Health fuer die aktuelle Generation"
+          return hs
+        end
+
+        hs.message = condition.message or condition.reason or "Dogu-Health"
+        if condition.status == "True" then
+          hs.status = "Healthy"
+        elseif condition.status == "False" then
+          hs.status = "Degraded"
+        end
+        return hs
+      end
+    end
+
+    -- Compatibility with Dogus that do not expose a healthy condition.
+    hs.message = obj.status.health or hs.message
+    if obj.status.health == "available" then
+      hs.status = "Healthy"
+    elseif obj.status.health == "unavailable" then
+      hs.status = "Degraded"
+    end
+    return hs
