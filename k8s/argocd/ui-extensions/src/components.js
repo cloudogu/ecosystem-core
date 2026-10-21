@@ -1,3 +1,5 @@
+import {DoguEvents} from "./dogu-events.js";
+
 const React = window.React;
 const h = React.createElement;
 
@@ -26,6 +28,10 @@ export const styles = `
 .ces-dogu-tab button { cursor: pointer; }
 .ces-dogu-tab__card { padding: 16px; border: 1px solid rgba(128,128,128,.3); border-radius: 4px; }
 .ces-dogu-tab__line { margin: 4px 0; }
+.ces-dogu-tab__events { min-width: 260px; }
+.ces-dogu-tab__event-list { padding-left: 20px; max-height: 420px; overflow-y: auto; }
+.ces-dogu-tab__event-list li { margin: 12px 0; overflow-wrap: anywhere; }
+.ces-dogu-tab__events input { margin-right: 4px; }
 `;
 
 export function Badge({state, text = state}) {
@@ -66,7 +72,7 @@ function Versions({desired, installed, comparison, specVersion}) {
     h(Badge, {state: comparison.state, text: comparison.text}));
 }
 
-export function DoguTable({rows, absent = false}) {
+export function DoguTable({rows, absent = false, application}) {
   return table(absent ? "Zur Entfernung vorgesehene Dogus" : "Dogu-Liste",
     ["Dogu", "Versionen", absent ? "Ressource" : "Health", "Betriebszustand", "Meldung"],
     rows.map(row => h("tr", {key: row.qualifiedName},
@@ -75,7 +81,8 @@ export function DoguTable({rows, absent = false}) {
       h("td", null, absent ? (row.found ? "Noch vorhanden" : "Nicht im Ressourcenbaum") : h(Badge, {state: row.state})),
       h("td", null, row.operations.map(text => h("div", {key: text, className: "ces-dogu-tab__line"}, text)),
         row.replicas.map(replica => h("div", {key: replica.name, className: "ces-dogu-tab__muted"}, `Verfügbare Replikate: ${replica.text}`))),
-      h("td", null, row.message, row.detailError && h("p", {className: "ces-dogu-tab__error"}, `Betriebs-/Versionsdaten veraltet / nicht verfügbar: ${row.detailError}`)))));
+      h("td", null, row.message, row.detailError && h("p", {className: "ces-dogu-tab__error"}, `Betriebs-/Versionsdaten veraltet / nicht verfügbar: ${row.detailError}`),
+        application && row.found && h(DoguEvents, {application, resources: row.eventResources, doguName: row.name})))));
 }
 
 export function ComponentTable({rows, namespace}) {

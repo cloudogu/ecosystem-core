@@ -28,6 +28,13 @@ export function resourceUrl(application, node, baseURI) {
   return url.toString();
 }
 
+export function resourceEventsUrl(application, node, baseURI) {
+  if (!node?.uid) throw new Error("Die Ressourcen-UID für die Ereignisabfrage fehlt.");
+  const url = applicationUrl(application, baseURI, "events");
+  for (const [key, value] of Object.entries({resourceUID: node.uid, resourceName: node.name, resourceNamespace: node.namespace || ""})) url.searchParams.set(key, value);
+  return url.toString();
+}
+
 export function sameDestination(left, right) {
   const a = left?.spec?.destination;
   const b = right?.spec?.destination;
@@ -36,7 +43,7 @@ export function sameDestination(left, right) {
   return Boolean((a.server && a.server === b.server) || (!a.server && !b.server && a.name && a.name === b.name));
 }
 
-async function requestJSON(url, signal, fetcher) {
+export async function requestJSON(url, signal, fetcher) {
   const controller = new AbortController();
   const abort = () => controller.abort();
   signal?.addEventListener("abort", abort, {once: true});
@@ -56,7 +63,7 @@ async function requestJSON(url, signal, fetcher) {
   }
 }
 
-async function mapLimited(items, callback, limit = 6) {
+export async function mapLimited(items, callback, limit = 6) {
   let index = 0;
   await Promise.all(Array.from({length: Math.min(limit, items.length)}, async () => {
     while (index < items.length) {

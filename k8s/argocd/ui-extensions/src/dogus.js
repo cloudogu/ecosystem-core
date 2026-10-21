@@ -1,3 +1,4 @@
+import {doguEventResources} from "./events.js";
 import {resourceKey, treeNodes} from "./argo-api.js";
 import {HEALTH_STATES, versionComparison, operatingState, deploymentReplicas} from "./status.js";
 export {resourceTreeUrl} from "./argo-api.js";
@@ -28,7 +29,7 @@ export function buildDoguOverview(blueprint, tree = {}, details = {}) {
       replicas: deployments.map(deployment => deploymentReplicas(details[resourceKey(deployment)]) || {name: deployment.name, text: "Unbekannt"}),
       state: HEALTH_STATES.has(node?.health?.status) ? node.health.status : "Unknown",
       message: node?.health?.message || (node ? "Keine Health-Bewertung verfügbar." : "Keine Ressourcendaten im ArgoCD-Baum verfügbar."),
-      found: Boolean(node),
+      found: Boolean(node), eventResources: doguEventResources(node, allNodes),
     };
     (entry.absent === true ? absent : present).push(row);
   }

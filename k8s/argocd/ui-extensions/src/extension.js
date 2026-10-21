@@ -88,8 +88,8 @@ function DoguOverview({resource, application, tree}) {
       Object.entries(overview.counts).map(([state, count]) => h("span", {key: state}, h(Badge, {state}), `: ${count}`)),
       h("span", null, `Versionsabweichungen: ${overview.deviations}`)),
     missingData > 0 && h("p", {className: "ces-dogu-tab__notice"}, `Für ${missingData} Dogus sind keine Ressourcendaten verfügbar. Das bedeutet nicht automatisch, dass sie im Cluster fehlen.`),
-    overview.present.length ? h(DoguTable, {rows: overview.present}) : h("p", null, "Im Blueprint sind keine Dogus zur Installation aufgeführt."),
-    overview.absent.length > 0 && h("details", null, h("summary", null, `Zur Entfernung vorgesehen (${overview.absent.length})`), h(DoguTable, {rows: overview.absent, absent: true})),
+    overview.present.length ? h(DoguTable, {rows: overview.present, application}) : h("p", null, "Im Blueprint sind keine Dogus zur Installation aufgeführt."),
+    overview.absent.length > 0 && h("details", null, h("summary", null, `Zur Entfernung vorgesehen (${overview.absent.length})`), h(DoguTable, {rows: overview.absent, absent: true, application})),
     h(ComponentTable, {rows: components, namespace: blueprintNamespace}),
     h("p", {className: "ces-dogu-tab__muted", "aria-live": "polite"}, snapshot.time ?
       `Letzte Datenaktualisierung: ${snapshot.time.toLocaleTimeString("de-DE")} · Aktualisierung alle 15 Sekunden` : "Warte auf Ressourcendaten …"));
