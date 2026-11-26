@@ -20,8 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#96] Bump Version of `k8s-ces-assets` from 3.0.0 to 3.0.1
 - [#96] Bump Version of `k8s-ces-control` from 1.10.4 to 1.13.0
 - [#96] Bump Version of `k8s-debug-mode-operator-crd` from 1.0.0 to 1.1.0
-- [#96] Bump Version of `k8s-debug-mode-operator from` 1.0.3 to 1.1.0
-- [#96] Bump Version of `service-account-operator from` 1.0.0 to 1.1.0
+- [#96] Bump Version of `k8s-debug-mode-operator` from 1.0.3 to 1.1.0
+- [#96] Bump Version of `service-account-operator` from 1.0.0 to 1.1.0
 - [#96] Bump Version of `lop-idp` from 1.3.2 to 1.3.3
 - [#96] Bump Version of `postfix` from 3.10.8-3 to 3.11.7-1
 - [#96] Bump Version of `k8s-backup-operator-crd` from 1.8.0 to 1.12.0
