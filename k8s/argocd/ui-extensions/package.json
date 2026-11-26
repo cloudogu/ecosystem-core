@@ -1,0 +1,18 @@
+{
+  "name": "ces-argocd-ui-extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Dogu overview tab for Cloudogu Blueprint resources in Argo CD",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "esbuild src/extension.js --bundle --format=iife --target=es2020 --outfile=dist/extension-ces-dogus.js",
+    "test": "node --test test/*.test.js",
+    "install:cluster": "node scripts/install.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

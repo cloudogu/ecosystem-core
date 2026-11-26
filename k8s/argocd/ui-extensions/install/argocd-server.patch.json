@@ -1,0 +1,28 @@
+{
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "argocd-server",
+            "volumeMounts": [
+              {
+                "name": "ces-dogu-ui-extension",
+                "mountPath": "/tmp/extensions/ces-dogus",
+                "readOnly": true
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "name": "ces-dogu-ui-extension",
+            "configMap": {
+              "name": "argocd-ces-dogu-ui-extension"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
