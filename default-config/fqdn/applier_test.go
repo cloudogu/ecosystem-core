@@ -19,9 +19,7 @@ func TestApplier_getFQDNFromLoadBalancerService(t *testing.T) {
 		a := &Applier{serviceGetter: sg}
 
 		svc := &corev1.Service{
-			ObjectMeta: metav1.ObjectMeta{
-				Name: cesLoadBalancerServiceName,
-			},
+			Name: cesLoadBalancerServiceName,
 			Spec: corev1.ServiceSpec{
 				Type: corev1.ServiceTypeLoadBalancer,
 			},
@@ -47,9 +45,7 @@ func TestApplier_getFQDNFromLoadBalancerService(t *testing.T) {
 		a := &Applier{serviceGetter: sg}
 
 		svc := &corev1.Service{
-			ObjectMeta: metav1.ObjectMeta{
-				Name: cesLoadBalancerServiceName,
-			},
+			Name: cesLoadBalancerServiceName,
 			Spec: corev1.ServiceSpec{
 				Type: corev1.ServiceTypeLoadBalancer,
 			},
@@ -75,9 +71,7 @@ func TestApplier_getFQDNFromLoadBalancerService(t *testing.T) {
 		a := &Applier{serviceGetter: sg}
 
 		svc := &corev1.Service{
-			ObjectMeta: metav1.ObjectMeta{
-				Name: cesLoadBalancerServiceName,
-			},
+			Name: cesLoadBalancerServiceName,
 			Spec: corev1.ServiceSpec{
 				Type: corev1.ServiceTypeClusterIP,
 			},
@@ -107,9 +101,7 @@ func TestApplier_getFQDNFromLoadBalancerService(t *testing.T) {
 		waitBetweenTries = 1 * time.Millisecond
 
 		svc := &corev1.Service{
-			ObjectMeta: metav1.ObjectMeta{
-				Name: cesLoadBalancerServiceName,
-			},
+			Name: cesLoadBalancerServiceName,
 			Spec: corev1.ServiceSpec{
 				Type: corev1.ServiceTypeLoadBalancer,
 			},
@@ -151,9 +143,7 @@ func TestApplier_getFQDNFromLoadBalancerService(t *testing.T) {
 		waitBetweenTries = 4 * time.Millisecond
 
 		svc := &corev1.Service{
-			ObjectMeta: metav1.ObjectMeta{
-				Name: cesLoadBalancerServiceName,
-			},
+			Name: cesLoadBalancerServiceName,
 			Spec: corev1.ServiceSpec{
 				Type: corev1.ServiceTypeLoadBalancer,
 			},
@@ -181,9 +171,7 @@ func TestApplier_ApplyInitialFQDN(t *testing.T) {
 	testCtx := context.Background()
 
 	svc := &corev1.Service{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: cesLoadBalancerServiceName,
-		},
+		Name: cesLoadBalancerServiceName,
 		Spec: corev1.ServiceSpec{
 			Type: corev1.ServiceTypeLoadBalancer,
 		},

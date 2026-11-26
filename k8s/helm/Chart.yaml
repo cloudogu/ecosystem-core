@@ -21,7 +21,7 @@ version: 0.0.0-replaceme
 appVersion: "0.0.0-replaceme"
 dependencies:
   - name: k8s-component-operator
-    version: "^1.14.0"
+    version: "^1.15.1"
     repository: "oci://registry.cloudogu.com/k8s"
     condition: k8s-component-operator.enabled
   - name: flux2
