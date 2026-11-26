@@ -94,7 +94,7 @@ node('docker') {
                     stage('Deploy ecosystem-core') {
                         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'harborhelmchartpush', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD']]) {
                             k3d.helm("registry login ${registryUrl} --username '${HARBOR_USERNAME}' --password '${HARBOR_PASSWORD}'")
-                            k3d.helm("install k8s-component-operator-crd oci://registry.cloudogu.com/k8s/k8s-component-operator-crd  --version 1.13.0")
+                            k3d.helm("install k8s-component-operator-crd oci://registry.cloudogu.com/k8s/k8s-component-operator-crd  --version 1.15.0")
                             k3d.helm("registry logout ${registryUrl}")
 
 							k3d.assignExternalIP()
@@ -110,7 +110,6 @@ node('docker') {
                         // Labels we wait for
                         def labels = [
                         	"app.kubernetes.io/name=k8s-component-operator",
-                        	"k8s.cloudogu.com/component.name=k8s-minio",
                             "k8s.cloudogu.com/component.name=k8s-loki",
                             "k8s.cloudogu.com/component.name=k8s-ces-control",
                             "k8s.cloudogu.com/component.name=k8s-alloy",

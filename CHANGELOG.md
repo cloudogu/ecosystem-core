@@ -8,6 +8,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - [#92] Adds Flux `values.yaml` documentation. The Dogu Operator requires Flux to be installed to work on Dogu API v3 dogus. 
 
+### Changed
+- [#96] Use Exposition API to make dogus available
+- [#96] Disable minio because it is no longer needed
+  - loki writes logs to the filesystem now
+- [#96] Bump Version of `k8s-dogu-operator-crd` from 3.0.0 to 3.3.0
+- [#96] Bump Version of `k8s-dogu-operator` from 3.29.0 to 3.39.1
+- [#96] Bump Version of `k8s-cert-manager` from 1.21.1-1 to 1.21.3-1
+- [#96] Bump Version of `k8s-service-discovery` from 6.1.1 to 6.1.6
+- [#96] Bump Version of `k8s-ces-gateway` from 3.3.3 to 3.4.1
+- [#96] Bump Version of `k8s-ces-assets` from 3.0.0 to 3.0.1
+- [#96] Bump Version of `k8s-ces-control` from 1.10.4 to 1.13.0
+- [#96] Bump Version of `k8s-debug-mode-operator-crd` from 1.0.0 to 1.1.0
+- [#96] Bump Version of `k8s-debug-mode-operator from` 1.0.3 to 1.1.0
+- [#96] Bump Version of `service-account-operator from` 1.0.0 to 1.1.0
+- [#96] Bump Version of `lop-idp` from 1.3.2 to 1.3.3
+- [#96] Bump Version of `postfix` from 3.10.8-3 to 3.11.7-1
+- [#96] Bump Version of `k8s-backup-operator-crd` from 1.8.0 to 1.12.0
+- [#96] Bump Version of `k8s-backup-operator` from 3.2.0 to 3.5.1
+- [#96] Bump Version of `k8s-velero` from 11.4.0-2 to 11.4.0-3
+- [#96] Bump Version of `k8s-prometheus` from 75.3.5-7 to 87.5.1-3
+- [#96] Bump Version of `k8s-loki` from 3.5.10-1 to 3.7.9-1
+- [#96] Bump Version of `k8s-alloy` from 1.1.2-3 to 1.15.0-2
+- [#96] Bump Version of `k8s-support-archive-operator` from 1.1.1 to 1.1.2
+- [#96] Bump Version of `k8s-component-operator` from 1.14.0 to 1.15.1
+- [#96] Bump Version of `kubectl` from 1.35.2 to 1.37.2
+
 ## [v4.10.0] - 2026-09-04
 ### Changed
 - [#89] Bump Version of `k8s-dogu-lib` to 3.0.0
