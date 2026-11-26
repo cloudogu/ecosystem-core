@@ -1,6 +1,6 @@
 module github.com/cloudogu/ecosystem-core/default-config
 
-go 1.26.0
+go 1.27.4
 
 require (
 	github.com/cloudogu/ces-commons-lib v0.2.0
