@@ -1,5 +1,5 @@
 #!groovy
-@Library('github.com/cloudogu/ces-build-lib@5.6.1')
+@Library('github.com/cloudogu/ces-build-lib@6.2.0')
 import com.cloudogu.ces.cesbuildlib.*
 
 git = new Git(this, "cesmarvin")
@@ -80,6 +80,14 @@ node('docker') {
                     def imageNameDefaultConfig = ""
                     stage('Build & Push Image') {
 						imageNameDefaultConfig = buildAndPushToLocalRegistry(k3d, "cloudogu/${repositoryName}-default-config", version, "./default-config")
+                    }
+
+                    stage('Trivy scan') {
+                        Trivy trivy = new Trivy(this)
+                        trivy.scanImage("${imageNameDefaultConfig}", params.TrivySeverityLevels, params.TrivyStrategy)
+                        trivy.saveFormattedTrivyReport(TrivyScanFormat.TABLE)
+                        trivy.saveFormattedTrivyReport(TrivyScanFormat.JSON)
+                        trivy.saveFormattedTrivyReport(TrivyScanFormat.HTML)
                     }
 
                     stage('Update development resources') {
