@@ -1,5 +1,5 @@
 #!groovy
-@Library('github.com/cloudogu/ces-build-lib@5.6.1')
+@Library('github.com/cloudogu/ces-build-lib@6.2.0')
 import com.cloudogu.ces.cesbuildlib.*
 
 git = new Git(this, "cesmarvin")
@@ -19,12 +19,18 @@ currentBranch = "${env.BRANCH_NAME}"
 registryNamespace = "k8s"
 registryUrl = "registry.cloudogu.com"
 
-goVersion = "1.26.0"
+goVersion = "1.27.4"
 helmTargetDir = "target/k8s"
 helmChartDir = "${helmTargetDir}/helm"
 
 node('docker') {
     timestamps {
+        properties([
+            parameters([
+                    choice(name: 'TrivySeverityLevels', choices: [TrivySeverityLevel.CRITICAL, TrivySeverityLevel.HIGH_AND_ABOVE, TrivySeverityLevel.MEDIUM_AND_ABOVE, TrivySeverityLevel.ALL], description: 'The levels to scan with trivy'),
+                    choice(name: 'TrivyStrategy', choices: [TrivyScanStrategy.UNSTABLE, TrivyScanStrategy.FAIL, TrivyScanStrategy.IGNORE], description: 'Define whether the build should be unstable, fail or whether the error should be ignored if any vulnerability was found.'),
+            ])
+        ])
         catchError {
             timeout(activity: false, time: 60, unit: 'MINUTES') {
                 stage('Checkout') {
@@ -82,6 +88,14 @@ node('docker') {
 						imageNameDefaultConfig = buildAndPushToLocalRegistry(k3d, "cloudogu/${repositoryName}-default-config", version, "./default-config")
                     }
 
+                    stage('Trivy scan') {
+                        Trivy trivy = new Trivy(this)
+                        trivy.scanImage("cloudogu/${repositoryName}-default-config:${version}", params.TrivySeverityLevels, params.TrivyStrategy)
+                        trivy.saveFormattedTrivyReport(TrivyScanFormat.TABLE)
+                        trivy.saveFormattedTrivyReport(TrivyScanFormat.JSON)
+                        trivy.saveFormattedTrivyReport(TrivyScanFormat.HTML)
+                    }
+
                     stage('Update development resources') {
                     	def repository = imageNameDefaultConfig.substring(0, imageNameDefaultConfig.lastIndexOf(":"))
                         docker.image("golang:${goVersion}")
@@ -94,7 +108,7 @@ node('docker') {
                     stage('Deploy ecosystem-core') {
                         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'harborhelmchartpush', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD']]) {
                             k3d.helm("registry login ${registryUrl} --username '${HARBOR_USERNAME}' --password '${HARBOR_PASSWORD}'")
-                            k3d.helm("install k8s-component-operator-crd oci://registry.cloudogu.com/k8s/k8s-component-operator-crd  --version 1.13.0")
+                            k3d.helm("install k8s-component-operator-crd oci://registry.cloudogu.com/k8s/k8s-component-operator-crd  --version 1.15.0")
                             k3d.helm("registry logout ${registryUrl}")
 
 							k3d.assignExternalIP()
@@ -110,7 +124,6 @@ node('docker') {
                         // Labels we wait for
                         def labels = [
                         	"app.kubernetes.io/name=k8s-component-operator",
-                        	"k8s.cloudogu.com/component.name=k8s-minio",
                             "k8s.cloudogu.com/component.name=k8s-loki",
                             "k8s.cloudogu.com/component.name=k8s-ces-control",
                             "k8s.cloudogu.com/component.name=k8s-alloy",
